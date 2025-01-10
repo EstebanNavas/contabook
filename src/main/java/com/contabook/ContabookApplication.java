@@ -8,6 +8,7 @@ public class ContabookApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ContabookApplication.class, args);
+		System.out.println("Contabook OK");
 	}
 
 }
