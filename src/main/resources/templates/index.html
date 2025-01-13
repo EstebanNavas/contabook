@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="utf-8">
+    <title>Contabook</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Flaticon Font -->
+    <link href="lib/flaticon/font/flaticon.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/Index.css}"> 
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card">
+			<img src="/imagenes/logoContaBook.jpg" alt="Logo Contabook" class="logo">
+            <h1>Iniciar Sesión</h1>
+
+            <form  th:action="@{/login-post}"  method="POST">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="usuario" name="usuario" placeholder="Ingresa tu usuario" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+                </div>
+            <label for="sistema">Sistema</label>
+            <select class="sistema" name="sistema" id="sistema">               
+               <!--  <option value="Webpos">WebPos</option> -->
+               <!--  <option value="Webcomercial">WebComercial</option> -->
+                     <option value="Marketing">Marketing</option>
+               <!--  <option value="Pot">POT</option> -->
+            </select>
+                <button type="submit" class="btn-login">Ingresar</button>
+            </form>
+
+        </div>
+    </div>
+</body>
+
+</html>
