@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  		<link rel="stylesheet" type="text/css" th:href="@{/styles/NavBar.css}">  
+        <title>ContaBook</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+     
+         <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Flaticon Font -->
+    <link href="lib/flaticon/font/flaticon.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..........." crossorigin="anonymous" />
+    
+
+<body>
+<header th:fragment="navbar" th:if="${session.usuarioAuth} != null" id="usuarioAuth">
+
+	<div th:style="'background-color: ' + ${Navbar_color}">
+		
+		<nav class="barraNavegacion">
+			<div class="Logo-contabook">
+		    <a href="./menuPrincipal">
+              <img src="/imagenes/logoContaBook.jpg" alt="Logo Contabook" class="logo">
+            </a>
+			</div>
+		
+		
+			<!--data-bs-auto-close="false" por si quieres que no se cierre la lista a darle click agrega esto en a -->
+			<div class="dropdown" th:each="opcion : ${session.ListaOpcionesTipo1}" id="primerLista">
+				<a class="btn btn-darck dropdown-toggle" style="color: black; " href="#" role="button" id="dropdownMenuLink"  data-bs-auto-close="false" data-bs-toggle="dropdown"
+					aria-expanded="false"
+					th:text="${opcion.getNombreOpcion()}" th:value="${opcion.getIdOpcion()}" 
+					th:attr="data-id=${opcion.getIdOpcion()}"
+					onclick="mostrarIdOpcionTipo2(this)">
+					
+					Dropdown link
+				</a>
+			
+				<ul th:id="${opcion.getIdOpcion()}" class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="background-color: black;" >
+				</ul>
+			</div>
+			
+		<!--	<ul class="navbar-nav" id="PaginaPrincipalSite">
+				<li>
+					<a th:href="@{/PaginaPrincipalSite}" id="navbarDropdownSesion" role="button" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false">
+						Pagina Site
+					</a>
+				</li>
+			</ul> -->
+			<ul class="navbar-nav" id="CerrarSesion">
+				<li>
+					<a th:href="@{/logout}" id="navbarDropdownSesion" role="button" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false">
+						Cerrar Sesion
+					</a>
+				</li>
+			</ul>
+
+	
+			
+		</nav>
+		
+	
+	</div>
+
+
+		<script type="text/javascript" th:inline="javascript">
+			
+		console.log(" Hola mundo desde el fragmento header");
+		
+function mostrarIdOpcionTipo2(element) {
+	
+	   // Obtener el ID del submenú asociado
+    const idOpcion = element.getAttribute("value");
+    console.log("ID de la opción: " + idOpcion);
+
+    // Obtener el submenú correspondiente
+    const listaUl7 = document.getElementById(idOpcion);
+
+    // Cerrar todos los submenús abiertos, excepto el actual
+    document.querySelectorAll(".dropdown-menu").forEach(menu => {
+        if (menu !== listaUl7) {
+            menu.style.display = "none";
+        }
+    });
+
+    // Alternar visibilidad del submenú actual
+    if (listaUl7.style.display === "block") {
+        listaUl7.style.display = "none";
+        console.log("Cerrando el submenú.");
+    } else {
+        listaUl7.style.display = "block";
+        console.log("Abriendo el submenú.");
+    }
+
+    console.log("Estado actual del submenú:", listaUl7.style.display === "block" ? "Abierto" : "Cerrado");
+				
+				
+
+				// Crear un objeto que contenga los datos a enviar
+				var datos = {
+					idOpcion: idOpcion
+				};
+
+				// Realizar una solicitud POST al controlador
+
+				fetch("./ListaUnNivel", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(datos),
+				})
+					.then((response) => response.json())
+					.then((data) => {
+
+						const idOpcion = element.getAttribute("data-id");
+						const selector = `[data-id="${idOpcion}"]`;
+						console.log("Selector es " + selector);
+
+						var xListaUnnivel = data.xListaUnnivel;
+						console.log("byId es " + document.getElementById(selector));
+						console.log("idUlOpcion es " + idOpcion);
+						const listaUl7 = document.getElementById(idOpcion);
+						const listaUl = document.querySelector(selector);
+						console.log("Lista 7: ", listaUl7);
+						console.log("listaUl selector: ", listaUl7);
+
+						listaUl7.innerHTML = '';
+
+						// Recorre el objeto y crea elementos <li> para cada tarea
+						xListaUnnivel.forEach(function (item) {
+							//crear etiqueta a
+				
+							var enlace = document.createElement('a');
+							
+							
+							
+							enlace.textContent = item.nombreOpcion;
+							enlace.setAttribute('id', item.idOpcion);
+                            let container = document.createElement("ul");
+                            
+                            container.classList.add("menu-2");
+                       
+							// Asignar el atributo "id" con el valor de "item.idOpcion"
+
+							enlace.addEventListener('click', function (event) {							
+								event.preventDefault(); // Evita la navegación a una URL
+								mostrarIdOpcionTipo3(enlace, container); 
+								console.log("prueba evento a");
+							});
+							// Agregar el estilo para cambiar el cursor a pointer
+							enlace.style.cursor = 'pointer';
+							enlace.style.color = "burlywood";
+							enlace.style.marginLeft = "10px";
+							//crear li 
+							
+							const elementoLi = document.createElement("li");
+							console.log("Valor LI_:  " + item.nombreOpcion);
+							console.log(" LI_:  " + elementoLi.textContent);
+							elementoLi.style.color = "white";
+							elementoLi.appendChild(enlace);
+							elementoLi.appendChild(container);
+							elementoLi.style.width = "230px";
+							listaUl7.appendChild(elementoLi); // Agrega el <li> a la <ul>
+						});
+
+						console.log("Lista 2: ", listaUl);
+
+
+						xListaUnnivel.forEach(function (item) {
+
+							console.log("Nombre de opción: " + item.nombreOpcion);
+							console.log("ID de opción: " + item.idOpcion);
+							console.log("Ruta de opción: " + item.rutaOpcion);
+							console.log("ID de tipo de opción: " + item.idTipoOpcion);
+						});
+
+
+					})
+					.catch((error) => {
+						console.error("Error al registrar el log:", error);
+					});
+
+
+
+			}
+		
+		
+	
+	
+function mostrarIdOpcionTipo3(enlace, container) {
+			
+    console.log("enlace:", enlace);
+
+    // Obtener el valor del atributo "id"
+    var idOpcion2 = enlace.getAttribute('id');
+    console.log("ID de la idOpcion2 en mostrarIdOpcionTipo3: " + idOpcion2);
+
+    // Cerrar todos los submenús abiertos, excepto el actual
+    document.querySelectorAll(".menu-2").forEach(menu => {
+        if (menu !== container) {
+            menu.style.display = "none";
+        }
+    });
+
+    // Alternar visibilidad del submenú actual
+    if (container.style.display === "block") {
+        container.style.display = "none";
+        console.log("Cerrando el submenú.");
+    } else {
+        container.style.display = "block";
+        console.log("Abriendo el submenú.");
+    }
+
+    console.log("Estado actual del submenú:", container.style.display === "block" ? "Abierto" : "Cerrado");
+
+    // Limpiar el contenido actual del contenedor
+    container.innerHTML = "";
+
+    // Crear un objeto que contenga los datos a enviar
+    var datos = {
+        idOpcion2: idOpcion2
+    };
+    
+    
+    container.innerHTML = "";
+
+    // Realizar una solicitud POST al controlador
+    fetch("./ListaSubOpcionMenu", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+		
+			
+            var xListaSubOpcionMenu = data.xListaSubOpcionMenu;
+            console.log("xListaSubOpcionMenu es : " + xListaSubOpcionMenu);
+
+            xListaSubOpcionMenu.forEach(function (item) {
+                // Crear un elemento <li>
+                var subLi = document.createElement('li');
+                subLi.style.color = "white";
+                subLi.style.width = "200px";
+                // Crear un elemento <a>
+                var subA = document.createElement('a');
+                // Asignar el contenido de item.nombreOpcion al elemento <a>
+                subA.textContent = item.nombreOpcion;
+                
+                subA.style.color = "aliceblue";
+                
+                // Asignar el atributo th:href con el valor de item.rutaOpcion
+                //subA.setAttribute('href', item.rutaOpcion);
+                subA.setAttribute('href', item.rutaOpcion);
+
+                // Agregar el <a> como hijo del <li>
+                subLi.appendChild(subA);
+
+                // Agregar el <li> como hijo del elemento <a> original
+                container.appendChild(subLi);
+
+
+                console.log("Nombre de opción Tipo3 : " + item.nombreOpcion);
+                console.log("ID de opción Tipo3: " + item.idOpcion);
+                console.log("Ruta de opciónTipo3 : " + item.rutaOpcion);
+                console.log("ID de tipo de opción Tipo3 : " + item.idTipoOpcion);
+            });
+        })
+        .catch((error) => {
+			isCharge = false;
+            console.error("Error al registrar el log:", error);
+        });
+}			
+
+		</script>
+	</header>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	<header th:fragment="navbar" th:unless="${session.usuarioAuth}!=null" >
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark"  >
+    <img th:src="@{/imagenes/logo.png}" title="title" alt="logo mobiletic" width="100" height="40"  /> 
+        <a class="navbar-brand" href="/"><font face="ARIAL">Marketing</font></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+</nav>
+
+</header>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

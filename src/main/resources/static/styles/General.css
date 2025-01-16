@@ -1,0 +1,474 @@
+
+
+h1{
+	margin: 0px;
+}
+.colorbody{
+	
+	background-color: #F8F8F8;
+}
+
+.bodyPqr{
+	
+	background-color: #F8F8F8;
+	height: 1700px;
+}
+
+.containerFlex{
+	display: flex;
+	margin: 15px;
+	justify-content: space-around;
+}
+
+.border{
+	border: solid 1px green;
+	padding: 10px;
+	
+}
+
+.containerFlexCenter{
+	display: flex;
+	margin: 5px;
+	padding: 20px;
+	align-items: center;
+	justify-content: space-around;
+	border: solid 1px #e3e6f0;
+	background-color: white;
+	
+}
+
+
+
+
+.containerFlexCenter2{
+	display: flex;
+	margin: 25px;
+	padding: 0px;
+	height: 34px;
+	align-items: center;
+	border: solid 1px #e3e6f0;
+	border-left: none;  /* Quitar el borde izquierdo */
+	border-right: none;  /* Quitar el borde derecho */
+	background-color: white;
+	
+}
+
+
+.containerFlexCenter3 {
+    display: flex;
+    justify-content: space-between; /* Espacio entre los elementos */
+    align-items: center; /* Alineación vertical de los elementos */
+    margin: 25px;
+    padding: 0px;
+    height: 34px;
+    border: solid 1px #e3e6f0;
+    border-left: none; /* Quitar el borde izquierdo */
+    border-right: none; /* Quitar el borde derecho */
+    background-color: white;
+}
+
+
+.containerFlexCenter4{
+	display: flex;
+	margin: 5px;
+	padding: 10px;
+	align-items: center;
+	justify-content: flex-start;
+	border: solid 1px #e3e6f0;
+	background-color: white;
+	
+}
+
+
+
+
+.containerFlexCenter5 {
+    display: flex;
+    justify-content: center; /* Espacio entre los elementos */
+    align-items: center; /* Alineación vertical de los elementos */
+    margin: 25px;
+    padding: 0px;
+    height: 34px;
+    border: solid 1px #e3e6f0;
+    border-left: none; /* Quitar el borde izquierdo */
+    border-right: none; /* Quitar el borde derecho */
+    background-color: white;
+}
+
+
+
+.containerFlexCenter6{
+    display: flex;
+    justify-content: center; /* Espacio entre los elementos */
+    align-items: center; /* Alineación vertical de los elementos */
+    margin: 5px;
+	padding: 10px;
+    border: solid 1px #e3e6f0;
+    border-left: none; /* Quitar el borde izquierdo */
+    border-right: none; /* Quitar el borde derecho */
+    background-color: white;
+	
+}
+
+
+
+.containerFlexCenter6 div {
+	
+	margin: 0px 50px;
+}
+
+.containerFlexCenter5 div {
+	
+	margin: 50px;
+}
+
+
+
+.cajaprincipal{
+	display: flex;
+	margin: 15px;
+	padding: 0px;
+	height: 34px;
+	align-items: center;
+	border: solid 1px #e3e6f0;
+	border-right: none;  /* Quitar el borde derecho */
+	background-color:white;
+	
+}
+
+.containerFlexCenterNoBorder{
+	display: flex;
+	margin: 5px;
+	padding: 20px;
+	align-items: center;
+	justify-content: space-around;
+	background-color: white;
+	
+}
+
+
+.containerFlexCenterNoBorderNoSpace{
+	display: flex;
+	margin: 5px;
+	padding: 20px;
+	align-items: center;
+	background-color: white;
+	justify-content: center; 
+	
+}
+
+
+.containerFlexCenter button{
+	
+	
+}
+
+.containerFlexCenterNombre{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	margin: 0px;
+	
+}
+
+.containerFlexCenter input {
+    width: 170px;
+}
+
+.containerFlexCenter select {
+    width: 170px;
+}
+
+.containerFlex input{
+	margin: 15px;
+	
+}
+
+
+
+.local{
+	width: 30%;
+	border: solid 1px #808B96;
+	margin: 8px;
+	padding: 3px 20px;
+	background-color: #DFE1E3 ;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.descripcion{
+	width: 40%;
+	border: solid 1px #808B96;
+	margin: 8px;
+	padding: 7px 20px 3px 20px;
+	background-color: #DFE1E3 ;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+
+.fechahora{
+	width: 30%;
+	border: solid 1px #808B96;
+	margin: 8px;
+	padding: 5px 20px 3px 20px;
+	background-color: #DFE1E3 ;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.containerFlexdivBlack{
+	border: solid 2px black;
+	border-radius: 7px;
+	margin: 15px;
+	padding: 5px 20px;
+	text-align:center;
+	background-color: #DFE1E3 ;
+}
+
+.containerFlexdivBlue{
+	border: solid 2px #0066FF;
+	border-radius: 7px;
+	margin: 15px;
+	padding: 5px 20px;
+	text-align:center;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.containerTable{
+	width: 100%;
+	margin: 0 auto;
+	padding: 0px 20px 0px 20px;
+	
+}
+
+
+.containerTableCenter{
+	width: auto;
+	height: auto;
+	margin: 0 auto;
+	padding: 0px 20px 0px 20px;
+	
+}
+
+
+#table{
+	width: 100%;
+	border: solid 1px #808B96;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+
+#selectAll{
+	margin-right: 15px;
+}
+
+.containerDisplayFlexBlack{
+	display: flex;
+	border: solid 2px black;
+	border-radius: 7px;
+	margin: 15px;
+	padding: 5px 20px;
+	text-align:center;
+	background-color: #DFE1E3 ;
+}
+
+
+
+.containerDisplayFlexBlack label{
+	
+	margin-right: 20px;
+	margin-top: 8px;
+	}
+
+
+.description{
+	margin-left: 100px;
+}
+
+.description textarea{
+	width: 94%;
+	height: 100px;
+	padding: 7px;
+}
+
+
+.divCencer{
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    margin: 0;
+    padding: 0;
+}
+
+
+.divCentrado{
+	
+	display: flex;
+    justify-content: center;
+    align-items: center; /* Añadir esto si también quieres centrar verticalmente */
+    text-align: center; /* Para centrar el texto dentro de los elementos */
+
+}
+
+.divCencer button {
+    margin: 20px; 
+    width: 200px;
+}
+
+#BtnCOnfirmarUsuario {
+    height: 32px;
+    margin-left: 20px;
+    margin-bottom: 8px;
+    text-align: center;
+    padding-bottom: 27px;
+    padding-top: 3px;
+}
+
+
+.estilo-0,
+.estilo-1,
+.estilo-2,
+.estilo-3 
+ {
+    font-size: 18px;
+}
+
+
+.estilo-4,
+.estilo-5 
+ {
+    font-size: 18px;
+}
+
+.estilo-6 {
+    font-size: 18px;
+}
+
+
+
+.comentario-estilo{
+
+	 font-size: 20px;
+
+}
+
+.comentario-container {
+    display: flex;
+    flex-direction: column; /* Esto hace que los elementos se muestren en columnas */
+    align-items: center; /* Alinea los elementos en el centro horizontalmente */
+   
+}
+
+
+.GenerarReporte{
+	display: flex;
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+  margin : 20px;
+}
+
+.NroFactura{
+	margin-top: 20px;
+	margin-left: 100px;
+}
+
+
+.containerCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20vh;
+    flex-direction: column;
+    margin-top: 40px;
+}
+
+/* Estilos adicionales para los elementos dentro del form */
+.containerCenter > div {
+    text-align: center; /* Centra el texto horizontalmente */
+}
+
+.resultado{
+	margin-top: 50px;
+	margin-left: 720px;
+}
+
+.resultado > p{
+	font-size: 24px;
+}
+
+
+.buscarCategoria {
+	display: flex;
+	align-items: center;
+	margin-left: 300px;
+	margin-top: 40px;
+	border-radius: 20px;
+	border: 1px solid #e3e6f0 ;
+	padding: 10px;
+	width: 650px;
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); 
+}
+
+
+.buscarReferencia {
+	display: flex;
+	align-items: center;
+	margin-left: 480px;
+	margin-top: 40px;
+	border-radius: 20px;
+	border: 1px solid #e3e6f0 ;
+	padding: 10px;
+	width: 280px;
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); 
+}
+
+
+
+
+
+
+ .spinner {
+        width: 90px;
+        height: 90px;
+        border: 10px solid #f3f3f3;
+        border-top-color:  #3498db;
+        border-radius: 50%;
+        animation: loader 2000ms linear infinite;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+    }
+
+    @keyframes loader {
+        from {
+			
+			transform: rotate(0);
+		}
+		to{
+			transform: rotate(360deg);
+		}
+    }
+
+
+
+
+
+
+.plu-column {
+        width: 5%; /* Ajusta el porcentaje según sea necesario */
+    }
+    .concepto-column {
+        width: 25%;
+    }
+    .ccant-column, .subtotal-column {
+        width: 15%;
+    }
+    .empty-column {
+        width: 5%;
+    }
+
+
+
+
+
+
+
+

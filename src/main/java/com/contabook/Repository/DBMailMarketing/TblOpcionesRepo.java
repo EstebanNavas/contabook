@@ -17,31 +17,31 @@ public interface TblOpcionesRepo extends JpaRepository<TblOpciones, Integer> {
 			  "tblopciones.nombreOpcion, " +
 			  "tblopciones.rutaOpcion, " +
 			  "tblopciones.idTipoOpcion " +
-	  		  "FROM bdaquamovil.dbo.tblOpciones " +
+	  		  "FROM BDMailMarketing.dbo.tblOpciones " +
 	  		  "WHERE tblopciones.idTipoOpcion = 1 " +
 	  		  "AND tblopciones.idLocal = ?1 " +
 	  		  "AND tblopciones.idOpcion IN ?2 " +
 	  		  "ORDER BY tblopciones.idOpcion ", nativeQuery = true)
-  List<TblOpcionesDTO> ObtenerTipoOpciones1(int idLocal, List<Integer> idOpciones);
+List<TblOpcionesDTO> ObtenerTipoOpciones1(int idLocal, List<Integer> idOpciones);
 	  
 	  
 	  
 	  @Query( value = "SELECT tblopciones.idOpcion " +
-	  		  "FROM bdaquamovil.dbo.tblOpciones " +
+	  		  "FROM BDMailMarketing.dbo.tblOpciones " +
 	  		  "WHERE tblopciones.idTipoOpcion = 1 " +
 	  		  "AND tblopciones.idLocal = ?1 " +
 	  		  "AND tblopciones.sistema = 'marketing' " +
 	  		  "ORDER BY tblopciones.idOpcion ", nativeQuery = true)
-  List<Integer> ObtenerListaIdTipoOpcion1(int idLocal);
+List<Integer> ObtenerListaIdTipoOpcion1(int idLocal);
 	  
 	  
 	  @Query( value = "SELECT tblOpcionesPerfil.idOpcion " +
-	  		  "FROM bdaquamovil.dbo.tblOpcionesPerfil " +
+	  		  "FROM BDMailMarketing.dbo.tblOpcionesPerfil " +
 	  		  "WHERE tblOpcionesPerfil.idLocal = ?1 " +
 	  		  "AND tblOpcionesPerfil.idOpcion IN ?2 " +
 	  		  "AND tblOpcionesPerfil.idPerfil = ?3 " +
 	  		  "ORDER BY tblOpcionesPerfil.idOpcion ", nativeQuery = true)
-  List<Integer> ListaIdTipoOpcion1OpcionesPerfil(int idLocal, List<Integer> idOpciones, int xIdPerfil );
+List<Integer> ListaIdTipoOpcion1OpcionesPerfil(int idLocal, List<Integer> idOpciones, int xIdPerfil );
 	  
 	  
 	  
@@ -126,7 +126,7 @@ public interface TblOpcionesRepo extends JpaRepository<TblOpciones, Integer> {
 	  		  "AND tblopciones.idLocal = ?2 ) AS tmpMenu " +
 	  		  "WHERE tmpMenu.isChecked = 1 " +
 	  		  "AND tmpMenu.idLocal = ?2 ", nativeQuery = true)
-    List<TblOpcionesDTO> ObtenerListaUnNivel(int IdOpcion, int IdLocal, int xIdPerfil);
+  List<TblOpcionesDTO> ObtenerListaUnNivel(int IdOpcion, int IdLocal, int xIdPerfil);
 	  
 	  
 	  
@@ -212,5 +212,5 @@ public interface TblOpcionesRepo extends JpaRepository<TblOpciones, Integer> {
 	  		  "AND tblopciones.idLocal = ?2 ) AS tmpMenu " +
 	  		  "WHERE tmpMenu.isChecked = 1 " +
 	  		  "AND tmpMenu.idLocal = ?2 ", nativeQuery = true)
-    List<TblOpcionesDTO> ObtenerListaSubOpcionMenu(int IdOpcion, int IdLocal, int xIdPerfil);	
+  List<TblOpcionesDTO> ObtenerListaSubOpcionMenu(int IdOpcion, int IdLocal, int xIdPerfil);	
 }

@@ -1,36 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <title>Contabook</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
-
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet"> 
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Flaticon Font -->
-    <link href="lib/flaticon/font/flaticon.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link rel="stylesheet" type="text/css" th:href="@{/styles/Index.css}"> 
+ <head th:replace ="combo/head.html :: head" ></head> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" th:href="@{/styles/NavBar.css}"> 
+        <link rel="stylesheet" type="text/css" th:href="@{/styles/General.css}"> 
+        <title>ContaBook</title>
 </head>
-
 <body>
-   <h1>hola desde menu principal</h1>
-</body>
+		<!-- barra de navegación navBar  -->
+		<div layout:fragment="page-content">
+		<header th:replace ="combo/navBar.html :: navbar" ></header>
+		</div>
+          <div style="float: center; padding-left: 10px;">
+    <!-- Del mismo modo agrego el fragmento empty que esta dentro de empty.html en el iframe -->
+				
+				<!-- Logo de Mobile-tic y nombre del acueducto 
+                 <iframe  th:replace ="combo/empty.html :: empty" align="left" width="1000px" height="650px" frameborder="0"  marginwidth="0" marginheight="0" name="workarea">
+                 </iframe> -->
+            </div>
+            
+             <div id="Periodo" class="divCentrado" >
+				
+				<div style="margin-top: 50px;">
+					<h6>PERIODO ACTIVO</h6>
+					<h6 th:text="${xNombrePeriodo}"></h6>
+					<h7  th:text="${xIdPeriodo}"></h7> 
+					<br>
+					<h7  th:text="${xlectura}"></h7>
+					<br>
+					<h7  th:text="${xfactura}"></h7>  
+				</div>
+				
+			</div>
+            
+            <div id="Certificado" class="divCentrado" >
+				
+				
+				
+            
+				
+			</div>
 
+                 
+      <script th:inline="javascript">
+
+
+
+</script>               
+</body>
 </html>

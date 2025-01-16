@@ -1,0 +1,67 @@
+
+.barraNavegacion{
+	
+	height: 60px;
+	background-color: #f9f9f9;
+	border-bottom: 4px solid #007bff;
+	display: flex;
+	justify-content: space-around;
+	text-align:center;
+}
+
+
+.barraNavegacion ul{
+	font-size: 16px;
+	margin: 10px;
+}
+
+.OptionTipo1{
+	
+	color:burlywood ;
+}
+
+#dropdownMenuLink{
+	
+	margin-top: 10px;
+}
+
+
+
+#CerrarSesion{
+	margin-top: 15px;
+}
+
+
+#CerrarSesion a{
+	
+	color: #007bff;
+}
+
+
+.dropdown-menu {
+    display: none; /* Submenú oculto por defecto */
+}
+
+.dropdown-menu.show {
+    display: block; /* Submenú visible cuando tiene la clase "show" */
+}
+
+.logo{	
+	width: 65px; 
+    height: 52px; 
+    border-radius: 10%; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    object-fit: cover; 
+    margin: 3px; 
+}
+
+a#navbarDropdownSesion {
+    text-decoration: none; /* Sin subrayado */
+    color: blue;           /* Color azul siempre */
+    font-weight: bold;     /* Grosor de la letra */
+    font-size: 16px;       /* Tamaño de la letra (ajusta según necesidad) */
+}
+
+a#navbarDropdownSesion:hover {
+    color: darkblue;       /* Un tono más oscuro al pasar el cursor (opcional) */
+}
