@@ -43,35 +43,30 @@
     <thead>
         <tr>
             <th></th>			
-            <th class="subtituloCentrado">IDPERIODO</th>
+            <th class="subtituloAF">IDPERIODO</th>
             <th class="subtituloAF">NOMBRE</th>
-            <th class="subtituloAF">FECHA INICIO <br> CONSUMO</th>
-            <th class="subtituloAF">FECHA FIN <br> CONSUMO</th>
-            <th class="subtituloAF">FECHA SIN <br> RECARGO PAGO</th>
-            <th class="subtituloAF">FECHA CON <br> RECARGO PAGO</th>
+            <th class="subtituloAF">FECHA INICIO </th>
+            <th class="subtituloAF">FECHA FIN </th>
             <th class="subtituloAF">ESTADO</th>
         </tr>
     </thead>
     <tbody>
 		 <tr>
             <td></td>
-            <td><input type="number" class="form-control" style="width: 150px; height: 37px;" id="idPeriodo" th:attr="valor=${xIdPeriodo}" oninput="limitarLongitud(this, 6)"></td>
+            <td><input type="number" class="form-control" style="width: 115px; height: 37px;" id="idPeriodo" th:attr="valor=${xIdPeriodo}" oninput="limitarLongitud(this, 6)"></td>
             <td><input type="text" class="form-control" style="width: 150px; height: 37px;" id="nombre" ></td>
             <td><input type="text" class="form-control fecha-input" maxlength="8" style="width: 115px; height: 37px;" id="fechaInicioConsumo" th:attr="valor=${xfechaInicioConsumo}"></td>
-            <td><input type="text" class="form-control fecha-input" maxlength="8" style="width: 150px; height: 37px;" id="fechaFinConsumo" th:attr="valor=${xfechaFinConsumo}"></td>
-            <td><input type="text" class="form-control fecha-input" maxlength="8" style="width: 150px; height: 37px;" id="fechaSinRecargo" th:attr="valor=${xfechaSinRecargo}"></td>
-            <td><input type="text" class="form-control fecha-input" maxlength="8" style="width: 150px; height: 37px;" id="fechaConrecargo" th:attr="valor=${xfechaConRecargo}"></td>
+            <td><input type="text" class="form-control fecha-input" maxlength="8" style="width: 115px; height: 37px;" id="fechaFinConsumo" th:attr="valor=${xfechaFinConsumo}"></td>
+
         </tr>
         <tr th:each="periodo : ${listaPeriodos}">
-  		  <td class="detalleCentrado" text=""></td>
-    	<td class="detalleCentrado">
+  		  <td class="detalleAF" text=""></td>
+    	<td class="detalleAF">
      	   <a href="#" th:text="${periodo.getIdPeriodo()}" th:onclick="'mostrarDetalle(\'' + ${periodo.getIdPeriodo()} + '\')'"></a>
     	</td>
    	 	<td class="detalleAF" th:text="${periodo.getNombrePeriodo()}"></td>
    		<td class="detalleAF" th:text="${periodo.getFechaInicialAAMMDD()}"></td> 
   	    <td class="detalleAF" th:text="${periodo.getFechaFinalAAMMDD()}"></td>
-        <td class="detalleAF" th:text="${periodo.getFechaSinRecargoAAMMDD()}"></td>
-        <td class="detalleAF" th:text="${periodo.getFechaConRecargoAAMMDD()}"></td>
         <td class="detalleAF estadoPeriodo" th:text="${periodo.getEstadoPeriodo()}"></td>
      </tr>
         <!--  -->
@@ -99,7 +94,7 @@
 	
 	
 
-    <script th:inline="javascript" src="./js/contadorRegresivo.js"></script>
+
     <script th:inline="javascript">
 		
 		// ----------------------------- LIMITAR LONGITUD ------------------------------
@@ -220,22 +215,6 @@ if (nuevoAnio < xAnio || (nuevoAnio === xAnio && nuevoMes <= xMes)) {
     }
     
     
-     var fechaSinRecargo = document.getElementById("fechaSinRecargo").value;
-    console.log("fechaSinRecargo es: " + fechaSinRecargo);
-    
-    var fechaConrecargo = document.getElementById("fechaConrecargo").value;
-    console.log("fechaConrecargo es: " + fechaConrecargo);
-
-    // Convertimos las cadenas de fecha en objetos Date
-    var SinRecargo = new Date(fechaSinRecargo);
-    var Conrecargo = new Date(fechaConrecargo);
-
-    // Verificamos si la fecha de fin de consumo es menor que la fecha de inicio de consumo
-    if (Conrecargo < SinRecargo) {
-
-        alert("Error: La fecha CON recargo debe ser mayor a la fecha sin recargo.");
-        return; 
-    }
 		
 		
 		var nombre = document.getElementById("nombre").value;
@@ -268,20 +247,6 @@ if (nuevoAnio < xAnio || (nuevoAnio === xAnio && nuevoMes <= xMes)) {
 		}
 		
 		
-		if(!fechaSinRecargo){
-			
-			alert("Por ingrese fecha sin recargo");
-			return;
-		}
-		
-		
-		
-		if(!fechaConrecargo){
-			
-			alert("Por ingrese fecha con recargo");
-			return;
-		}
-		
 		
 		
 		
@@ -294,8 +259,6 @@ if (nuevoAnio < xAnio || (nuevoAnio === xAnio && nuevoMes <= xMes)) {
 		nombre: nombre,
 		FechaInicioConsumo: FechaInicioConsumo,
 		fechaFinConsumo: fechaFinConsumo,
-		fechaSinRecargo: fechaSinRecargo,
-		fechaConrecargo: fechaConrecargo
 			
     };
     
