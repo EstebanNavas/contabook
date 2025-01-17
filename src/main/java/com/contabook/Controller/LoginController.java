@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimerTask;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -235,6 +236,49 @@ public class LoginController {
 		
 	}
 	
+	
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request,Model model) {
+		
+		// Actualizamos los ESTADO Que sean = 9 a 1
+	    tblAgendaLogVisitasRepo.actualizarEstadoA1(idLocalAutenticado, xidUsuario);
+	    
+	    System.out.println("idUsuario es : " + xidUsuario);
+	    
+	    HttpSession session = request.getSession();
+	    
+	    // Obtenemos el ID de session del usuario que intenta cerrar sessión
+    	String sessionId = session.getId();
+    	System.out.println("sessionId en  /logout es: " + sessionId);
+    	
+    	
+    	
+    	
+    	List<Integer> ListaIdLocales = tblAgendaLogVisitasService.ObtenerListaIdLocalPorSession(sessionId);
+    	
+    	for(Integer xIdLocal : ListaIdLocales ) {
+    		
+    		// Actualizamos los idEstadoTx Que sean = 9 a 1
+    	    tblAgendaLogVisitasRepo.actualizarIdEstadoTxA1(xIdLocal, sessionId);
+    		
+    	}
+    	
+    	//Obtenemos el idLocal de la sessionId
+    	//Integer xIdLocal = tblAgendaLogVisitasService.ObtenerIdLocalPorSession(sessionId);
+    	
+    	// Detenemos el contador asociado a la sesión (si existe)
+       // detenerContador(sessionId);
+	    
+	    // Actualizamos los idEstadoTx Que sean = 9 a 1
+	    //tblAgendaLogVisitasRepo.actualizarIdEstadoTxA1(xIdLocal, sessionId);
+	    
+		request.getSession().invalidate();
+		
+		return "redirect:/";
+		
+	}
+	
+
 	
 	
 }
