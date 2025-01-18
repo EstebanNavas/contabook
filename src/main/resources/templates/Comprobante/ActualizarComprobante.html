@@ -21,7 +21,7 @@
 		</div>
 	
 		<div class="descripcion"> 
-			<h2 class="tituloAFcenter">CREAR COMPROBANTE</h2>
+			<h2 class="tituloAFcenter">ACTUALIZAR COMPROBANTE</h2>
 		</div>
 		<div class="fechahora">
 			<h2 class="letra" th:replace="combo/FechaHoraActual.html :: comboFechaHora">
@@ -32,8 +32,7 @@
 	<div class="Container1">
 		<form class="containerTable">
 			<div class="container" style="margin-top: 50px; margin-bottom: 50px;">
-				
-			<div id="cajaprincipal" class="cajaprincipal">
+              <div id="cajaprincipal" class="cajaprincipal">
 				<div id="caja1">
 					<div id="NombreTercero" class="containerFlexCenter2" style="width: 600px;">
 			
@@ -41,7 +40,7 @@
 						<div class="containerFlexCenterNombre">
 			
 							<label class="letra" for="nombreComprobante" style="margin: 15px;">NOMBRE COMPROBANTE:</label>
-							<input type="text"maxlength="98"  id="nombreComprobante" style="width: 240px; margin-left: 10px;" th:value="${xNombreTercero}">
+							<input type="text"maxlength="98" th:value="${nombre}"  id="nombreComprobante" style="width: 240px; margin-left: 10px;" >
 						</div>
 			
 			
@@ -55,7 +54,7 @@
 						<div class="containerFlexCenterNombre">
 			
 							<label class="letra" for="idComprobante" style="margin: 15px;">#ID:</label>
-							<input type="number" id="idComprobante" th:value="${MaxIdTipoCpte}" style="width: 240px; margin-left: 80px;" readonly >
+							<input type="number" id="idComprobante" th:value="${IdTipoCpte}" style="width: 240px; margin-left: 80px;" readonly >
 						</div>
 			
 			
@@ -71,7 +70,7 @@
 						<div class="containerFlexCenterNombre">
 			
 							<label class="letra" for="estado" style="margin: 15px;">ESTADO:</label>
-							<input type="text" maxlength="10" id="estado" style="width: 240px; margin-left: 154px;" th:value="${xNombreTercero}" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+							<input type="text" maxlength="10" id="estado" style="width: 240px; margin-left: 154px;" th:value="${estado}" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 						</div>
 			
 			
@@ -85,7 +84,7 @@
 						<div class="containerFlexCenterNombre">
 			
 							<label class="letra" for="signo" style="margin: 15px;">SIGNO:</label>
-							<input type="text" maxlength="18" id="signo" style="width: 240px; margin-left: 53px;" th:value="${xNombreTercero}"  pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+							<input type="text" maxlength="18" id="signo" style="width: 240px; margin-left: 53px;" th:value="${signo}"  pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 						</div>
 			
 			
@@ -101,7 +100,7 @@
 						<div class="containerFlexCenterNombre">
 			
 							<label class="letra" for="idSeq" style="margin: 15px;">IDSEQ:</label>
-							<input type="text" maxlength="10" id="idSeq" style="width: 240px; margin-left: 169px;" th:value="${xNombreTercero}" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+							<input type="text" maxlength="10" id="idSeq" style="width: 240px; margin-left: 169px;" th:value="${idSeq}" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 						</div>
 			
 			
@@ -115,22 +114,19 @@
 						<div class="containerFlexCenterNombre">
 			
 							<label class="letra" for="idAlcance" style="margin: 15px;">IDALCANCE:</label>
-							<input type="text" maxlength="18" id="idAlcance" style="width: 240px; margin-left: 10px;" th:value="${xNombreTercero}"  pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+							<input type="text" maxlength="18" id="idAlcance" style="width: 240px; margin-left: 10px;" th:value="${idAlcance}"  pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
 						</div>
 			
 			
 					</div>
 				</div>
 			</div>
-			
-
-			
 	
 			</div>
 				<div class="GenerarReporte">
 					<!-- Botón para enviar el formulario -->
 					<a href="./Comprobante" class="btn btn-success" style="margin: 50px;">Regresar</a>
-					<button type="button" class="btn btn-primary" onclick="crearComprobante()" >Crear </button>
+					<button type="button" class="btn btn-primary" onclick="actualizarComprobante()" >Actualizar Comprobante</button>
 				</div>
      
 		</form>
@@ -146,9 +142,8 @@
     <script th:inline="javascript" src="./js/contadorRegresivo.js"></script>
     <script th:inline="javascript">
 		
-
-		
-	function crearComprobante() {
+	
+	function actualizarComprobante() {
 		
 		var nombreComprobante = document.getElementById("nombreComprobante").value;
 		var idComprobante = document.getElementById("idComprobante").value;
@@ -156,11 +151,9 @@
 		var signo = document.getElementById("signo").value;
 		var idSeq = document.getElementById("idSeq").value;
 		var idAlcance = document.getElementById("idAlcance").value;
-
 		
 		
-		    
-    	if (!nombreComprobante) {
+		if (!nombreComprobante) {
         alert("Por favor, ingrese nombre del Comprobante.");
         return;
     }
@@ -192,9 +185,6 @@
         alert("Por favor, ingrese idAlcance.");
         return;
     }
-    
-    
-		
 		
 		
 		// Crear un objeto que contenga los datos a enviar
@@ -208,7 +198,7 @@
     };
     
     // Realizar una solicitud POST al controlador
-    fetch("./CrearComprobante-Post", {
+    fetch("./ActualizarComprobante-Post", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -220,16 +210,11 @@
 		
 		var message = data.message;
        console.log(message);
+       var nombre = data.nombreComprobante
        
-       var nombreComprobante = data.nombreComprobante
-       console.log("message es " + message);
-       
-       
-       
-       
-       if(message === "OK"){		   
-		     swal({
-            title: "¡Comprobante " + nombreComprobante + " creado correctamente ! ",
+          swal({
+            title: "¡Comprobante " + nombre + " actualizado correctamente",
+            //text: "La PQR  " + numeroRadicado + " ha sido creada correctamente",
             icon: "success",
             button: "Continuar",
         })
@@ -239,10 +224,6 @@
                 window.location.href = "./Comprobante";
             }
         });
-		   
-	   }
-       
-        
 
     })
     .catch((error) => {
@@ -256,7 +237,6 @@
 	
 		
 	
-
 	</script>
 </body>
 </html>

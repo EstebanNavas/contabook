@@ -53,17 +53,17 @@
 						</thead>
 						<tbody>
 							
-								<tr th:each="tercero : ${listaComprobantes}">
+								<tr th:each="comprobante : ${listaComprobantes}">
 									<td class="detalleCentrado" text=""></td>
-									<td class="detalleCentrado" th:text="${tercero.getIdTipoCpte()}"></td>
+									<td class="detalleCentrado" th:text="${comprobante.getIdTipoCpte()}"></td>
 									<td>
-										<a href="#" th:text="${tercero.getNombreCmpte()}"
-											th:onclick="'mostrarDetalle(\'' + ${tercero.getIdTipoCpte()} + '\')'"></a>
+										<a href="#" th:text="${comprobante.getNombreCmpte()}"
+											th:onclick="'mostrarDetalle(\'' + ${comprobante.getIdTipoCpte()} + '\')'"></a>
 									</td>
-									<td class="detalleAF" th:text="${tercero.getEstado()}"></td>
-									<td class="detalleAF" th:text="${tercero.getSigno()}"></td>
-									<td class="detalleAF" th:text="${tercero.getIdSeq()}"></td>
-									<td class="detalleAF" th:text="${tercero.getIdAlcance()}"></td>
+									<td class="detalleAF" th:text="${comprobante.getEstado()}"></td>
+									<td class="detalleAF" th:text="${comprobante.getSigno()}"></td>
+									<td class="detalleAF" th:text="${comprobante.getIdSeq()}"></td>
+									<td class="detalleAF" th:text="${comprobante.getIdAlcance()}"></td>
 								
 							</tr>
 						</tbody>
@@ -72,7 +72,7 @@
 		
 		</form>
 	<div>
-		<a href="./CatalogoSuscriptor" class="btn btn-success" style="margin: 50px;">Regresar</a>
+		<a href="./Comprobante" class="btn btn-success" style="margin: 50px;">Regresar</a>
 		
 	</div>
 	
@@ -118,18 +118,15 @@
 		}
 		
 		
-			function mostrarDetalle(idTercero) {
-					console.log("Ingresó a mostrarDetalle");
-					console.log("El idTercero en mostrarDetalle es :" + idTercero);
-
+			function mostrarDetalle(idTipoCpte) {
 
 					// Crear un objeto que contenga los datos a enviar
 					var datos = {
-						idTercero: idTercero
+						idTipoCpte: idTipoCpte
 					};
 
 					// Realizar una solicitud POST al controlador
-					fetch("./TraerSuscriptor-Post", {
+					fetch("./TraerComprobante-Post", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",

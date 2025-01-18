@@ -5,15 +5,21 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="tblTipoCpte")
+@IdClass(TblTipoCptePK.class)
 public class TblTipoCpte {
 	
 	@Id
 	@Column(name = "idTipoCpte")
 	private Integer idTipoCpte;
+	
+	@Id
+	@Column(name = "idLocal")
+	private Integer idLocal;
 	
 	@Column(name = "nombreCmpte")
 	private String nombreCmpte;
