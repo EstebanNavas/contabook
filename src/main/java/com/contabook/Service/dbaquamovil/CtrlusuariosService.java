@@ -23,15 +23,17 @@ public class CtrlusuariosService {
 	        if (usuarioOptional.isPresent()) {
 	            Ctrlusuarios usuario = usuarioOptional.get();
 	            Integer estado = usuario.getEstado(); // Obtenemos el estado del idUsuario
+	            Integer idNivel = usuario.getIdNivel();// Nivel del Usuario
 	            System.out.println("Estado del usuario logueado es : " + estado);
+	            System.out.println("idNivel del usuario logueado es : " + idNivel);
 	            
-	            // Comparamos la contraseña ingresada con la contraseña de la base de datos y si el estado es = 1
-	            if (usuario.getClave().equals(clave) & estado == 1) {
+	            // Comparamos la contraseña ingresada con la contraseña de la base de datos, si el estado es activo y el nivel es 25
+	            if (usuario.getClave().equals(clave) & estado == 1 & idNivel == 25 ) {
 	            	System.out.println("El usuario logueado SI cumple con el estado : " + estado);
 	                return true;  // Autenticación exitosa
 	            }
 	        }
-	        System.out.println("El usuario logueado NO cumple con el estado, o datos incorrectos ");
+	        System.out.println("El usuario logueado NO cumple con el estado, nivel o datos incorrectos ");
 	        return false;  // Autenticación fallida
 	    }
 	  
