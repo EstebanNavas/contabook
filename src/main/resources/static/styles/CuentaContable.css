@@ -1,0 +1,137 @@
+.containerFlexContable {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 20px;
+}
+
+.navTree {
+    width: 30%;
+    background: #f7f7f7;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.navTree ul {
+    list-style: none;
+    padding: 0;
+}
+
+.navTree li {
+    margin: 5px 0;
+}
+
+.navTree span {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.formContainer {
+    width: 70%;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+
+
+
+
+
+
+
+/* Estilo para el contenedor */
+.tree-table-container {
+    width: 1000px;  /* Ancho fijo */
+    height: 450px; /* Alto fijo */
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc; /* Línea delgada alrededor */
+    border-radius: 4px; /* Bordes suavizados */
+    padding: 10px; /* Espacio interior */
+    overflow-y: auto; /* Activa el scroll vertical */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera para resaltar */
+}
+
+/* Tabla básica */
+.tree-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Encabezados */
+.tree-table th {
+    text-align: left;
+    font-weight: bold;
+    padding: 6px 0;
+    border-bottom: 1px solid #ccc; /* Línea divisoria entre columnas */
+}
+
+/* Celdas */
+.tree-table td {
+    padding: 6px 0;
+}
+
+/* Botón expandir */
+.expand-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.codigo-clickable {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.codigo-clickable:hover {
+    text-decoration: none;
+}
+
+
+/*ESTILO NIVEL 2*/
+
+.tree-table .level-2 td {
+    padding-left: 15px; /* Desplaza solo el contenido de las celdas hacia la derecha */
+}
+
+.tree-table .level-3 td {
+    padding-left: 30px; /* Desplaza solo el contenido de las celdas hacia la derecha */
+}
+
+
+.tree-table .level-4 td {
+    padding-left: 45px; /* Desplaza solo el contenido de las celdas hacia la derecha */
+}
+
+.tree-table .level-5 td {
+    padding-left: 68px; /* Desplaza solo el contenido de las celdas hacia la derecha */
+}
+
+
+.titulo{	
+	display: flex;
+	/*justify-content: space-around;*/
+}
+
+.fila{	
+	display: flex;
+	align-items: center;
+}
+
+
+.input-barra-verde {
+    border: 1px solid #ccc; /* Borde base */
+    border-left: 5px solid green; /* Barrita verde en el lado izquierdo */
+    padding-left: 5px; /* Espaciado interno para que el texto no se pegue al borde */
+    height: 20px; /* Mantener la altura */
+    box-sizing: border-box; /* Asegurar que el padding no aumente el tamaño total */
+}
+
+
+
+
+

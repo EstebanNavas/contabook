@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+ 	<head th:replace ="combo/head.html :: head" ></head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" th:href="@{/styles/login.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/styles/General.css}"> 
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/fuenteColor.css}">  	
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/NavBar.css}"> 
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/CuentaContable.css}">
+        <title> Contabook</title>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+	<header th:replace="combo/navBar.html :: navbar"></header>
+	<div class="containerFlex" id="encabezado">
+		<div class="local">
+			<h2 class="letraBlue" th:replace="combo/comboLocal.html :: comboLocal"></h2>
+		</div>
+		<div class="descripcion">
+			<h2 class="tituloAFcenter">CUENTA CONTABLE</h2>
+		</div>
+		<div class="fechahora">
+			<h2 class="letra" th:replace="combo/FechaHoraActual.html :: comboFechaHora"></h2>
+		</div>
+	</div>
+
+	<div class="containerFlexContable">
+		<!-- Árbol de navegación -->
+<div class="tree-table-container">
+    <table class="tree-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Cuenta contable</th>
+            </tr>
+        </thead>
+        <tbody id="nivel1-tbody">
+            <tr th:each="opcion : ${opcionesNivel1}" >
+                <td style="display: flex; align-items: center;">
+        <!-- Triángulo activador -->
+        <span 
+            th:attr="data-id=${opcion.getIdCuenta()}" 
+            onclick="mostrarLista2(this)" 
+            style="cursor: pointer; margin-right: 5px; display: inline-block; width: 0; height: 0; 
+                   border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 7px solid #217bf7;">
+        </span>
+        <!-- ID de la cuenta -->
+        <span th:text="${opcion.getIdCuenta()}"></span>
+    </td>
+    <!-- Nombre de la cuenta -->
+    <td th:text="${opcion.getNombreCuenta()}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+		<!-- Formulario de creación -->
+		<div id="formContainer" class="formContainer">
+			<form th:action="@{/crearCuentaAuxiliar}" method="post">
+				
+				<div class="titulo">
+					<div class="formGroup" style="margin-left: 158px;">
+					<label for="codigo">Código</label>
+				   </div>
+				   <div class="formGroup" style="margin-left: 126px;">
+					<label for="nombre">Nombre</label>
+				   </div>
+					
+			   </div>
+			   <div class="fila" style="margin-top: 20px; margin-left: 20;">
+				    <div class="formGroup">
+					  <label for="descripcion">Clase</label>
+				   </div>
+				   <div class="formGroup" style="margin-left: 120px;">
+					  <input style="width: 58px; height: 24px; background-color: #eee;" id="clase" readonly >
+				   </div>
+    			   <div class="formGroup" style="margin-left: 120px;">
+					  <input style="width: 350px; height: 24px; background-color: #eee;" id="nombreClase" readonly>
+				   </div>
+				   
+			   </div>
+			   <div class="fila" style="margin-top: 10px; margin-left: 20;">
+				    <div class="formGroup">
+					  <label for="descripcion">Grupo</label>
+				   </div>
+				   <div class="formGroup" style="margin-left: 114px;">
+					  <input style="width: 58px; height: 24px; background-color: #eee;" id="grupo" readonly>
+				   </div>
+    			   <div class="formGroup" style="margin-left: 120px;">
+					  <input style="width: 350px; height: 24px; background-color: #eee;" id="nombreGrupo" readonly>
+				   </div>
+				   
+			   </div>
+			   <div class="fila" style="margin-top: 10px; margin-left: 20;">
+				    <div class="formGroup">
+					  <label for="descripcion">Cuenta</label>
+				   </div>
+				   <div class="formGroup" style="margin-left: 109px;">
+					  <input style="width: 58px; height: 24px; background-color: #eee;" id="cuenta" readonly>
+				   </div>
+    			   <div class="formGroup" style="margin-left: 120px;">
+					  <input style="width: 350px; height: 24px; background-color: #eee;" id="nombreCuenta" readonly>
+				   </div>
+				   
+			   </div>
+			   <div class="fila" style="margin-top: 10px; margin-left: 20;">
+				    <div class="formGroup" >
+					  <label for="descripcion">Subcuenta</label>
+				   </div>
+				   <div class="formGroup" style="margin-left: 85px;">
+					  <input style="width: 58px; height: 24px; background-color: #eee;" id="subCuenta" readonly>
+				   </div>
+    			   <div class="formGroup" style="margin-left: 120px;">
+					  <input style="width: 350px; height: 24px; background-color: #eee;" id="nombreSubCuenta" readonly>
+				   </div>
+				   
+			   </div>
+			   <div class="fila" style="margin-top: 10px; margin-left: 20;">
+				    <div class="formGroup" style="margin-right: 50px;" >
+					  <label for="descripcion">Auxiliar</label>
+				   </div>
+				   <div class="formGroup" style="width: 50px;">
+					  <label for="subCuenta" id="subCuentaAux"></label>
+				   </div>
+				   <div class="formGroup" style="margin-left: 6px;">
+					  <input class="input-barra-verde" style="width: 59px; height: 25px;" id="codidoAux" maxlength="2">					  
+				   </div>
+    			   <div class="formGroup" style="margin-left: 120px;">
+					  <input class="input-barra-verde" style="width: 352px; height: 25px;" id="nombreAux">
+				   </div>
+				   
+			   </div>
+			   <div id="error-message" style="color: red; font-size: 12px; display: none;">El código auxiliar ya existe.</div>
+				
+
+				<div class="divCencer" style="margin-top: 100px;">
+					<!-- Botón para enviar el formulario -->
+					<button type="button" class="btn btn-success" value="Guardar" onclick="CrearAuxiliar()" id="crearAux">Crear Auxiliar</button>
+					<button type="button" class="btn btn-primary" value="Guardar" onclick="ActualizarAuxiliar()" id="actualizarAux" style="display: none;">Actualizar Auxiliar</button>
+					<button type="button" class="btn btn-danger" value="Guardar" onclick="EliminarAuxiliar()" id="eliminarAux" style="display: none;">Eliminar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script type="text/javascript" th:inline="javascript">
+		
+let xListaAuxiliares = [];  // Asegúrate de que este array esté siendo correctamente llenado con los valores de Integer
+
+// Validar código auxiliar y verificar existencia en xListaAuxiliares
+const codigoAuxInput = document.getElementById("codidoAux");
+const subCuentaAux = document.getElementById("subCuentaAux");
+const errorMessage = document.getElementById("error-message");  // Obtener el contenedor del mensaje de error
+
+codigoAuxInput.addEventListener("blur", (event) => {
+    let value = event.target.value;
+
+    if (value === "") return;
+
+    value = value.replace(/\D/g, ""); // Eliminar caracteres no numéricos
+    if (parseInt(value) < 1) value = "01";
+    else if (parseInt(value) > 99) value = "99";
+
+    const codigoAuxFinal = value.padStart(2, "0");
+    event.target.value = codigoAuxFinal;
+
+    // Obtener el contenido de subCuentaAux (el valor del label)
+    const subCuentaValue = subCuentaAux.innerText.trim(); // Usamos innerText para obtener el texto dentro del label
+
+    // Verificar que subCuentaValue tenga un valor válido
+    if (!subCuentaValue || isNaN(subCuentaValue)) {
+        console.error("El valor de subCuentaAux no es válido.");
+        return;
+    }
+
+    // Concatenar subCuentaAux y codigoAuxInput y convertirlo a número
+    const idCuentaAux = parseInt(`${subCuentaValue}${codigoAuxFinal}`);  // Convertir a Integer
+
+    // Verificar si la conversión fue exitosa
+    if (isNaN(idCuentaAux)) {
+        console.error("idCuentaAux es NaN. Verifica los valores concatenados.");
+        return;
+    }
+
+    console.log("idCuentaAux es :", idCuentaAux);
+
+    // Verificar si idCuentaAux ya existe en xListaAuxiliares
+    const existe = xListaAuxiliares.includes(idCuentaAux);  // Usar includes para verificar existencia
+
+    // Imprimir xListaAuxiliares en la consola
+    console.log("Contenido actual de xListaAuxiliares:", xListaAuxiliares);
+
+    if (existe) {
+        // Mostrar el mensaje de error debajo del input
+        errorMessage.style.display = "block";
+        // Limpiar el campo de entrada
+        codigoAuxInput.value = "";
+    } else {
+        // Ocultar el mensaje de error si el código no existe
+        errorMessage.style.display = "none";
+    }
+});
+
+// Permitir edición en tiempo real
+codigoAuxInput.addEventListener("input", (event) => {
+    let value = event.target.value;
+    if (value === "") return;
+
+    event.target.value = value.replace(/\D/g, "").slice(0, 2);
+});
+		
+		
+		
+function mostrarLista2(element) {
+    // Obtener la fila seleccionada
+    const selectedRow = element.closest("tr");
+    const idCuenta = element.getAttribute("data-id");
+    const idClase = element.getAttribute("data-id");
+    console.log("ID de la opción seleccionada: " + idCuenta);
+
+    // Buscar si ya hay filas desplegadas para este idCuenta
+    let nextRow = selectedRow.nextElementSibling;
+    let isExpanded = false;
+
+    // Verificar si las filas siguientes pertenecen al mismo `idCuenta`
+    while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+        isExpanded = true;
+        nextRow = nextRow.nextElementSibling;
+    }
+
+    // Si ya está expandido, eliminar las filas desplegadas
+    if (isExpanded) {
+        console.log("Cerrando las filas desplegadas para ID: " + idCuenta);
+        nextRow = selectedRow.nextElementSibling;
+        while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+            const rowToRemove = nextRow;
+            nextRow = nextRow.nextElementSibling;
+            rowToRemove.remove();
+        }
+        return; // Terminar la ejecución aquí
+    }
+
+    // Si no está expandido, realizar la solicitud para obtener las filas
+    console.log("Mostrando nuevas filas para ID: " + idCuenta);
+
+    // Crear un objeto con los datos a enviar
+    const datos = {
+        idCuenta: idCuenta,
+        idClase: idClase
+    };
+
+    // Realizar una solicitud POST al controlador
+    fetch("./ListaSegundoNivel", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            // Obtener la lista del segundo nivel
+            const xlistaNivel2 = data.xlistaNivel2;
+
+            // Crear e insertar las nuevas filas debajo de la fila seleccionada
+           xlistaNivel2.reverse().forEach((item) => {
+             const newRow = document.createElement("tr");
+             newRow.classList.add("level-2"); // Clase para estilo escalonado
+             newRow.setAttribute("data-parent-id", idCuenta); // Asignar el ID del padre
+
+             newRow.innerHTML = `
+              <td style="display: flex; align-items: center;">
+                <span 
+                 onclick="mostrarLista3(this)" 
+                 data-id="${item.idCuenta}" 
+                 data-id-clase="${idClase}" 
+                 style="cursor: pointer; color: blue; margin-right: 5px; font-size: 11px;"
+                 >
+                   ►
+               </span>
+              ${item.idCuenta}
+            </td>
+             <td>${item.nombreCuenta}</td>
+              `;
+
+             selectedRow.parentNode.insertBefore(newRow, selectedRow.nextSibling);
+          });
+        })
+        .catch((error) => {
+            console.error("Error al registrar el log:", error);
+        });
+}
+
+
+function mostrarLista3(element) {
+    // Obtener la fila seleccionada
+    const selectedRow = element.closest("tr");
+    const idCuenta = element.getAttribute("data-id");
+    const idClase = element.getAttribute("data-id-clase");
+    console.log("ID de la opción seleccionada en mostrarLista3: " + idCuenta);
+    console.log("idClase seleccionada en mostrarLista3: " + idClase);
+
+
+     // Buscar si ya hay filas desplegadas para este idCuenta
+    let nextRow = selectedRow.nextElementSibling;
+    let isExpanded = false;
+
+    // Verificar si las filas siguientes pertenecen al mismo `idCuenta`
+    while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+        isExpanded = true;
+        nextRow = nextRow.nextElementSibling;
+    }
+
+    // Si ya está expandido, eliminar las filas desplegadas
+    if (isExpanded) {
+        console.log("Cerrando las filas desplegadas para ID: " + idCuenta);
+        nextRow = selectedRow.nextElementSibling;
+        while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+            const rowToRemove = nextRow;
+            nextRow = nextRow.nextElementSibling;
+            rowToRemove.remove();
+        }
+        return; // Terminar la ejecución aquí
+    }
+
+
+    // Crear un objeto con los datos a enviar
+    const datos = {
+        idCuenta: idCuenta,
+        idClase: idClase
+    };
+
+    // Realizar una solicitud POST al controlador
+    fetch("./ListaNiveles", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            // Obtener la lista del segundo nivel
+            const xlistaNivel3 = data.xlistaNiveles;
+
+            // Crear e insertar las nuevas filas debajo de la fila seleccionada
+            xlistaNivel3.reverse().forEach((item) => {
+                const newRow = document.createElement("tr");
+                newRow.classList.add("level-3"); // Clase para estilo escalonado
+                newRow.setAttribute("data-parent-id", idCuenta); // Asignar el ID del padre
+
+             newRow.innerHTML = `
+              <td style="display: flex; align-items: center;">
+                <span 
+                 onclick="mostrarLista4(this)" 
+                 data-id="${item.idCuenta}" 
+                 data-id-clase="${idClase}" 
+                 style="cursor: pointer; color: #ea7722; margin-right: 5px; font-size: 11px;"
+                 >
+                   ►
+               </span>
+              ${item.idCuenta}
+            </td>
+             <td>${item.nombreCuenta}</td>
+              `;
+
+                selectedRow.parentNode.insertBefore(newRow, selectedRow.nextSibling);
+            });
+        })
+        .catch((error) => {
+            console.error("Error al registrar el log:", error);
+        });
+}
+
+
+
+function mostrarLista4(element) {
+    // Obtener la fila seleccionada
+    const selectedRow = element.closest("tr");
+    const idCuenta = element.getAttribute("data-id");
+    const idClase = element.getAttribute("data-id-clase");
+    console.log("ID de la opción seleccionada en mostrarLista3: " + idCuenta);
+    console.log("idClase seleccionada en mostrarLista3: " + idClase);
+
+
+     // Buscar si ya hay filas desplegadas para este idCuenta
+    let nextRow = selectedRow.nextElementSibling;
+    let isExpanded = false;
+
+    // Verificar si las filas siguientes pertenecen al mismo `idCuenta`
+    while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+        isExpanded = true;
+        nextRow = nextRow.nextElementSibling;
+    }
+
+    // Si ya está expandido, eliminar las filas desplegadas
+    if (isExpanded) {
+        console.log("Cerrando las filas desplegadas para ID: " + idCuenta);
+        nextRow = selectedRow.nextElementSibling;
+        while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+            const rowToRemove = nextRow;
+            nextRow = nextRow.nextElementSibling;
+            rowToRemove.remove();
+        }
+        return; // Terminar la ejecución aquí
+    }
+
+
+    // Crear un objeto con los datos a enviar
+    const datos = {
+        idCuenta: idCuenta,
+        idClase: idClase
+    };
+
+    // Realizar una solicitud POST al controlador
+    fetch("./ListaNivel4", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            // Obtener la lista del segundo nivel
+            const xlistaNivel4 = data.xlistaNiveles;
+            xListaAuxiliares = data.xListaAuxiliares;
+
+            // Crear e insertar las nuevas filas debajo de la fila seleccionada
+            xlistaNivel4.reverse().forEach((item) => {
+                const newRow = document.createElement("tr");
+                newRow.classList.add("level-4"); // Clase para estilo escalonado
+                newRow.setAttribute("data-parent-id", idCuenta); // Asignar el ID del padre
+
+                newRow.innerHTML = `
+                <td style="display: flex; align-items: center;">
+                 <!-- Triángulo para mostrarLista4 -->
+                 <span 
+                  onclick="mostrarLista5(this)" 
+                  data-id="${item.idCuenta}" 
+                  data-id-clase="${idClase}" 
+                  style="cursor: pointer; color: #38b16d; margin-right: 5px; font-size: 11px;"
+                  >
+                  ►
+                </span>  
+                <span 
+                 onclick="mostrarDetalle(this)" 
+                 data-id-cuenta="${item.idCuenta}" 
+                 data-id-claseCuenta="${idClase}"
+                 style="cursor: pointer; color: #000; text-decoration: underline;"
+                 >
+                ${item.idCuenta}
+               </span>
+               </td>
+               <td>${item.nombreCuenta}</td>
+                 `;
+
+                selectedRow.parentNode.insertBefore(newRow, selectedRow.nextSibling);
+            });
+        })
+        .catch((error) => {
+            console.error("Error al registrar el log:", error);
+        });
+}
+
+
+
+function mostrarLista5(element) {
+    // Obtener la fila seleccionada
+    const selectedRow = element.closest("tr");
+    const idCuenta = element.getAttribute("data-id");
+    const idClase = element.getAttribute("data-id-clase");
+    console.log("ID de la opción seleccionada en mostrarLista3: " + idCuenta);
+    console.log("idClase seleccionada en mostrarLista3: " + idClase);
+
+
+     // Buscar si ya hay filas desplegadas para este idCuenta
+    let nextRow = selectedRow.nextElementSibling;
+    let isExpanded = false;
+
+    // Verificar si las filas siguientes pertenecen al mismo `idCuenta`
+    while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+        isExpanded = true;
+        nextRow = nextRow.nextElementSibling;
+    }
+
+    // Si ya está expandido, eliminar las filas desplegadas
+    if (isExpanded) {
+        console.log("Cerrando las filas desplegadas para ID: " + idCuenta);
+        nextRow = selectedRow.nextElementSibling;
+        while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+            const rowToRemove = nextRow;
+            nextRow = nextRow.nextElementSibling;
+            rowToRemove.remove();
+        }
+        return; // Terminar la ejecución aquí
+    }
+
+
+    // Crear un objeto con los datos a enviar
+    const datos = {
+        idCuenta: idCuenta,
+        idClase: idClase
+    };
+
+    // Realizar una solicitud POST al controlador
+    fetch("./ListaAuxiliares", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            // Obtener la lista del segundo nivel
+            const xListaAuxiliares = data.xListaAuxiliares;
+
+            // Crear e insertar las nuevas filas debajo de la fila seleccionada
+            xListaAuxiliares.reverse().forEach((item) => {
+                const newRow = document.createElement("tr");
+                newRow.classList.add("level-5"); // Clase para estilo escalonado
+                newRow.setAttribute("data-parent-id", idCuenta); // Asignar el ID del padre
+
+                newRow.innerHTML = `
+                    <td>
+                        <span onclick="mostrarDetalleAux(this)" data-id-aux="${item.idCuentaAux}" data-id-cuenta="${idCuenta}" data-id-clase="${idClase}"  style="cursor: pointer; color: #38b16d; text-decoration: underline;">
+                            ${item.idCuentaAux}
+                        </span>
+                    </td>
+                    <td>${item.nombreCuenta}</td>
+                `;
+
+                selectedRow.parentNode.insertBefore(newRow, selectedRow.nextSibling);
+            });
+        })
+        .catch((error) => {
+            console.error("Error al registrar el log:", error);
+        });
+}
+
+
+function mostrarDetalleAux(element) {
+    // Obtener la fila seleccionada
+    const selectedRow = element.closest("tr");
+    const idCuentaAux = element.getAttribute("data-id-aux");
+    const idCuenta = element.getAttribute("data-id-cuenta");
+    const idClase = element.getAttribute("data-id-clase");
+
+   console.log("Ingresó a mostrarDetalleAux");
+    
+    const vacio = "";
+    
+        document.getElementById("clase").value = vacio;
+        document.getElementById("nombreClase").value = vacio;
+
+        document.getElementById("grupo").value = vacio;
+        document.getElementById("nombreGrupo").value = vacio;
+
+        document.getElementById("cuenta").value = vacio;
+        document.getElementById("nombreCuenta").value = vacio;
+
+        document.getElementById("subCuenta").value = vacio;
+        document.getElementById("nombreSubCuenta").value = vacio;
+
+
+
+
+
+    // Crear un objeto con los datos a enviar
+    const datos = {
+        idCuenta: idCuenta,
+        idCuentaAux: idCuentaAux,
+        idClase: idClase
+    };
+
+    // Realizar una solicitud POST al controlador
+    fetch("./DetalleAux", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            // Obtener la lista del segundo nivel
+            const nombreClase = data.xNombreClase;
+            const idClase = data.xIdClase;
+            
+            const nombreGrupo = data.xNombreGrupo;
+            const idGrupo = data.xIdGrupo;
+            
+            const nombreCuenta = data.xNombreCuenta;
+            const idCuenta = data.xIdCuenta;
+            
+            const nombreSubCuenta = data.xNombreSubCuenta;
+            const idSubCuenta = data.xIdSubCuenta;
+            
+            const nombreCuentaAux = data.xNombreCuentaAux;
+            const coidgoAux = data.xCoidgoAux;
+            
+            xListaAuxiliares = [];
+            
+             // Asignar los valores a los inputs
+        document.getElementById("clase").value = idClase;
+        document.getElementById("nombreClase").value = nombreClase;
+
+        document.getElementById("grupo").value = idGrupo;
+        document.getElementById("nombreGrupo").value = nombreGrupo;
+
+        document.getElementById("cuenta").value = idCuenta;
+        document.getElementById("nombreCuenta").value = nombreCuenta;
+
+        document.getElementById("subCuenta").value = idSubCuenta;
+        document.getElementById("nombreSubCuenta").value = nombreSubCuenta;
+        
+        document.getElementById("subCuentaAux").innerText = idSubCuenta;
+        
+        document.getElementById("codidoAux").value = coidgoAux;
+        document.getElementById("nombreAux").value = nombreCuentaAux;
+        
+        const codigoAux = document.getElementById("codidoAux");
+        codigoAux.readOnly = true;
+        codigoAux.style.backgroundColor = "#eee";
+        
+        
+        const botonActualizar = document.getElementById("actualizarAux");  
+        botonActualizar.style.display = "block";
+        
+        const botonEliminar = document.getElementById("eliminarAux");  
+        botonEliminar.style.display = "block";
+        
+        const botonCrear = document.getElementById("crearAux");  
+        botonCrear.style.display = "none";
+        
+        
+
+
+        })
+        .catch((error) => {
+            console.error("Error al registrar el log:", error);
+        });
+}
+
+
+
+function mostrarDetalle(element) {
+    // Obtener la fila seleccionada
+    const selectedRow = element.closest("tr");
+    const idCuenta = element.getAttribute("data-id-cuenta");
+    const idClase = element.getAttribute("data-id-claseCuenta");
+    console.log("ID de la opción seleccionada en mostrarLista3: " + idCuenta);
+    console.log("idClase seleccionada en mostrarLista3: " + idClase);
+    
+    
+        const botonActualizar = document.getElementById("actualizarAux");  
+        botonActualizar.style.display = "none";
+        
+        const botonEliminar = document.getElementById("eliminarAux");  
+        botonEliminar.style.display = "none";
+        
+        const botonCrear = document.getElementById("crearAux");  
+        botonCrear.style.display = "block";
+        
+        errorMessage.style.display = "none";
+        
+        const codigoAux = document.getElementById("codidoAux");
+        codigoAux.readOnly = false;
+        codigoAux.style.backgroundColor = "#fff";
+    
+    const vacio = "";
+    
+        document.getElementById("clase").value = vacio;
+        document.getElementById("nombreClase").value = vacio;
+
+        document.getElementById("grupo").value = vacio;
+        document.getElementById("nombreGrupo").value = vacio;
+
+        document.getElementById("cuenta").value = vacio;
+        document.getElementById("nombreCuenta").value = vacio;
+
+        document.getElementById("subCuenta").value = vacio;
+        document.getElementById("nombreSubCuenta").value = vacio;
+        
+        document.getElementById("codidoAux").value = vacio;
+        document.getElementById("nombreAux").value = vacio;
+        
+        document.getElementById("subCuentaAux").innerText = vacio;
+
+
+     // Buscar si ya hay filas desplegadas para este idCuenta
+    let nextRow = selectedRow.nextElementSibling;
+    let isExpanded = false;
+
+    // Verificar si las filas siguientes pertenecen al mismo `idCuenta`
+    while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+        isExpanded = true;
+        nextRow = nextRow.nextElementSibling;
+    }
+
+    // Si ya está expandido, eliminar las filas desplegadas
+    if (isExpanded) {
+        console.log("Cerrando las filas desplegadas para ID: " + idCuenta);
+        nextRow = selectedRow.nextElementSibling;
+        while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+            const rowToRemove = nextRow;
+            nextRow = nextRow.nextElementSibling;
+            rowToRemove.remove();
+        }
+        return; // Terminar la ejecución aquí
+    }
+
+
+    // Crear un objeto con los datos a enviar
+    const datos = {
+        idCuenta: idCuenta,
+        idClase: idClase
+    };
+
+    // Realizar una solicitud POST al controlador
+    fetch("./DetallePuc", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+			
+             xListaAuxiliares = data.xListaAuxiliares;
+            
+            const nombreClase = data.xNombreClase;
+            const idClase = data.xIdClase;
+            
+            const nombreGrupo = data.xNombreGrupo;
+            const idGrupo = data.xIdGrupo;
+            
+            const nombreCuenta = data.xNombreCuenta;
+            const idCuenta = data.xIdCuenta;
+            
+            const nombreSubCuenta = data.xNombreSubCuenta;
+            const idSubCuenta = data.xIdSubCuenta;
+            
+             // Asignar los valores a los inputs
+        document.getElementById("clase").value = idClase;
+        document.getElementById("nombreClase").value = nombreClase;
+
+        document.getElementById("grupo").value = idGrupo;
+        document.getElementById("nombreGrupo").value = nombreGrupo;
+
+        document.getElementById("cuenta").value = idCuenta;
+        document.getElementById("nombreCuenta").value = nombreCuenta;
+
+        document.getElementById("subCuenta").value = idSubCuenta;
+        document.getElementById("nombreSubCuenta").value = nombreSubCuenta;
+        
+        document.getElementById("subCuentaAux").innerText = idSubCuenta;
+        
+        
+
+
+        })
+        .catch((error) => {
+            console.error("Error al registrar el log:", error);
+        });
+}
+
+
+
+function CrearAuxiliar() {
+
+  var subCuenta = document.getElementById("subCuenta").value;
+  var codidoAux = document.getElementById("codidoAux").value;
+  var nombreAux = document.getElementById("nombreAux").value;
+
+	
+	   if(!subCuenta){			
+			alert("Por favor cargue los datos");
+			return;
+		}
+	
+	
+		if(!codidoAux){			
+			alert("Por favor ingrese el código del Auxiliar");
+			return;
+		}
+		
+		if(!nombreAux){
+			
+			alert("Por favor ingrese un nombre para el Auxiliar");
+			return;
+		}
+				
+		
+		
+			// Crear un objeto que contenga los datos a enviar
+    var datos = {
+		subCuenta: subCuenta,
+		codidoAux: codidoAux,
+		nombreAux: nombreAux			
+    };
+    
+    // Realizar una solicitud POST al controlador
+    fetch("./CrearAuxiliar-Post", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+		
+		var xNombreAux = data.xNombreAux;    
+		var xIdCuentaAux = data.xIdCuentaAux;    
+       
+          swal({
+            title: "¡Auxiliar " + xIdCuentaAux + " - " + xNombreAux + " creado correctamente!",
+            //text: "La PQR  " + numeroRadicado + " ha sido creada correctamente",
+            icon: "success",
+            button: "Continuar",
+        })
+        .then((value) => {
+            // Redirigimos a la vista "CrearSuscriptor"" al hacer clic en el botón Continuar
+            if (value) {
+                window.location.href = "./Puc";
+            }
+        });
+
+    })
+    .catch((error) => {
+        console.error("Error al registrar el log:", error);
+    });
+		
+		
+	}
+	
+	
+	
+	
+ function ActualizarAuxiliar() {
+
+  var subCuenta = document.getElementById("subCuenta").value;
+  var codidoAux = document.getElementById("codidoAux").value;
+  var nombreAux = document.getElementById("nombreAux").value;
+  
+  
+        if(!subCuenta){			
+			alert("Por favor cargue los datos");
+			return;
+		}
+
+	
+		if(!codidoAux){			
+			alert("Por ingrese el código del Auxiliar");
+			return;
+		}
+		
+		if(!nombreAux){
+			
+			alert("Por ingrese un nombre para el Auxiliar");
+			return;
+		}
+				
+		
+		
+			// Crear un objeto que contenga los datos a enviar
+    var datos = {
+		subCuenta: subCuenta,
+		codidoAux: codidoAux,
+		nombreAux: nombreAux			
+    };
+    
+    // Realizar una solicitud POST al controlador
+    fetch("./ActualizarAuxiliar-Post", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+		
+		var xNombreAux = data.xNombreAux;    
+		var xIdCuentaAux = data.xIdCuentaAux;    
+       
+          swal({
+            title: "¡Auxiliar " + xIdCuentaAux + " - " + xNombreAux + " actualizado correctamente!",
+            //text: "La PQR  " + numeroRadicado + " ha sido creada correctamente",
+            icon: "success",
+            button: "Continuar",
+        })
+        .then((value) => {
+            // Redirigimos a la vista "CrearSuscriptor"" al hacer clic en el botón Continuar
+            if (value) {
+                window.location.href = "./Puc";
+            }
+        });
+
+    })
+    .catch((error) => {
+        console.error("Error al registrar el log:", error);
+    });
+		
+		
+	}
+	
+	
+	
+function EliminarAuxiliar() {
+  var subCuenta = document.getElementById("subCuenta").value;
+  var codidoAux = document.getElementById("codidoAux").value;
+  var nombreAux = document.getElementById("nombreAux").value;
+
+  if (!subCuenta) {
+    alert("Por favor cargue los datos");
+    return;
+  }
+
+  if (!codidoAux) {
+    alert("Por favor ingrese el código del Auxiliar");
+    return;
+  }
+
+  if (!nombreAux) {
+    alert("Por favor ingrese un nombre para el Auxiliar");
+    return;
+  }
+
+  // Crear un objeto que contenga los datos a enviar
+  var datos = {
+    subCuenta: subCuenta,
+    codidoAux: codidoAux,
+    nombreAux: nombreAux,
+  };
+
+  // Mostrar mensaje de confirmación antes de eliminar
+  swal({
+    title: "¿Está seguro?",
+    text: "¿Desea eliminar el auxiliar " + nombreAux + "? Esta acción no se puede deshacer.",
+    icon: "warning",
+    buttons: ["Cancelar", "Eliminar"],
+    dangerMode: true,
+  }).then((willDelete) => {
+    if (willDelete) {
+      // Realizar la solicitud POST al controlador
+      fetch("./EliminarAuxiliar-Post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          var xNombreAux = data.xNombreAux;
+          var xIdCuentaAux = data.xIdCuentaAux;
+
+          swal({
+            title: "¡Eliminado!",
+            text: "Auxiliar " + xIdCuentaAux + " - " + xNombreAux + " eliminado correctamente.",
+            icon: "success",
+            button: "Continuar",
+          }).then((value) => {
+            if (value) {
+              window.location.href = "./Puc";
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Error al registrar el log:", error);
+          swal({
+            title: "Error",
+            text: "Ocurrió un error al eliminar el auxiliar.",
+            icon: "error",
+            button: "Cerrar",
+          });
+        });
+    }
+  });
+}
+
+
+
+
+
+		
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+ 	<head th:replace ="combo/head.html :: head" ></head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" th:href="@{/styles/login.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/styles/General.css}"> 
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/fuenteColor.css}">  	
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/NavBar.css}"> 
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/ComprobanteContable.css}">
+        <title> Contabook</title>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+	<header th:replace="combo/navBar.html :: navbar"></header>
+	<div class="containerFlex" id="encabezado">
+		<div class="local">
+			<h2 class="letraBlue" th:replace="combo/comboLocal.html :: comboLocal"></h2>
+		</div>
+		<div class="descripcion">
+			<h2 class="tituloAFcenter">NUEVO COMPROBANTE CONTABLE</h2>
+		</div>
+		<div class="fechahora">
+			<h2 class="letra" th:replace="combo/FechaHoraActual.html :: comboFechaHora"></h2>
+		</div>
+	</div>
+	
+	<div class="tipoComprobante">
+		<div>
+			<label>Tipo de Comprobante</label>			
+		</div>
+		<div style="margin-left: 60px; ">
+			<select class="select-barra-verde" style="width: 400px; height: 25px;">
+				<option selected disabled>Opcion1</option>
+				<option >Opcion2</option>
+				<option >Opcion3</option>
+			</select>
+		</div>		
+		<div style="margin-left: 500px; ">
+			<label >Consecutivo</label>
+			<label style="margin-left: 20px; ">0</label>	
+		</div>
+		
+	</div>
+	
+    <div class="fechaComprobante">
+		<div>
+			<label>Fecha de elaboración</label>			
+		</div>
+		<div style="margin-left: 60px; ">
+			<input class="select-barra-verde" type="date" id="fechaComprobante" style="margin-left: 6px; height: 25px;" th:value="${xFechaActual}"  pattern="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}" required>
+		</div>			
+	</div>
+	
+	
+	<div class="tablaContable">
+		 <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Cuenta contable</th>
+                <th>Tercero</th>
+                <th>Detalle contable</th>
+                <th>Descripción</th>
+                <th>Débito</th>
+                <th>Crédito</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>
+                    <div class="search-container">
+                            <input type="text" placeholder="Buscar" id="buscarCuenta" onfocus="BuscarCuentas()">
+                            <span class="icon">🔍</span>
+                            <div class="results-container" id="results"></div>
+                      </div>
+                </td>
+                <td>
+                    <div class="search-container">
+                        <input type="text" placeholder="Buscar">
+                        <span class="icon">🔍</span>
+                    </div>
+                </td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text" value="0.00"></td>
+                <td><input type="text" value="0.00"></td>
+            </tr>
+        </tbody>
+    </table>
+    
+     <div class="totals">
+        <p><strong>Total :</strong> <span>0.00</span> <span>0.00</span></p>
+        <p class="difference">Diferencia : <span>0.00</span></p>
+    </div>
+		
+	</div>
+
+
+
+	<script type="text/javascript" th:inline="javascript">
+
+let listaCuentas = []; // Almacena todas las cuentas 
+
+function BuscarCuentas() {
+    console.log("Ingresó a BuscarCuentas");
+
+    fetch("./ObtenerCuentas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        listaCuentas = data.xlistaCuentas; 
+        mostrarResultados(listaCuentas); //Muestra los resultados
+    })
+    .catch(error => console.error("Error al obtener cuentas:", error));
+}
+
+function mostrarResultados(cuentas) {
+    let resultsContainer = document.getElementById("results");
+    resultsContainer.innerHTML = "";
+
+    if (cuentas.length === 0) {
+        resultsContainer.style.display = "none";
+        return;
+    }
+
+    cuentas.forEach(cuenta => {
+        let item = document.createElement("div");
+        item.classList.add("result-item");
+        item.textContent = `${cuenta.idCuentaAux} - ${cuenta.nombreCuenta}`;
+        item.onclick = () => {
+            let inputCuenta = document.getElementById("buscarCuenta");
+
+            inputCuenta.value = `${cuenta.idCuentaAux} - ${cuenta.nombreCuenta}`;
+            inputCuenta.setAttribute("data-id", cuenta.idCuentaAux);
+            
+            resultsContainer.style.display = "none";
+        };
+        resultsContainer.appendChild(item);
+    });
+
+    resultsContainer.style.display = "block";
+}
+
+// Filtrar en tiempo real
+document.getElementById("buscarCuenta").addEventListener("input", function() {
+    let filtro = this.value.toLowerCase();
+    let cuentasFiltradas = listaCuentas.filter(cuenta =>
+        `${cuenta.idCuentaAux} - ${cuenta.nombreCuenta}`.toLowerCase().includes(filtro)
+    );
+    mostrarResultados(cuentasFiltradas);
+});
+
+
+
+		
+	</script>
+</body>
+
+</html>

@@ -30,7 +30,7 @@ List<TblOpcionesDTO> ObtenerTipoOpciones1(int idLocal, List<Integer> idOpciones)
 	  		  "FROM BDMailMarketing.dbo.tblOpciones " +
 	  		  "WHERE tblopciones.idTipoOpcion = 1 " +
 	  		  "AND tblopciones.idLocal = ?1 " +
-	  		  "AND tblopciones.sistema = 'marketing' " +
+	  		  "AND tblopciones.sistema = 'contabook' " +
 	  		  "ORDER BY tblopciones.idOpcion ", nativeQuery = true)
 List<Integer> ObtenerListaIdTipoOpcion1(int idLocal);
 	  
