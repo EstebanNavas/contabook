@@ -95,11 +95,55 @@ th {
         .result-item:hover {
             background-color: #f1f1f1;
         }
-        .totals {
-            margin-top: 10px;
-            font-size: 12px;
-        }
+       .totals-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.totales{
+	display: flex;
+}
+
+.empty-space {
+    flex-grow: 4; /* Ocupa el espacio antes de las columnas Débito y Crédito */
+}
+
+.total-debito, .total-credito, .total-diferencia {
+    width: 100px;
+    text-align: center;
+    font-weight: bold;
+}
         .difference {
             color: green;
             font-weight: bold;
         }
+        
+/*-------------------------------------------------------*/     
+
+.credito-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.credito-container input {
+    flex: 1;
+    text-align: right;
+}
+
+.icon {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.save-icon {
+    color: green;
+}
+
+.delete-icon {
+    color: red;
+}  
+        
+        
