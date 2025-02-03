@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.contabook.Model.DBMailMarketing.TblDctosPeriodo;
 import com.contabook.Model.DBMailMarketing.TblPuc;
 import com.contabook.Model.DBMailMarketing.TblPucAux;
 import com.contabook.Model.DBMailMarketing.TblTipoCpte;
@@ -214,7 +215,14 @@ public class ComprobanteContableController {
 	    Integer idTipoOrden = 999;
 	    String siglaMoneda = "COP";
 	    
-	    Integer idperiodo = 000000;
+	    // Obtenemos el periodo activo
+		List <TblDctosPeriodo> PeriodoActivo = tblDctosPeriodoService.ObtenerPeriodoActivo(idLocal);
+		
+		Integer idPeriodo = 0;
+		
+		for(TblDctosPeriodo P : PeriodoActivo) {						
+			idPeriodo = P.getIdPeriodo();					
+		}
 	    
 	    //obtenemos el maximo idCpte
     	Integer maxIdCpte = tblDctoService.MaximoiIdCpte(idLocal) + 1;
@@ -233,7 +241,7 @@ public class ComprobanteContableController {
 	            System.out.println("El documento no existe ");
 	            
 	            //(int idLocal, int idTipoCpte, int idCpte, int idTipoOrden, int idDcto, String FechaDcto, String siglaMoneda, int idTasa, int idPeriodo)
-	            tblDctoRepo.ingresaDcto(idLocal, idTipoCpte, maxIdCpte, idTipoOrden, maxIdCpte, fechaDcto, siglaMoneda, 0, idperiodo);
+	            tblDctoRepo.ingresaDcto(idLocal, idTipoCpte, maxIdCpte, idTipoOrden, maxIdCpte, fechaDcto, siglaMoneda, 0, idPeriodo);
 	            System.out.println("ingresaDcto ");
 	            
 	            int item = 1;
@@ -255,7 +263,7 @@ public class ComprobanteContableController {
 	      			    // int accion, int cantProducto, int prefijo, int consecutivo, int numeroCuota, String fechaVencimiento, int codImpuesto, int codGrupoActivoFijo, int codActivoFijo,
 	    			   //String descripcion, int codCentroSubCentro, Double vrDebito, Double vrCredito, String observacion, Double baseGravable, int mesCierre )
 	                 	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, maxIdCpte, idCuenta, cliente, item, 0, 0, 0, 
-	                	 0, 0, 0, 0, 0, fechaDcto, 0, 0, 0, descripcion, 0, vrDebito, vrCredito, observación, 0.0, idperiodo);
+	                	 0, 0, 0, 0, 0, fechaDcto, 0, 0, 0, descripcion, 0, vrDebito, vrCredito, observación, 0.0, idPeriodo);
 	                 	
 	                	System.out.println("ingresaDctoDetalle ");
 	                    
@@ -275,6 +283,7 @@ public class ComprobanteContableController {
 	        
 		    Map<String, Object> response = new HashMap<>();
 		    response.put("message", "LOGGGGGGGGG");
+		    response.put("xComprobante", maxIdCpte);
 
 		    return ResponseEntity.ok(response);
 	   

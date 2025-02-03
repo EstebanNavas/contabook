@@ -325,6 +325,10 @@ public class PeriodoController {
 		    
 	        System.out.println("IDPERIODO ACTIVADO CORRECTAMENTE");
 		    Map<String, Object> response = new HashMap<>();
+		    
+	        request.getSession().removeAttribute("periodoActivo");            
+			request.getSession().setAttribute("periodoActivo", idPeriodo);
+			
 		    response.put("message", "LOGGGGGGGGG");
 		    response.put("idPeriodo", idPeriodo);
 		    
@@ -387,6 +391,10 @@ public class PeriodoController {
 	    											0, 0, TextoPeriodo, usuario.getIdLocal(), idPeriodoInt);
 		    
 	        System.out.println("IDPERIODO ACTUALIDADO CORRECTAMENTE");
+	        
+	        
+
+	        
 		    Map<String, Object> response = new HashMap<>();
 		    response.put("message", "LOGGGGGGGGG");
 		    response.put("idPeriodo", idPeriodo);

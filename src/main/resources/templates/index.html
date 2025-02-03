@@ -32,10 +32,10 @@
 <body>
     <div class="login-container">
         <div class="login-card">
-			<img src="/imagenes/logoContaBook.jpg" alt="Logo Contabook" class="logo">
+			<img src="./imagenes/logoContaBook.jpg" alt="Logo Contabook" class="logo">
             <h1>Iniciar Sesión</h1>
 
-            <form  th:action="@{/login-post}"  method="POST">
+            <form  th:action="@{./login-post}"  method="POST">
                 <div class="form-group">
                     <label for="username">Usuario</label>
                     <input type="text" id="usuario" name="usuario" placeholder="Ingresa tu usuario" required>

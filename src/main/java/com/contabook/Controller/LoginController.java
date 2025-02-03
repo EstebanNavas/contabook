@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.contabook.Service.DBMailMarketing.TblAgendaLogVisitasService;
+import com.contabook.Service.DBMailMarketing.TblDctosPeriodoService;
 import com.contabook.Service.DBMailMarketing.TblOpcionesService;
 import com.contabook.Service.dbaquamovil.CtrlusuariosService;
 import com.contabook.Service.dbaquamovil.TblLocalesService;
@@ -25,6 +26,7 @@ import com.contabook.Model.dbaquamovil.Ctrlusuarios;
 import com.contabook.Model.DBMailMarketing.TblAgendaLogVisitas;
 import com.contabook.Projection.TblOpcionesDTO;
 import com.contabook.Repository.DBMailMarketing.TblAgendaLogVisitasRepo;
+import com.contabook.Model.DBMailMarketing.TblDctosPeriodo;
 
 @Controller
 public class LoginController {
@@ -43,6 +45,9 @@ public class LoginController {
 	
 	@Autowired
 	TblAgendaLogVisitasRepo tblAgendaLogVisitasRepo;
+	
+	@Autowired
+	TblDctosPeriodoService tblDctosPeriodoService;
 	
 	Integer idLocalAutenticado = 0;
 	Integer xidUsuario = 0;
@@ -208,7 +213,18 @@ public class LoginController {
 		            
 		            System.out.println(" request.getSession() es  " + request.getSession());
 		            model.addAttribute("ListaOpcionesTipo1", ListaOpcionesTipo1);
+		            
+		            
+		            // Obtenemos el periodo activo
+					List <TblDctosPeriodo> PeriodoActivo = tblDctosPeriodoService.ObtenerPeriodoActivo(idLocalAutenticado);
+					
+					Integer idPeriodo = 0;
+					
+					for(TblDctosPeriodo P : PeriodoActivo) {						
+						idPeriodo = P.getIdPeriodo();					
+					}
 		        	
+					request.getSession().setAttribute("periodoActivo", idPeriodo);
 		        	
 	        	
 		            return "menuPrincipal";

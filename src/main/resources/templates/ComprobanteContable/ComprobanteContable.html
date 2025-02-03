@@ -23,6 +23,7 @@
 		</div>
 		<div class="descripcion">
 			<h2 class="tituloAFcenter">NUEVO DOCUMENTO CONTABLE</h2>
+			<h3 th:replace="combo/comboPeriodo.html :: comboPeriodo"></h3>
 		</div>
 		<div class="fechahora">
 			<h2 class="letra" th:replace="combo/FechaHoraActual.html :: comboFechaHora"></h2>
@@ -38,11 +39,7 @@
         	 <option th:text="${xLista.getIdTipoCpte() + ' - ' + xLista.getNombreCmpte()}" th:each="xLista:${xListaComprobantes}" th:value="${xLista.getIdTipoCpte()}" ></option>
 			</select>
 		</div>		
-		<div style="margin-left: 500px; ">
-			<label >Consecutivo</label>
-			<label style="margin-left: 20px; " th:text="${xXaxIdCpte}"></label>	
-		</div>
-		
+
 	</div>
 	
     <div class="fechaComprobante">
@@ -154,7 +151,7 @@
 	
 	
 	<div class="divCencer" style="margin-top: 100px;">				
-    	<button type="button" class="btn btn-primary" value="Guardar" style="width: 100px;" onclick="CrearAuxiliar()" >Regresar</button>
+    	<a href="./menuPrincipal" class="btn btn-primary" style="margin: 25px;">Regresar</a>
 		<button type="button" class="btn btn-success" value="Guardar" style="width: 100px;" onclick="GuardarDctoContable()" >Guardar</button>
 	</div>
 
@@ -430,7 +427,7 @@ function calcularTotales() {
 
 
 function GuardarDctoContable() {
-		
+    
     calcularTotales();
     
     var xCuentaArr = [];
@@ -460,22 +457,22 @@ function GuardarDctoContable() {
 
     var tabla = document.querySelector("#tabla tbody");
 
-    //ilas de la tabla
+    // Filas de la tabla
     var filas = tabla.querySelectorAll("tr");
-    
+
+    // Bandera filas vacías
+    var filasVacias = false;
+
     // Iterar sobre cada fila de la tabla
     filas.forEach(function(fila) {
-        // Obtener los elementos de la fila
         var elementos = fila.querySelectorAll("td");
 
-        // Obtener los valores de los elementos y hacer lo que necesites con ellos
-        var cuenta = elementos[1].querySelector("input").getAttribute("data-idCuenta");       
-        var tercero = elementos[2].querySelector("input").getAttribute("data-idTercero");
-        var detalleContable = elementos[3].querySelector("input").value;
-        var descripcion = elementos[4].querySelector("input").value;
-        var debito = elementos[5].querySelector("input").value;
-        var credito = elementos[6].querySelector("input").value;
-
+        var cuenta = elementos[1].querySelector("input").getAttribute("data-idCuenta") || "";       
+        var tercero = elementos[2].querySelector("input").getAttribute("data-idTercero") || "";
+        var detalleContable = elementos[3].querySelector("input").value.trim();
+        var descripcion = elementos[4].querySelector("input").value.trim();
+        var debito = elementos[5].querySelector("input").value.trim();
+        var credito = elementos[6].querySelector("input").value.trim();
 
         console.log("cuenta: " + cuenta);
         console.log("tercero: " + tercero);
@@ -484,31 +481,43 @@ function GuardarDctoContable() {
         console.log("debito: " + debito);
         console.log("credito: " + credito);
 
+        // Verificar si hay una fila vacía
+        if (!cuenta || !tercero || !detalleContable || !descripcion || (!debito && !credito)) {
+            filasVacias = true;
+        }
 
-       // Agregar los valores a los arrays
-       xCuentaArr.push(cuenta);
-       xTerceroArr.push(tercero);
-       xDetalleContableArr.push(detalleContable);
-       xDescripcionArr.push(descripcion);    
-       xDebitoArr.push(debito); 
-       xCreditoArr.push(credito); 
-
+        xCuentaArr.push(cuenta);
+        xTerceroArr.push(tercero);
+        xDetalleContableArr.push(detalleContable);
+        xDescripcionArr.push(descripcion);    
+        xDebitoArr.push(debito); 
+        xCreditoArr.push(credito); 
     });
-		
-		
-	// Crear un objeto que contenga los datos a enviar
-    var datos = {
-		xCuentaArr : xCuentaArr,
-		xTerceroArr: xTerceroArr,
-		xDetalleContableArr: xDetalleContableArr,
-		xDescripcionArr: xDescripcionArr,
-		xDebitoArr: xDebitoArr,
-		xCreditoArr: xCreditoArr,
-		tipoComprobante: tipoComprobante,
-		fechaComprobante: fechaComprobante		
-    };
+
     
-    // Realizar una solicitud POST al controlador
+    if (filasVacias) {
+        swal({
+            title: "Error",
+            text: "Hay filas incompletas. Por favor, llena todos los campos antes de guardar.",
+            icon: "error",
+            button: "Aceptar",
+        });
+        return;
+    }
+
+    // Crear un objeto con los datos a enviar
+    var datos = {
+        xCuentaArr: xCuentaArr,
+        xTerceroArr: xTerceroArr,
+        xDetalleContableArr: xDetalleContableArr,
+        xDescripcionArr: xDescripcionArr,
+        xDebitoArr: xDebitoArr,
+        xCreditoArr: xCreditoArr,
+        tipoComprobante: tipoComprobante,
+        fechaComprobante: fechaComprobante
+    };
+
+    // Realizar la solicitud POST solo si todas las filas tienen datos
     fetch("./GuardarDctoContable-Post", {
         method: "POST",
         headers: {
@@ -519,28 +528,22 @@ function GuardarDctoContable() {
     .then((response) => response.json())
     .then((data) => {
 		
-       
-          swal({
-            title: "¡Documento contable  guardado correctamente!",
-            //text: "La PQR  " + numeroRadicado + " ha sido creada correctamente",
+		var numComprobante = data.xComprobante;
+		
+        swal({
+            title: "¡Documento contable " + numComprobante + " guardado correctamente!",
             icon: "success",
             button: "Continuar",
-        })
-        .then((value) => {
-            // Redirigimos a la vista "CrearSuscriptor"" al hacer clic en el botón Continuar
+        }).then((value) => {
             if (value) {
                 window.location.href = "./ComprobanteContable";
             }
         });
-
     })
     .catch((error) => {
         console.error("Error al registrar el log:", error);
     });
-		
-		
-	}
-
+}
 		
 	</script>
 </body>

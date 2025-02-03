@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/styles/fuenteColor.css}"> 
+ </head>
+<body>
+    
+        <div th:fragment="comboPeriodo" class="tituloAFcenter">
+         	<h7 th:text="'Periodo Activo: ' + ${session.periodoActivo}"></h7>  
+        
+    </div>
+</body>
+</html>
