@@ -16,16 +16,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.contabook.Service.DBMailMarketing.TblAgendaLogVisitasService;
+
 import com.contabook.Service.DBMailMarketing.TblDctosPeriodoService;
 import com.contabook.Service.DBMailMarketing.TblOpcionesService;
 import com.contabook.Service.dbaquamovil.CtrlusuariosService;
+import com.contabook.Service.dbaquamovil.TblAgendaLogVisitasService;
 import com.contabook.Service.dbaquamovil.TblLocalesService;
 import com.contabook.Utilidades.UtilidadesIP;
 import com.contabook.Model.dbaquamovil.Ctrlusuarios;
-import com.contabook.Model.DBMailMarketing.TblAgendaLogVisitas;
+import com.contabook.Model.dbaquamovil.TblAgendaLogVisitas;
 import com.contabook.Projection.TblOpcionesDTO;
-import com.contabook.Repository.DBMailMarketing.TblAgendaLogVisitasRepo;
+import com.contabook.Repository.dbaquamovil.TblAgendaLogVisitasRepo;
 import com.contabook.Model.DBMailMarketing.TblDctosPeriodo;
 
 @Controller
@@ -56,6 +57,10 @@ public class LoginController {
 	//Se obtienen los valores ingresados en el form del index
    public String login(HttpServletRequest request,  @RequestParam(value = "usuario", required = false) String idUsuario, @RequestParam(value = "password", required = false) String password, @RequestParam(value = "sistema", required = false) String sistema,
                     Model model) throws UnknownHostException { 
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
 		
 		
 		System.out.println("usuario es " + idUsuario);

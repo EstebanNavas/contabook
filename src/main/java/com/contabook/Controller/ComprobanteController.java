@@ -28,6 +28,8 @@ import com.contabook.Model.DBMailMarketing.TblTipoCpte;
 import com.contabook.Model.dbaquamovil.Ctrlusuarios;
 import com.contabook.Repository.DBMailMarketing.TblTipoCpteRepo;
 import com.contabook.Service.DBMailMarketing.TblTipoCpteService;
+import com.contabook.Utilidades.ControlDeInactividad;
+import com.contabook.Model.dbaquamovil.TblAgendaLogVisitas;
 
 
 
@@ -41,6 +43,9 @@ public class ComprobanteController {
 	@Autowired
 	TblTipoCpteRepo tblTipoCpteRepo;
 	
+	@Autowired
+	ControlDeInactividad controlDeInactividad;
+	
 	@GetMapping("/Comprobante")
 	public String Comprobante(HttpServletRequest request,Model model) {
 		
@@ -50,31 +55,31 @@ public class ComprobanteController {
 		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		
-//		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
-//	    HttpSession session = request.getSession();
-//	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
-//	    
-//	    @SuppressWarnings("unchecked")
-//		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
-//	    
-//	    Integer estadoUsuario = 0;
-//	    
-//
-//	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
-//	            Integer idLocalUsuario = usuarioLog.getIdLocal();
-//	            Integer idLogUsuario = usuarioLog.getIDLOG();
-//	            String sessionIdUsuario = usuarioLog.getSessionId();
-//	            
-//	            
-//	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
-//	        }
-//    
-//	           if(estadoUsuario.equals(2)) {
-//	        	   System.out.println("USUARIO INACTIVO");
-//	        	   return "redirect:/";
-//	           }
-//		
-//		//------------------------------------------------------------------------------------------------------------------------------------------
+		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
+	    HttpSession session = request.getSession();
+	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
+	    
+	    @SuppressWarnings("unchecked")
+		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
+	    
+	    Integer estadoUsuario = 0;
+	    
+
+	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
+	            Integer idLocalUsuario = usuarioLog.getIdLocal();
+	            Integer idLogUsuario = usuarioLog.getIDLOG();
+	            String sessionIdUsuario = usuarioLog.getSessionId();
+	            
+	            
+	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
+	        }
+    
+	           if(estadoUsuario.equals(2)) {
+	        	   System.out.println("USUARIO INACTIVO");
+	        	   return "redirect:/";
+	           }
+		
+		//------------------------------------------------------------------------------------------------------------------------------------------
 
 
 	    
@@ -98,35 +103,31 @@ public class ComprobanteController {
 		Integer idLocal = usuario.getIdLocal();
 		
 		
-//		 // ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
-//	    HttpSession session = request.getSession();
-//	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
-//	    
-//	    @SuppressWarnings("unchecked")
-//		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
-//	    
-//	    Integer estadoUsuario = 0;
-//	    
-//
-//	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
-//	            Integer idLocal = usuarioLog.getIdLocal();
-//	            Integer idLog = usuarioLog.getIDLOG();
-//	            String sessionId = usuarioLog.getSessionId();
-//	            
-//	            
-//	            System.out.println("idLocal: " + idLocal);
-//	            System.out.println("idLog: " + idLog);
-//	            System.out.println("sessionId: " + sessionId);
-//	            
-//	            
-//	           estadoUsuario = controlDeInactividad.ingresa(idLocal, idLog, sessionId);          
-//	        }
-//    
-//	           if(estadoUsuario.equals(2)) {
-//	        	   System.out.println("USUARIO INACTIVO");
-//	        	   return "redirect:/";
-//	           }
+		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
+	    HttpSession session = request.getSession();
+	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
+	    
+	    @SuppressWarnings("unchecked")
+		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
+	    
+	    Integer estadoUsuario = 0;
+	    
+
+	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
+	            Integer idLocalUsuario = usuarioLog.getIdLocal();
+	            Integer idLogUsuario = usuarioLog.getIDLOG();
+	            String sessionIdUsuario = usuarioLog.getSessionId();
+	            
+	            
+	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
+	        }
+    
+	           if(estadoUsuario.equals(2)) {
+	        	   System.out.println("USUARIO INACTIVO");
+	        	   return "redirect:/";
+	           }
 		
+		//------------------------------------------------------------------------------------------------------------------------------------------
 
 
 		    
@@ -157,36 +158,31 @@ public class ComprobanteController {
 		
 		System.out.println("Entró a /CrearComprobante");
 		
-//		 // ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
-//	    HttpSession session = request.getSession();
-//	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
-//	    
-//	    @SuppressWarnings("unchecked")
-//		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
-//	    
-//	    Integer estadoUsuario = 0;
-//	    
-//
-//	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
-//	            Integer idLocal = usuarioLog.getIdLocal();
-//	            Integer idLog = usuarioLog.getIDLOG();
-//	            String sessionId = usuarioLog.getSessionId();
-//	            
-//	            
-//	            System.out.println("idLocal: " + idLocal);
-//	            System.out.println("idLog: " + idLog);
-//	            System.out.println("sessionId: " + sessionId);
-//	            
-//	            
-//	           estadoUsuario = controlDeInactividad.ingresa(idLocal, idLog, sessionId);          
-//	        }
-//    
-//	           if(estadoUsuario.equals(2)) {
-//	        	   System.out.println("USUARIO INACTIVO");
-//	        	   return "redirect:/";
-//	           }
-//		
-//		//------------------------------------------------------------------------------------------------------------------------------------------	
+		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
+	    HttpSession session = request.getSession();
+	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
+	    
+	    @SuppressWarnings("unchecked")
+		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
+	    
+	    Integer estadoUsuario = 0;
+	    
+
+	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
+	            Integer idLocalUsuario = usuarioLog.getIdLocal();
+	            Integer idLogUsuario = usuarioLog.getIDLOG();
+	            String sessionIdUsuario = usuarioLog.getSessionId();
+	            
+	            
+	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
+	        }
+    
+	           if(estadoUsuario.equals(2)) {
+	        	   System.out.println("USUARIO INACTIVO");
+	        	   return "redirect:/";
+	           }
+		
+		//------------------------------------------------------------------------------------------------------------------------------------------
 			
 
 		    //Obtenemos el Maximo ID
@@ -203,6 +199,12 @@ public class ComprobanteController {
 	@PostMapping("/CrearComprobante-Post")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> CrearComprobantePost(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+        
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 	    Integer IdUsuario = usuario.getIdUsuario();
 	    
@@ -278,36 +280,31 @@ public class ComprobanteController {
 		
 		Integer idTipoCpteInt = Integer.parseInt(idTipoCpte);
 		
-//		 // ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
-//	    HttpSession session = request.getSession();
-//	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
-//	    
-//	    @SuppressWarnings("unchecked")
-//		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
-//	    
-//	    Integer estadoUsuario = 0;
-//	    
-//
-//	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
-//	            Integer idLocal = usuarioLog.getIdLocal();
-//	            Integer idLog = usuarioLog.getIDLOG();
-//	            String sessionId = usuarioLog.getSessionId();
-//	            
-//	            
-//	            System.out.println("idLocal: " + idLocal);
-//	            System.out.println("idLog: " + idLog);
-//	            System.out.println("sessionId: " + sessionId);
-//	            
-//	            
-//	           estadoUsuario = controlDeInactividad.ingresa(idLocal, idLog, sessionId);          
-//	        }
-//    
-//	           if(estadoUsuario.equals(2)) {
-//	        	   System.out.println("USUARIO INACTIVO");
-//	        	   return "redirect:/";
-//	           }
-//		
-//		//------------------------------------------------------------------------------------------------------------------------------------------
+		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
+	    HttpSession session = request.getSession();
+	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
+	    
+	    @SuppressWarnings("unchecked")
+		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
+	    
+	    Integer estadoUsuario = 0;
+	    
+
+	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
+	            Integer idLocalUsuario = usuarioLog.getIdLocal();
+	            Integer idLogUsuario = usuarioLog.getIDLOG();
+	            String sessionIdUsuario = usuarioLog.getSessionId();
+	            
+	            
+	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
+	        }
+    
+	           if(estadoUsuario.equals(2)) {
+	        	   System.out.println("USUARIO INACTIVO");
+	        	   return "redirect:/";
+	           }
+		
+		//------------------------------------------------------------------------------------------------------------------------------------------
 	
 		
 		    List<TblTipoCpte>  comprobante = tblTipoCpteService.obtenerCpteXId(idLocal, idTipoCpteInt);
@@ -336,6 +333,12 @@ public class ComprobanteController {
 	@PostMapping("/ActualizarComprobante-Post")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> ActualizarComprobante(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+        
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 	    Integer IdUsuario = usuario.getIdUsuario();
 	    Integer idLocal = usuario.getIdLocal();

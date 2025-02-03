@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,11 @@ import com.contabook.Model.DBMailMarketing.TblDctosPeriodo;
 import com.contabook.Model.DBMailMarketing.TblPuc;
 import com.contabook.Model.DBMailMarketing.TblPucAux;
 import com.contabook.Model.dbaquamovil.Ctrlusuarios;
+import com.contabook.Model.dbaquamovil.TblAgendaLogVisitas;
 import com.contabook.Repository.DBMailMarketing.TblPucAuxRepo;
 import com.contabook.Service.DBMailMarketing.TblPucAuxService;
 import com.contabook.Service.DBMailMarketing.TblPucService;
+import com.contabook.Utilidades.ControlDeInactividad;
 
 
 @Controller
@@ -41,6 +44,9 @@ public class PucController {
 	@Autowired
 	TblPucAuxService tblPucAuxService;
 	
+	@Autowired
+	ControlDeInactividad controlDeInactividad;
+	
 	
 	@GetMapping("/Puc")
 	public String Puc(HttpServletRequest request,Model model) {
@@ -48,6 +54,32 @@ public class PucController {
 		Class tipoObjeto = this.getClass();					
         String nombreClase = tipoObjeto.getName();		
         System.out.println("CONTROLLER " + nombreClase);
+        
+     // ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
+	    HttpSession session = request.getSession();
+	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
+	    
+	    @SuppressWarnings("unchecked")
+		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
+	    
+	    Integer estadoUsuario = 0;
+	    
+
+	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
+	            Integer idLocalUsuario = usuarioLog.getIdLocal();
+	            Integer idLogUsuario = usuarioLog.getIDLOG();
+	            String sessionIdUsuario = usuarioLog.getSessionId();
+	            
+	            
+	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
+	        }
+    
+	           if(estadoUsuario.equals(2)) {
+	        	   System.out.println("USUARIO INACTIVO");
+	        	   return "redirect:/";
+	           }
+		
+		//------------------------------------------------------------------------------------------------------------------------------------------
 		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		Integer idLocal = usuario.getIdLocal();
@@ -66,6 +98,10 @@ public class PucController {
 	@PostMapping("/ListaSegundoNivel")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> ListaSegundoNivel(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,  Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
 		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		
@@ -107,6 +143,10 @@ public class PucController {
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> ListaTercerNivel(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,  Model model) {
 		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		
 		Map<String, Object> response = new HashMap<>();
@@ -143,6 +183,10 @@ public class PucController {
 	@PostMapping("/ListaNivel4")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> ListaNivel4(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,  Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
 		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		Integer idLocal = usuario.getIdLocal();
@@ -193,6 +237,10 @@ public class PucController {
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> ListaAuxiliares(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,  Model model) {
 		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		Integer idLocal = usuario.getIdLocal();
 		
@@ -222,6 +270,10 @@ public class PucController {
 	@PostMapping("/DetallePuc")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> DetallePuc(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,  Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClaseController = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClaseController);
 		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		Integer idLocal = usuario.getIdLocal();
@@ -295,6 +347,10 @@ public class PucController {
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> DetalleAux(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,  Model model) {
 		
+		Class tipoObjeto = this.getClass();					
+        String nombreClaseController = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClaseController);
+		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		Integer idLocal = usuario.getIdLocal();
 		
@@ -367,6 +423,12 @@ public class PucController {
 	@PostMapping("/CrearAuxiliar-Post")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> CrearAuxiliar(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+        
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 	    Integer IdUsuario = usuario.getIdUsuario();
 	    
@@ -412,6 +474,12 @@ public class PucController {
 	@PostMapping("/ActualizarAuxiliar-Post")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> ActualizarAuxiliar(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+        
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 	    Integer IdUsuario = usuario.getIdUsuario();
 	    
@@ -455,6 +523,12 @@ public class PucController {
 	@PostMapping("/EliminarAuxiliar-Post")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> EliminarAuxiliar(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+        
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 	    Integer IdUsuario = usuario.getIdUsuario();
 	    

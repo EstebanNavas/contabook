@@ -32,10 +32,15 @@
 	</div>
 	
 		<form class="containerTable">
+			
+
 
                 <div class="divCentrado" style="margin-top: 100px;">
 					<input type="hidden" id="idPeriodo" th:value="${xIdPeriodo}">
-					<button type="button" id="Importar"  class="btn btn-primary" onclick="ImportarContabilidad()" >Importar contabilidad</button>
+					<button type="button" id="Importar" class="btn btn-primary" 
+                         onclick="ImportarContabilidad()" 
+                        th:text="'Importar contabilidad PERIODO:  ' + ${xIdPeriodo}">
+                   </button>
 
 				</div>
 				<div id="loadingSpinner" style="display: none;">

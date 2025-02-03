@@ -28,7 +28,8 @@ import com.contabook.Repository.DBMailMarketing.TblDctosPeriodoRepo;
 import com.contabook.Service.DBMailMarketing.TblDctosPeriodoService;
 import com.contabook.Service.dbaquamovil.CtrlusuariosService;
 import com.contabook.Service.dbaquamovil.TblLocalesService;
-import com.contabook.Model.DBMailMarketing.TblAgendaLogVisitas;
+import com.contabook.Utilidades.ControlDeInactividad;
+import com.contabook.Model.dbaquamovil.TblAgendaLogVisitas;
 import com.contabook.Model.DBMailMarketing.TblDctosPeriodo;
 
 @Controller
@@ -46,36 +47,43 @@ public class PeriodoController {
 	@Autowired
 	TblDctosPeriodoRepo tblDctosPeriodoRepo;
 	
+	@Autowired
+	ControlDeInactividad controlDeInactividad;
+	
 	@GetMapping("/Periodo")
 	public String Referencia(HttpServletRequest request,Model model) {
 		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		
-//		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
-//	    HttpSession session = request.getSession();
-//	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
-//	    
-//	    @SuppressWarnings("unchecked")
-//		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
-//	    
-//	    Integer estadoUsuario = 0;
-//	    
-//
-//	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
-//	            Integer idLocalUsuario = usuarioLog.getIdLocal();
-//	            Integer idLogUsuario = usuarioLog.getIDLOG();
-//	            String sessionIdUsuario = usuarioLog.getSessionId();
-//	            
-//	            
-//	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
-//	        }
-//    
-//	           if(estadoUsuario.equals(2)) {
-//	        	   System.out.println("USUARIO INACTIVO");
-//	        	   return "redirect:/";
-//	           }
-//		
-//		//------------------------------------------------------------------------------------------------------------------------------------------
+		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
+	    HttpSession session = request.getSession();
+	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
+	    
+	    @SuppressWarnings("unchecked")
+		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
+	    
+	    Integer estadoUsuario = 0;
+	    
+
+	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
+	            Integer idLocalUsuario = usuarioLog.getIdLocal();
+	            Integer idLogUsuario = usuarioLog.getIDLOG();
+	            String sessionIdUsuario = usuarioLog.getSessionId();
+	            
+	            
+	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
+	        }
+    
+	           if(estadoUsuario.equals(2)) {
+	        	   System.out.println("USUARIO INACTIVO");
+	        	   return "redirect:/";
+	           }
+		
+		//------------------------------------------------------------------------------------------------------------------------------------------
 
 		    
 		    
@@ -118,6 +126,12 @@ public class PeriodoController {
 	@PostMapping("/CrearPeriodo-Post")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> CrearRuta(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+        
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 	    Integer IdUsuario = usuario.getIdUsuario();
 	    
@@ -231,35 +245,39 @@ public class PeriodoController {
 	@GetMapping("/TraerPeriodo")
 	public String TraerRuta(@RequestParam(name = "idPeriodo", required = false) String idPeriodo, HttpServletRequest request, Model model) {
 		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		System.out.println("Entró a /TraerReferencia con idPlu: " + idPeriodo);
 		
 		
-//		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
-//	    HttpSession session = request.getSession();
-//	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
-//	    
-//	    @SuppressWarnings("unchecked")
-//		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
-//	    
-//	    Integer estadoUsuario = 0;
-//	    
-//
-//	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
-//	            Integer idLocalUsuario = usuarioLog.getIdLocal();
-//	            Integer idLogUsuario = usuarioLog.getIDLOG();
-//	            String sessionIdUsuario = usuarioLog.getSessionId();
-//	            
-//	            
-//	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
-//	        }
-//    
-//	           if(estadoUsuario.equals(2)) {
-//	        	   System.out.println("USUARIO INACTIVO");
-//	        	   return "redirect:/";
-//	           }
-//		
-//		//------------------------------------------------------------------------------------------------------------------------------------------
+		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
+	    HttpSession session = request.getSession();
+	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
+	    
+	    @SuppressWarnings("unchecked")
+		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
+	    
+	    Integer estadoUsuario = 0;
+	    
+
+	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
+	            Integer idLocalUsuario = usuarioLog.getIdLocal();
+	            Integer idLogUsuario = usuarioLog.getIDLOG();
+	            String sessionIdUsuario = usuarioLog.getSessionId();
+	            
+	            
+	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
+	        }
+    
+	           if(estadoUsuario.equals(2)) {
+	        	   System.out.println("USUARIO INACTIVO");
+	        	   return "redirect:/";
+	           }
+		
+		//------------------------------------------------------------------------------------------------------------------------------------------
 
 		    
 		    Integer idPeriodoInt = Integer.parseInt(idPeriodo);
@@ -304,11 +322,14 @@ public class PeriodoController {
 	@PostMapping("/ActivarPeriodo-Post")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> ActivarPeriodoPost(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 	    Integer IdUsuario = usuario.getIdUsuario();
 
-
-	    //System.out.println("SI ENTRÓ A  /ActualizarRuta-Post");
 
 	        // Obtenemos los datos del JSON recibido
 	    String idPeriodo = (String) requestBody.get("idPeriodo");
@@ -342,11 +363,13 @@ public class PeriodoController {
 	@PostMapping("/ActualizarPeriodo-Post")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> ActualizarPeriodoPost(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 	    Integer IdUsuario = usuario.getIdUsuario();
-
-
-	    System.out.println("SI ENTRÓ A  /ActualizarRuta-Post");
 
 	        // Obtenemos los datos del JSON recibido
 	    String idPeriodo = (String) requestBody.get("idPeriodo");

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.contabook.Model.dbaquamovil.Ctrlusuarios;
+import com.contabook.Model.dbaquamovil.TblAgendaLogVisitas;
 import com.contabook.Projection.TblDctosDTO;
 import com.contabook.Repository.DBMailMarketing.TblDctoDetalleRepo;
 import com.contabook.Repository.DBMailMarketing.TblDctoRepo;
 import com.contabook.Service.DBMailMarketing.TblDctoService;
 import com.contabook.Service.DBMailMarketing.TblDctosPeriodoService;
 import com.contabook.Service.dbaquamovil.TblDctosService;
+import com.contabook.Utilidades.ControlDeInactividad;
 import com.contabook.Model.DBMailMarketing.TblDctosPeriodo;
 
 @Controller
@@ -42,12 +45,41 @@ public class Importar {
 	@Autowired
 	TblDctosPeriodoService tblDctosPeriodoService;
 	
+	@Autowired
+	ControlDeInactividad controlDeInactividad;
+	
 	@GetMapping("/Importar")
 	public String Importar(HttpServletRequest request,Model model) {
 		
 		Class tipoObjeto = this.getClass();					
         String nombreClase = tipoObjeto.getName();		
         System.out.println("CONTROLLER " + nombreClase);
+        
+     // ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
+	    HttpSession session = request.getSession();
+	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
+	    
+	    @SuppressWarnings("unchecked")
+		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
+	    
+	    Integer estadoUsuario = 0;
+	    
+
+	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
+	            Integer idLocalUsuario = usuarioLog.getIdLocal();
+	            Integer idLogUsuario = usuarioLog.getIDLOG();
+	            String sessionIdUsuario = usuarioLog.getSessionId();
+	            
+	            
+	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
+	        }
+    
+	           if(estadoUsuario.equals(2)) {
+	        	   System.out.println("USUARIO INACTIVO");
+	        	   return "redirect:/";
+	           }
+		
+		//------------------------------------------------------------------------------------------------------------------------------------------
 		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		Integer idLocal = usuario.getIdLocal();
@@ -78,6 +110,11 @@ public class Importar {
 	@PostMapping("/ImportarContabilidad-Post")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> ImportarContabilidad(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 	    Integer IdUsuario = usuario.getIdUsuario();
 	    

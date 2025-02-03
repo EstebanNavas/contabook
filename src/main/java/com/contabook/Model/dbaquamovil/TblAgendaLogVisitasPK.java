@@ -1,9 +1,9 @@
-package com.contabook.Model.DBMailMarketing;
+package com.contabook.Model.dbaquamovil;
 
 import java.io.Serializable;
 
-public class TblAgendaLogVisitasPK implements Serializable{
-
+public class TblAgendaLogVisitasPK implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 	private Integer idLocal;
 	
@@ -33,4 +33,5 @@ public class TblAgendaLogVisitasPK implements Serializable{
 	public void setIDLOG(Integer IDLOG) {
 		this.IDLOG = IDLOG;
 	}
+
 }

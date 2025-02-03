@@ -1,4 +1,4 @@
-package com.contabook.Model.DBMailMarketing;
+package com.contabook.Model.dbaquamovil;
 
 import java.sql.Timestamp;
 
@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+
 
 
 @Entity
