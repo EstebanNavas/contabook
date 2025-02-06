@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.contabook.Model.DBMailMarketing.TblPucAux;
+import com.contabook.Projection.TblPucAuxDTO;
 import com.contabook.Repository.DBMailMarketing.TblPucAuxRepo;
 
 @Service
@@ -33,6 +34,21 @@ public class TblPucAuxService {
 		List<TblPucAux> todosAuxiliares = tblPucAuxRepo.listaTodosAuxiliares(idLocal);
 		
 		return todosAuxiliares;
+	}
+	
+	public List<TblPucAux> listaAuxiliaresXClase(int idLocal, int idClase){
+				
+		List<TblPucAux> listaAux = tblPucAuxRepo.listaAuxiliaresXClase(idLocal, idClase);
+		
+		return listaAux;
+		
+	}
+	
+	public List<TblPucAuxDTO> listaCuentasContables(int idLocal){
+		
+		List<TblPucAuxDTO> cuentasContables = tblPucAuxRepo.listaCuentasContables(idLocal);
+		
+		return cuentasContables;
 	}
 
 }
