@@ -16,15 +16,15 @@
           <div style="float: center; padding-left: 10px;">
     <!-- Del mismo modo agrego el fragmento empty que esta dentro de empty.html en el iframe -->
 				
-				<!-- Logo de Mobile-tic y nombre del acueducto 
+				 <!-- Logo de Mobile-tic y nombre del acueducto  -->
                  <iframe  th:replace ="combo/empty.html :: empty" align="left" width="1000px" height="650px" frameborder="0"  marginwidth="0" marginheight="0" name="workarea">
-                 </iframe> -->
+                 </iframe> 
             </div>
             
              <div id="Periodo" class="divCentrado" >
 				
 				<div style="margin-top: 50px;">
-					<h6>PERIODO ACTIVO</h6>
+					<h6>PERIODO CONTABLE ACTIVO</h6>
 					<h6 th:text="${xNombrePeriodo}"></h6>
 					<h7  th:text="${xIdPeriodo}"></h7> 
 					<br>
@@ -36,6 +36,20 @@
 			</div>
             
             <div id="Certificado" class="divCentrado" >
+				
+		    <div id="Certificado" class="divCentrado" >
+				
+				<div style="margin-top: 50px;">
+					<h6>CERTIFICADO ELÉCTRONICO</h6>
+					<h7  th:text="${xValido}"></h7> 
+					<br>
+					<h7  th:text="${xVence}"></h7> 
+				</div>
+				
+				
+            
+				
+			</div>
 				
 				
 				

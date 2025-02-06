@@ -2,6 +2,9 @@ package com.contabook.Controller;
 
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
@@ -23,6 +26,8 @@ import com.contabook.Service.dbaquamovil.CtrlusuariosService;
 import com.contabook.Service.dbaquamovil.TblAgendaLogVisitasService;
 import com.contabook.Service.dbaquamovil.TblLocalesService;
 import com.contabook.Utilidades.UtilidadesIP;
+import com.contabook.Model.dbaquamovil.CertificadoResponse;
+import com.contabook.ServiceApi.ApiCertificado;
 import com.contabook.Model.dbaquamovil.Ctrlusuarios;
 import com.contabook.Model.dbaquamovil.TblAgendaLogVisitas;
 import com.contabook.Projection.TblOpcionesDTO;
@@ -49,6 +54,9 @@ public class LoginController {
 	
 	@Autowired
 	TblDctosPeriodoService tblDctosPeriodoService;
+	
+	@Autowired
+	ApiCertificado  apiCertificado;
 	
 	Integer idLocalAutenticado = 0;
 	Integer xidUsuario = 0;
@@ -224,12 +232,91 @@ public class LoginController {
 					List <TblDctosPeriodo> PeriodoActivo = tblDctosPeriodoService.ObtenerPeriodoActivo(idLocalAutenticado);
 					
 					Integer idPeriodo = 0;
+					String NombrePeriodo = "";
 					
 					for(TblDctosPeriodo P : PeriodoActivo) {						
-						idPeriodo = P.getIdPeriodo();					
+						idPeriodo = P.getIdPeriodo();	
+						NombrePeriodo = P.getNombrePeriodo();
 					}
 		        	
 					request.getSession().setAttribute("periodoActivo", idPeriodo);
+					model.addAttribute("xNombrePeriodo", NombrePeriodo);
+					model.addAttribute("xIdPeriodo", idPeriodo);
+					
+					
+					
+					 // VALIDACION CERTIFICADO --------------------------------------------------------------------------------------------------------------------------------------
+		            
+		            String xToken = tblLocalesService.ObtenerToken(idLocalAutenticado);
+				    System.out.println("xToken en /Certificado : " + xToken);
+		            
+				    // Invocamos la API para validar el certificado y obtenemos el resultado de la validación
+		    	    CertificadoResponse certificadoResponse = apiCertificado.consumirApi(xToken);
+		    	    
+		    	    // Verificar si certificadoResponse es nulo
+		            if (certificadoResponse == null) {
+		                System.out.println("Error al validar certificado: respuesta nula.");
+		                
+		                model.addAttribute("xValido", "DIAN FUERA DE LÍNEA - Por favor intentar mas tarde");
+			            model.addAttribute("xVence", "DIAN FUERA DE LÍNEA - Por favor intentar mas tarde" );
+			            model.addAttribute("xNombrePeriodo", NombrePeriodo );
+			            model.addAttribute("xIdPeriodo", idPeriodo );
+		                
+		                return "menuPrincipal";
+		            }
+		    		
+		    		// Obtenemos el valor de IsValid para validar que el cetificado esté vigente, osea sea TRUE 
+		    	    boolean isValid = certificadoResponse.isIs_valid();
+		    	    
+		    		
+		    		// Validamos si isValid es true
+		    	    if (isValid) { 
+		    			
+		    			// Obtenemosla fecha actual
+		    	        LocalDate xfechaActual = LocalDate.now();
+
+		    	        // Convierte la fecha de String a  LocalDate
+		    	        DateTimeFormatter fechaFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		    	        
+		    	        String xExpirationDate = certificadoResponse.getExpiration_date();
+		    	        LocalDate fechaExpiracion = LocalDate.parse(xExpirationDate, fechaFormat);
+
+		    	        // Calculamos la diferencia en días
+		    	        long diferenciaEnDias = ChronoUnit.DAYS.between(xfechaActual, fechaExpiracion);
+
+		    	        System.out.println("Diferencia en días: " + diferenciaEnDias);
+		    	        
+		    	        String fechaSinHora = xExpirationDate.substring(0, 10);
+		    	       
+		    			
+		    			// Validamos las diferencias, si es menor a 5, menor a 30 o mayor a 30
+		    	        if (diferenciaEnDias < 5) {
+		    	            System.out.println("Certificado expira en menos de " + diferenciaEnDias + " días");
+		    	            model.addAttribute("xValido", "Certificado expira en menos de " + diferenciaEnDias + " días");
+		    	            model.addAttribute("xVence", "Vence " + fechaSinHora );
+		    	            model.addAttribute("xNombrePeriodo", NombrePeriodo );
+		    	            model.addAttribute("xIdPeriodo", idPeriodo );
+		    	            return "menuPrincipal"; 
+		    	        } else if (diferenciaEnDias < 30) {
+		    	            System.out.println("Certificado próximo a expirar");
+		    	            model.addAttribute("xValido", "Certificado próximo a expirar en " + diferenciaEnDias + " días" );
+		    	            model.addAttribute("xVence", "Vence " + fechaSinHora );
+		    	            model.addAttribute("xNombrePeriodo", NombrePeriodo );
+		    	            model.addAttribute("xIdPeriodo", idPeriodo );
+		    	            return "menuPrincipal"; 
+		    	        } else {
+		    	            System.out.println("Certificado válido");
+		    	            model.addAttribute("xValido", "Válido " + diferenciaEnDias + " días" );
+		    	            model.addAttribute("xVence", "Vence " + fechaSinHora );
+		    	            model.addAttribute("xNombrePeriodo", NombrePeriodo );
+		    	            model.addAttribute("xIdPeriodo", idPeriodo );
+		    	            return "menuPrincipal"; 
+		    	        }
+		    		
+		    		}else {
+		    			
+		    			System.out.println("isValid es : " + isValid);
+		    		}
 		        	
 	        	
 		            return "menuPrincipal";
