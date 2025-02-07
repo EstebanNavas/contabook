@@ -15,5 +15,8 @@ public interface TblDctosDTO {
 	Integer getIdRuta();
 	Integer getIdTipoOrden();
 	Integer getIdPeriodo();
+	String getFechaDctoSiigo();
+	String getCc_nit();
+	Integer getIdDctoNitCC();
 
 }

@@ -10,16 +10,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="tblTipoCpte")
-@IdClass(TblTipoCptePK.class)
 public class TblTipoCpte {
 	
 	@Id
 	@Column(name = "idTipoCpte")
-	private Integer idTipoCpte;
-	
-	@Id
-	@Column(name = "idLocal")
-	private Integer idLocal;
+	private Integer idTipoCpte;	
 	
 	@Column(name = "nombreCmpte")
 	private String nombreCmpte;
@@ -33,8 +28,8 @@ public class TblTipoCpte {
 	@Column(name = "idSeq")
 	private Integer idSeq;
 	
-	@Column(name = "idAlcance")
-	private Integer idAlcance;
+	@Column(name = "idTipoOrden")
+	private Integer idTipoOrden;
 
 	public Integer getIdTipoCpte() {
 		return idTipoCpte;
@@ -76,12 +71,12 @@ public class TblTipoCpte {
 		this.idSeq = idSeq;
 	}
 
-	public Integer getIdAlcance() {
-		return idAlcance;
+	public Integer getIdTipoOrden() {
+		return idTipoOrden;
 	}
 
-	public void setIdAlcance(Integer idAlcance) {
-		this.idAlcance = idAlcance;
+	public void setIdTipoOrden(Integer idTipoOrden) {
+		this.idTipoOrden = idTipoOrden;
 	}
 	
 	

@@ -15,9 +15,9 @@ public class TblTipoCpteService {
 	TblTipoCpteRepo tblTipoCpteRepo;
 	
 	
-	public List<TblTipoCpte> ListaComprobantes(int idLocal){
+	public List<TblTipoCpte> ListaComprobantes(){
 		
-		List<TblTipoCpte> listaComprobantes = tblTipoCpteRepo.ListaComprobantes(idLocal);
+		List<TblTipoCpte> listaComprobantes = tblTipoCpteRepo.ListaComprobantes();
 		
 		return listaComprobantes;
 		
@@ -42,6 +42,21 @@ public class TblTipoCpteService {
 		List<TblTipoCpte>  comprobante = tblTipoCpteRepo.obtenerCpteXId(idLocal, idTipoCpte);
 		
 		return comprobante;
+		
+	}
+	
+	public Integer obtenerIdTipoOrden(int idTipoCpte) {
+		
+		Integer idTipoOrden = tblTipoCpteRepo.obtenerIdTipoOrden(idTipoCpte);
+		
+		return idTipoOrden;
+	}
+	
+	public String obtenerNombreComprobante(int idTipoCpte) {
+		
+		String NombreComprobante = tblTipoCpteRepo.obtenerNombreComprobante(idTipoCpte);
+		
+		return NombreComprobante;
 		
 	}
 	

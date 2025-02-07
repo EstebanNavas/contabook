@@ -128,7 +128,7 @@ public class ComprobanteContableController {
     	System.out.println("maxIdCpte es " + maxIdCpte);
     	
     	// lista tipos de comprobante
-		List<TblTipoCpte> listaComprobantes = tblTipoCpteService.ListaComprobantes(idLocal);
+		List<TblTipoCpte> listaComprobantes = tblTipoCpteService.ListaComprobantes();
 	    System.out.println("La lista de ListaComprobantes es: " + listaComprobantes);
         
         

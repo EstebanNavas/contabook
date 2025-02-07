@@ -194,7 +194,8 @@ public class ReporteCuentasContableController {
 			params.put("p_direccion", L.getDireccion());
 			params.put("p_idLocal", idLocal);
 			params.put("p_fechaActual", strFechaActual);
-			xPathReport = L.getPathReport() + "contabook" + xCharSeparator;
+			//xPathReport = L.getPathReport() + "contabook" + xCharSeparator;
+			xPathReport = L.getPathReportContaBook() + "contabook" + xCharSeparator;
 
 		}
 

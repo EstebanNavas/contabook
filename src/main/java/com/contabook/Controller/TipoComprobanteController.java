@@ -35,7 +35,7 @@ import com.contabook.Model.dbaquamovil.TblAgendaLogVisitas;
 
 
 @Controller
-public class ComprobanteController {
+public class TipoComprobanteController {
 	
 	@Autowired
 	TblTipoCpteService tblTipoCpteService;
@@ -46,8 +46,8 @@ public class ComprobanteController {
 	@Autowired
 	ControlDeInactividad controlDeInactividad;
 	
-	@GetMapping("/Comprobante")
-	public String Comprobante(HttpServletRequest request,Model model) {
+	@GetMapping("/TipoComprobante")
+	public String tipoComprobante(HttpServletRequest request,Model model) {
 		
 		Class tipoObjeto = this.getClass();					
         String nombreClase = tipoObjeto.getName();		
@@ -85,7 +85,14 @@ public class ComprobanteController {
 	    
 
 			
-			return "Comprobante/Comprobante";
+	           List<TblTipoCpte> listaComprobantes = tblTipoCpteService.ListaComprobantes();
+
+			    System.out.println("La lista de ListaComprobantes es: " + listaComprobantes);
+		        
+		        model.addAttribute("listaComprobantes", listaComprobantes);
+			    
+				
+				return "Comprobante/TodosLosComprobantes";
 
 
 	}
@@ -131,7 +138,7 @@ public class ComprobanteController {
 
 
 		    
-		List<TblTipoCpte> listaComprobantes = tblTipoCpteService.ListaComprobantes(idLocal);
+		List<TblTipoCpte> listaComprobantes = tblTipoCpteService.ListaComprobantes();
 
 		    System.out.println("La lista de ListaComprobantes es: " + listaComprobantes);
 	        
@@ -312,12 +319,7 @@ public class ComprobanteController {
 		    for(TblTipoCpte cmpte : comprobante) {
 		    	
 		    	model.addAttribute("nombre", cmpte.getNombreCmpte());
-		    	model.addAttribute("IdTipoCpte", cmpte.getIdTipoCpte() );
-		    	model.addAttribute("estado", cmpte.getEstado());
-		    	model.addAttribute("signo", cmpte.getSigno());
-		    	model.addAttribute("idSeq", cmpte.getIdSeq());
-		    	model.addAttribute("idAlcance", cmpte.getIdAlcance());
-		    	
+		    	model.addAttribute("IdTipoCpte", cmpte.getIdTipoCpte() );		    	
 		    	
 		    }
 
@@ -353,25 +355,13 @@ public class ComprobanteController {
         String idComprobante = (String) requestBody.get("idComprobante");  
         Integer idCpteInt = Integer.parseInt(idComprobante);
         
-        String estado = (String) requestBody.get("estado");  
-        Integer estadoInt = Integer.parseInt(estado);
-        
-        String signo = (String) requestBody.get("signo"); 
-        Integer signoInt = Integer.parseInt(signo);
-        
-        String idSeq = (String) requestBody.get("idSeq"); 
-        Integer idSeqInt = Integer.parseInt(idSeq);
-        
-        
-        String idAlcance = (String) requestBody.get("idAlcance");  
-        Integer idAlcanceInt = Integer.parseInt(idAlcance);
-        
+             
 	     
 		    
 
 	        
 	        // Actualizamos Comprobante
-            tblTipoCpteRepo.actualizarComprobante(nombreComprobante, estadoInt, signoInt, idSeqInt, idAlcanceInt, idLocal, idCpteInt);
+            tblTipoCpteRepo.actualizarComprobante(nombreComprobante, 1, 1, 1, 1, idLocal, idCpteInt);
 	       
 		    Map<String, Object> response = new HashMap<>();
 		    response.put("message", "LOGGGGGGGGG");

@@ -15,10 +15,9 @@ public interface TblTipoCpteRepo extends JpaRepository<TblTipoCpte, Integer> {
 	
 	
 	@Query(value = "SELECT * " + 
-			"FROM BDMailMarketing.dbo.tblTipoCpte " +
-			"Where idLocal = ?1 ",
+			"FROM BDMailMarketing.dbo.tblTipoCpte ",
 			nativeQuery = true)
-	List<TblTipoCpte> ListaComprobantes(int idLocal);
+	List<TblTipoCpte> ListaComprobantes();
 	
 	
 	
@@ -62,6 +61,19 @@ public interface TblTipoCpteRepo extends JpaRepository<TblTipoCpte, Integer> {
 	                 "WHERE tblTipoCpte.idLocal = ?6 " +
 	                 "AND tblTipoCpte.idTipoCpte = ?7 ", nativeQuery = true)
 	  public void actualizarComprobante(String nombreCmpte,  int estado, int signo, int idSeq, int idAlcance, int idLocal, int idTipoCpte) ;
+	 
+	 
+		@Query(value = "SELECT idTipoOrden " + 
+				"FROM BDMailMarketing.dbo.tblTipoCpte " +
+				"where idTipoCpte = ?1 ",
+				nativeQuery = true)
+		Integer obtenerIdTipoOrden(int idTipoCpte);
+		
+		@Query(value = "SELECT nombreCmpte " + 
+				"FROM BDMailMarketing.dbo.tblTipoCpte " +
+				"where idTipoCpte = ?1 ",
+				nativeQuery = true)
+		String obtenerNombreComprobante(int idTipoCpte);
 	
 
 }

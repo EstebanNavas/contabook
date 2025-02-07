@@ -133,9 +133,8 @@ public class TblLocales {
 	@Column(name = "idContableFormato")
 	private Integer idContableFormato;
 	
-	
-	
-	
+	@Column(name = "pathReportContaBook")
+	private String pathReportContaBook;
 	
 	
 
@@ -443,5 +442,15 @@ public class TblLocales {
 	public void setPathReport(String pathReport) {
 		this.pathReport = pathReport;
 	}
+
+	public String getPathReportContaBook() {
+		return pathReportContaBook;
+	}
+
+	public void setPathReportContaBook(String pathReportContaBook) {
+		this.pathReportContaBook = pathReportContaBook;
+	}
+	
+	
 	
 }

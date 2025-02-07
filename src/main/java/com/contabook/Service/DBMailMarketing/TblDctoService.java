@@ -22,6 +22,19 @@ public class TblDctoService {
 	}
 	
 	
+	public Boolean ExisteDctoCpte(int idLocal, int idTipoOrden, int idDcto, int idTipoCpte) {
+		
+		Boolean existe = tblDctoRepo.ExisteDctoCpte(idLocal, idTipoOrden, idDcto, idTipoCpte);		
+		if(existe == null) {			
+			existe = false;
+		}
+		
+		return existe;
+		
+		
+	}
+	
+	
 	public Integer MaximoiIdCpte(int idLocal) {
 		
 		Integer MaxIdCpte = tblDctoRepo.MaximoiIdCpte(idLocal);		

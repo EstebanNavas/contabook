@@ -43,12 +43,8 @@
 							<tr>
 								
 								<th></th>			
-								<th class="subtituloCentrado">ID</th>
+								<th class="subtituloCentrado" >ID</th>
 								<th class="subtituloAF">Nombre Comprobante</th>
-								<th class="subtituloAF">Estado</th>
-								<th class="subtituloAF">Signo</th>
-								<th class="subtituloAF">IdSeq</th>
-								<th class="subtituloAF">idAlcance</th>
 								
 							</tr>
 						</thead>
@@ -57,14 +53,7 @@
 								<tr th:each="comprobante : ${listaComprobantes}">
 									<td class="detalleCentrado" text=""></td>
 									<td class="detalleCentrado" th:text="${comprobante.getIdTipoCpte()}"></td>
-									<td>
-										<a href="#" th:text="${comprobante.getNombreCmpte()}"
-											th:onclick="'mostrarDetalle(\'' + ${comprobante.getIdTipoCpte()} + '\')'"></a>
-									</td>
-									<td class="detalleAF" th:text="${comprobante.getEstado()}"></td>
-									<td class="detalleAF" th:text="${comprobante.getSigno()}"></td>
-									<td class="detalleAF" th:text="${comprobante.getIdSeq()}"></td>
-									<td class="detalleAF" th:text="${comprobante.getIdAlcance()}"></td>
+									<td class="detalleAF" th:text="${comprobante.getNombreCmpte()}"></td>
 								
 							</tr>
 						</tbody>
@@ -73,7 +62,7 @@
 		
 		</form>
 	<div>
-		<a href="./Comprobante" class="btn btn-success" style="margin: 50px;">Regresar</a>
+		<a href="./TipoComprobante" class="btn btn-success" style="margin: 50px;">Regresar</a>
 		
 	</div>
 	

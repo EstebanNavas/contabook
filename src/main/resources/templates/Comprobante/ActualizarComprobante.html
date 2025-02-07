@@ -63,70 +63,12 @@
 				</div>
 			</div>
 			
-			<div id="cajaprincipal" class="cajaprincipal">
-				<div id="caja1">
-					<div id="NombreTercero" class="containerFlexCenter2" style="width: 600px;">
-			
-			
-						<div class="containerFlexCenterNombre">
-			
-							<label class="letra" for="estado" style="margin: 15px;">ESTADO:</label>
-							<input type="text" maxlength="10" id="estado" style="width: 240px; margin-left: 154px;" th:value="${estado}" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-						</div>
-			
-			
-					</div>
-				</div>
-			
-				<div id="caja2">
-					<div id="NombreTercero" class="containerFlexCenter2" style="width: 600px;">
-			
-			
-						<div class="containerFlexCenterNombre">
-			
-							<label class="letra" for="signo" style="margin: 15px;">SIGNO:</label>
-							<input type="text" maxlength="18" id="signo" style="width: 240px; margin-left: 53px;" th:value="${signo}"  pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-						</div>
-			
-			
-					</div>
-				</div>
-			</div>
-			
-			<div id="cajaprincipal" class="cajaprincipal">
-				<div id="caja1">
-					<div id="NombreTercero" class="containerFlexCenter2" style="width: 600px;">
-			
-			
-						<div class="containerFlexCenterNombre">
-			
-							<label class="letra" for="idSeq" style="margin: 15px;">IDSEQ:</label>
-							<input type="text" maxlength="10" id="idSeq" style="width: 240px; margin-left: 169px;" th:value="${idSeq}" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-						</div>
-			
-			
-					</div>
-				</div>
-			
-				<div id="caja2">
-					<div id="NombreTercero" class="containerFlexCenter2" style="width: 600px;">
-			
-			
-						<div class="containerFlexCenterNombre">
-			
-							<label class="letra" for="idAlcance" style="margin: 15px;">IDALCANCE:</label>
-							<input type="text" maxlength="18" id="idAlcance" style="width: 240px; margin-left: 10px;" th:value="${idAlcance}"  pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-						</div>
-			
-			
-					</div>
-				</div>
-			</div>
+
 	
 			</div>
 				<div class="GenerarReporte">
 					<!-- Botón para enviar el formulario -->
-					<a href="./Comprobante" class="btn btn-success" style="margin: 50px;">Regresar</a>
+					<a href="./TipoComprobante" class="btn btn-success" style="margin: 50px;">Regresar</a>
 					<button type="button" class="btn btn-primary" onclick="actualizarComprobante()" >Actualizar Comprobante</button>
 				</div>
      
@@ -148,10 +90,7 @@
 		
 		var nombreComprobante = document.getElementById("nombreComprobante").value;
 		var idComprobante = document.getElementById("idComprobante").value;
-		var estado = document.getElementById("estado").value;
-		var signo = document.getElementById("signo").value;
-		var idSeq = document.getElementById("idSeq").value;
-		var idAlcance = document.getElementById("idAlcance").value;
+		
 		
 		
 		if (!nombreComprobante) {
@@ -166,36 +105,13 @@
     }
 
     
-    	if (!estado) {
-        alert("Por favor, seleccione un estado.");
-        return;
-    }
     
-    	if (!signo) {
-        alert("Por favor, ingrese un signo.");
-        return;
-    }
-
-    
-       if (!idSeq) {
-        alert("Por favor, ingrese un idSeq.");
-        return;
-    }
-    
-        	if (!idAlcance) {
-        alert("Por favor, ingrese idAlcance.");
-        return;
-    }
 		
 		
 		// Crear un objeto que contenga los datos a enviar
     var datos = {
         nombreComprobante: nombreComprobante,
-        idComprobante: idComprobante,
-        estado: estado,
-        signo: signo,
-        idSeq: idSeq,
-        idAlcance: idAlcance,
+        idComprobante: idComprobante
     };
     
     // Realizar una solicitud POST al controlador
@@ -222,7 +138,7 @@
         .then((value) => {
             // Redirigimos a la vista "CrearSuscriptor"" al hacer clic en el botón Continuar
             if (value) {
-                window.location.href = "./Comprobante";
+                window.location.href = "./TipoComprobante";
             }
         });
 

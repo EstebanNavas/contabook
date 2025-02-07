@@ -20,6 +20,15 @@ public interface TblDctoRepo extends JpaRepository<TblDcto, Integer> {
              nativeQuery = true)
 	 Boolean ExisteDcto(int idLocal, int idTipoOrden, int idDcto);
 	 
+	 @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END " +
+             "FROM BDMailMarketing.dbo.tblDcto " +
+             "WHERE tblDcto.idLocal = ?1 " +
+             "AND tblDcto.idTipoOrden = ?2 " +
+             "AND tblDcto.idDcto = ?3 " +
+             "AND tblDcto.idTipoCpte = ?4 ",
+             nativeQuery = true)
+	 Boolean ExisteDctoCpte(int idLocal, int idTipoOrden, int idDcto, int idTipoCpte);
+	 
 	 @Query(value = "SELECT MAX(idCpte) AS idCpte " +
              "FROM BDMailMarketing.dbo.tblDcto " +
              "WHERE tblDcto.idLocal = ?1 ",

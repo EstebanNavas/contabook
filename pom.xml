@@ -98,7 +98,8 @@
     <artifactId>jxl</artifactId>
     <version>2.6.12</version> <!-- o la versión más reciente disponible -->
 </dependency>	
-</dependencies>
+
+	</dependencies>
 
 	<build>
 		<plugins>
