@@ -1,8 +1,11 @@
 package com.contabook.Service.DBMailMarketing;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.contabook.Projection.TblDctoDTO;
 import com.contabook.Repository.DBMailMarketing.TblDctoRepo;
 
 @Service
@@ -45,6 +48,14 @@ public class TblDctoService {
 		}
 		
 		return MaxIdCpte;
+		
+	}
+	
+	public List<TblDctoDTO> listaComprobantes(int idLocal, int idTipoCpte, int idPeriodo){
+		
+		List<TblDctoDTO> listaComprobantes = tblDctoRepo.listaComprobantes(idLocal, idTipoCpte, idPeriodo);
+		
+		return listaComprobantes;
 		
 	}
 

@@ -1,5 +1,7 @@
 package com.contabook.Repository.DBMailMarketing;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.contabook.Model.DBMailMarketing.TblDctoDetalle;
+import com.contabook.Projection.TblDctoDetalleDTO;
 
 @Repository
 public interface TblDctoDetalleRepo extends JpaRepository<TblDctoDetalle, Integer> {
@@ -66,5 +69,31 @@ public interface TblDctoDetalleRepo extends JpaRepository<TblDctoDetalle, Intege
 	  public void ingresaDctoDetalle(int idLocal, int idTipoCpte, int idCpte, int idCuentaAux, String idCliente, int item, int sucursal, int codProducto, int codBodega, 
 			  int accion, int cantProducto, int prefijo, int consecutivo, int numeroCuota, String fechaVencimiento, int codImpuesto, int codGrupoActivoFijo, int codActivoFijo,
 			  String descripcion, int codCentroSubCentro, Double vrDebito, Double vrCredito, String observacion, Double baseGravable, int mesCierre );
+	
+	
+	
+	
+	@Modifying
+	  @Transactional
+	  @Query(value = "     SELECT  tblDctoDetalle.idLocal                               "
+			  + "      ,idTipoCpte                                                      "
+			  + "      ,idCpte                                                          "
+			  + "      ,tblPucAux.idCuentaAux                                           "
+			  + "      ,idCliente                                                      "
+			  + "      ,item                                                            "
+			  + "      ,fechaVencimiento                                                "
+			  + "      ,descripcion                                                     "
+			  + "      ,vrDebito                                                        "
+			  + "      ,vrCredito                                                       "
+			  + "      ,observacion                                                     "
+			  + "	   ,tblPucAux.nombreCuenta                                        "
+			  + "   FROM BDMailMarketing.dbo.tblDctoDetalle                         "
+			  + "   INNER JOIN BDMailMarketing.dbo.tblPucAux                        "
+			  + "   ON tblDctoDetalle.idLocal = tblPucAux.idLocal                       "
+			  + "   AND tblDctoDetalle.idCuentaAux = tblPucAux.idCuentaAux              "
+			  + "   Where tblDctoDetalle.idLocal = 137                                    "
+			  + "   AND tblDctoDetalle.idCpte = 823                                       ", 
+			  nativeQuery = true)
+	  List<TblDctoDetalleDTO> comprobanteContableDetalle(int idLocal, int idTipoCpte);
 
 }

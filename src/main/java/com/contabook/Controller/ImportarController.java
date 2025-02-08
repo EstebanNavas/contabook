@@ -156,7 +156,7 @@ public class ImportarController {
         Integer idTipoOrden = tblTipoCpteService.obtenerIdTipoOrden(idTipoCpte);
         System.out.println("idTipoOrden en ImportarContabilidad es " + idTipoOrden);
         
-        idPeriodo = 202403;
+
         int idTipoCpteFactura= 2;
         int idTipoCpteRecaudo= 3;
         
