@@ -79,20 +79,20 @@ public interface TblDctoDetalleRepo extends JpaRepository<TblDctoDetalle, Intege
 			  + "      ,idTipoCpte                                                      "
 			  + "      ,idCpte                                                          "
 			  + "      ,tblPucAux.idCuentaAux                                           "
-			  + "      ,idCliente                                                      "
+			  + "      ,idCliente                                                       "
 			  + "      ,item                                                            "
 			  + "      ,fechaVencimiento                                                "
 			  + "      ,descripcion                                                     "
 			  + "      ,vrDebito                                                        "
 			  + "      ,vrCredito                                                       "
 			  + "      ,observacion                                                     "
-			  + "	   ,tblPucAux.nombreCuenta                                        "
-			  + "   FROM BDMailMarketing.dbo.tblDctoDetalle                         "
-			  + "   INNER JOIN BDMailMarketing.dbo.tblPucAux                        "
+			  + "	   ,tblPucAux.nombreCuenta                                          "
+			  + "   FROM BDMailMarketing.dbo.tblDctoDetalle                             "
+			  + "   INNER JOIN BDMailMarketing.dbo.tblPucAux                            "
 			  + "   ON tblDctoDetalle.idLocal = tblPucAux.idLocal                       "
 			  + "   AND tblDctoDetalle.idCuentaAux = tblPucAux.idCuentaAux              "
-			  + "   Where tblDctoDetalle.idLocal = 137                                    "
-			  + "   AND tblDctoDetalle.idCpte = 823                                       ", 
+			  + "   Where tblDctoDetalle.idLocal = ?1                                   "
+			  + "   AND tblDctoDetalle.idCpte = ?2                                      ", 
 			  nativeQuery = true)
 	  List<TblDctoDetalleDTO> comprobanteContableDetalle(int idLocal, int idTipoCpte);
 

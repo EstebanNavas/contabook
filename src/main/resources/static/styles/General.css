@@ -464,6 +464,34 @@ h1{
     .empty-column {
         width: 5%;
     }
+    
+    
+ /*COMPROBANTE CONTABLE DETALLE*/
+ 
+  .totals-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.totales{
+	display: flex;
+}
+
+.empty-space {
+    flex-grow: 4; /* Ocupa el espacio antes de las columnas Débito y Crédito */
+}
+
+.total-debito, .total-credito, .total-diferencia {
+    width: 100px;
+    text-align: center;
+    font-weight: bold;
+}
+.difference {
+   color: green;
+   font-weight: bold;
+}   
 
 
 
