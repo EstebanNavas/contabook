@@ -426,6 +426,7 @@ function mostrarLista3(element) {
             xlistaNivel3.reverse().forEach((item) => {
                 const newRow = document.createElement("tr");
                 newRow.classList.add("level-3"); // Clase para estilo escalonado
+                newRow.setAttribute("data-id", item.idCuenta); 
                 newRow.setAttribute("data-parent-id", idCuenta); // Asignar el ID del padre
 
                 newRow.innerHTML = `
@@ -628,6 +629,130 @@ function mostrarLista5(element) {
 }
 
 
+function CrearSubCuenta() {
+
+  var cuenta = document.getElementById("cuenta").value;
+  var subCuenta = document.getElementById("subCuenta").value;
+  var nombreSubCuenta = document.getElementById("nombreSubCuenta").value;
+
+	
+	   if(!cuenta){			
+			alert("Por favor cargue los datos");
+			return;
+		}
+	
+	
+		if(!subCuenta){			
+			alert("Por favor ingrese el código de subCuenta");
+			return;
+		}
+		
+		if(!nombreSubCuenta){
+			
+			alert("Por favor ingrese un nombre para la subCuenta");
+			return;
+		}
+				
+		
+		
+			// Crear un objeto que contenga los datos a enviar
+    var datos = {
+		cuenta: cuenta,
+		subCuenta: subCuenta,
+		nombreSubCuenta: nombreSubCuenta			
+    };
+    
+    // Realizar una solicitud POST al controlador
+    fetch("./CrearSubCuenta-Post", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+		
+    var xNombreSubCuenta = data.xNombreSubCuenta;    
+	var xIdSubCuenta = data.xIdSubCuenta;  
+    
+    let idClase = cuenta.substring(0, 1);
+    console.log("idClase:", idClase);
+
+    Swal.fire("Éxito", "Sub cuenta: " + xIdSubCuenta + " - " + xNombreSubCuenta + ". creada correctamente", "success");
+    console.log("subCuenta:", subCuenta);
+    
+    
+        let inputCodidoAux = document.getElementById("codidoAux");
+        inputCodidoAux.value = "";
+
+        
+        let inputNombreAux = document.getElementById("nombreAux");
+        inputNombreAux.value = "";
+
+
+
+
+    // Obtener la fila padre correcta
+    const parentRow = document.querySelector(`tr[data-id='${cuenta}']`);
+    
+    // Buscar la última fila con el mismo `data-parent-id`
+    let lastChildRow = null;
+    document.querySelectorAll(`tr[data-parent-id='${cuenta}']`).forEach(row => {
+        lastChildRow = row; // Guardar la última fila con este parent
+    });
+
+    // Crear la nueva fila con el auxiliar agregado
+    const newRow = document.createElement("tr");
+    newRow.classList.add("level-4");
+    newRow.setAttribute("data-parent-id", cuenta);
+
+
+    newRow.innerHTML = `
+                <td style="display: flex; align-items: center;">
+                 <!-- Triángulo para mostrarLista4 -->
+                 <span 
+                  onclick="mostrarLista5(this)" 
+                  data-id="${xIdSubCuenta}" 
+                  data-id-clase="${idClase}" 
+                  style="cursor: pointer; color: #38b16d; margin-right: 5px; font-size: 11px;"
+                  >
+                  ►
+                </span>  
+                <span 
+                 onclick="mostrarDetalle(this)" 
+                 data-id-cuenta="${xIdSubCuenta}" 
+                 data-id-claseCuenta="${idClase}"
+                 style="cursor: pointer; color: #000; text-decoration: underline;"
+                 >
+                ${xIdSubCuenta}
+               </span>
+               </td>
+               <td>${xNombreSubCuenta}</td>
+          `;
+
+
+
+    // Si hay una fila hija, insertar después de la última fila hija
+    if (lastChildRow) {
+        lastChildRow.parentNode.insertBefore(newRow, lastChildRow.nextSibling);
+    } else if (parentRow) {
+        // Si no hay hijos, insertar justo después de la fila padre
+        parentRow.parentNode.insertBefore(newRow, parentRow.nextSibling);
+    }
+    
+
+    })
+    .catch((error) => {
+        console.error("Error al registrar el log:", error);
+    });
+		
+		
+	}	
+	
+	
+
+
 function CrearAuxiliar() {
     var subCuenta = document.getElementById("subCuenta").value;
     var codidoAux = document.getElementById("codidoAux").value;
@@ -651,6 +776,9 @@ function CrearAuxiliar() {
 		
 		var xNombreAux = data.xNombreAux;    
     var xIdCuentaAux = data.xIdCuentaAux; 
+    
+    let idClase = subCuenta.substring(0, 1);
+    console.log("idClase:", idClase);
 
     Swal.fire("Éxito", "Auxiliar: " + xIdCuentaAux + " - " + xNombreAux + ". creado correctamente", "success");
     console.log("subCuenta:", subCuenta);
@@ -682,7 +810,7 @@ function CrearAuxiliar() {
 
     newRow.innerHTML = `
         <td>
-            <span onclick="mostrarDetalleAux(this)" data-id-aux="${xIdCuentaAux}" data-id-cuenta="${subCuenta}" style="cursor: pointer; color: #38b16d; text-decoration: underline;">
+            <span onclick="mostrarDetalleAux(this)" data-id-aux="${xIdCuentaAux}" data-id-cuenta="${subCuenta}" data-id-clase="${idClase}" style="cursor: pointer; color: #38b16d; text-decoration: underline;">
                 ${xIdCuentaAux}
             </span>
         </td>
@@ -1120,73 +1248,7 @@ function mostrarDetalle(element) {
 	
 	
 	
-function CrearSubCuenta() {
 
-  var cuenta = document.getElementById("cuenta").value;
-  var subCuenta = document.getElementById("subCuenta").value;
-  var nombreSubCuenta = document.getElementById("nombreSubCuenta").value;
-
-	
-	   if(!cuenta){			
-			alert("Por favor cargue los datos");
-			return;
-		}
-	
-	
-		if(!subCuenta){			
-			alert("Por favor ingrese el código de subCuenta");
-			return;
-		}
-		
-		if(!nombreSubCuenta){
-			
-			alert("Por favor ingrese un nombre para la subCuenta");
-			return;
-		}
-				
-		
-		
-			// Crear un objeto que contenga los datos a enviar
-    var datos = {
-		cuenta: cuenta,
-		subCuenta: subCuenta,
-		nombreSubCuenta: nombreSubCuenta			
-    };
-    
-    // Realizar una solicitud POST al controlador
-    fetch("./CrearSubCuenta-Post", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(datos),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-		
-		var xNombreSubCuenta = data.xNombreSubCuenta;    
-		var xIdSubCuenta = data.xIdSubCuenta;    
-       
-          swal({
-            title: "¡Sub cuenta " + xIdSubCuenta + " - " + xNombreSubCuenta + " creada correctamente!",
-            //text: "La PQR  " + numeroRadicado + " ha sido creada correctamente",
-            icon: "success",
-            button: "Continuar",
-        })
-        .then((value) => {
-            // Redirigimos a la vista "CrearSuscriptor"" al hacer clic en el botón Continuar
-            if (value) {
-                window.location.href = "./Puc";
-            }
-        });
-
-    })
-    .catch((error) => {
-        console.error("Error al registrar el log:", error);
-    });
-		
-		
-	}	
 	
 	
 	
