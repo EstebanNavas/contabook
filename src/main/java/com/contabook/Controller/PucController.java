@@ -27,6 +27,7 @@ import com.contabook.Model.DBMailMarketing.TblPucAux;
 import com.contabook.Model.dbaquamovil.Ctrlusuarios;
 import com.contabook.Model.dbaquamovil.TblAgendaLogVisitas;
 import com.contabook.Repository.DBMailMarketing.TblPucAuxRepo;
+import com.contabook.Repository.DBMailMarketing.TblPucRepo;
 import com.contabook.Service.DBMailMarketing.TblPucAuxService;
 import com.contabook.Service.DBMailMarketing.TblPucService;
 import com.contabook.Utilidades.ControlDeInactividad;
@@ -46,6 +47,9 @@ public class PucController {
 	
 	@Autowired
 	ControlDeInactividad controlDeInactividad;
+	
+	@Autowired
+	TblPucRepo tblPucRepo;
 	
 	
 	@GetMapping("/Puc")
@@ -85,7 +89,7 @@ public class PucController {
 		Integer idLocal = usuario.getIdLocal();
 		
 	
-		List<TblPuc> listaNivel1 = tblPucService.pucNivel1();
+		List<TblPuc> listaNivel1 = tblPucService.pucNivel1(idLocal);
 		model.addAttribute("opcionesNivel1", listaNivel1);
 
 			
@@ -104,6 +108,7 @@ public class PucController {
         System.out.println("CONTROLLER " + nombreClase);
 		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
+		Integer idLocal = usuario.getIdLocal();
 		
 		Map<String, Object> response = new HashMap<>();
 
@@ -123,7 +128,7 @@ public class PucController {
       	System.out.println("idCuentaMenor " + idCuentaMenor);
       	System.out.println("idCuentaMayor " + idCuentaMayor);
 	
-      	List<TblPuc> listaNivel2 = tblPucService.pucNivel2(idCuentaMenor, idCuentaMayor, idClase);
+      	List<TblPuc> listaNivel2 = tblPucService.pucNivel2(idLocal, idCuentaMenor, idCuentaMayor, idClase);
       	System.out.println("listaNivel2  es  " + listaNivel2);
       	
       	for(TblPuc puc : listaNivel2) {
@@ -146,8 +151,10 @@ public class PucController {
 		Class tipoObjeto = this.getClass();					
         String nombreClase = tipoObjeto.getName();		
         System.out.println("CONTROLLER " + nombreClase);
+        
+        Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
+		Integer idLocal = usuario.getIdLocal();
 		
-		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		
 		Map<String, Object> response = new HashMap<>();
 
@@ -170,7 +177,7 @@ public class PucController {
       	
       
 	
-      	List<TblPuc> listaNiveles = tblPucService.pucNiveles(idCuentaMenor, idCuentaMayor, idClase);
+      	List<TblPuc> listaNiveles = tblPucService.pucNiveles(idLocal, idCuentaMenor, idCuentaMayor, idClase);
       	System.out.println("listaNiveles  es  " + listaNiveles);
       	
       	response.put("xlistaNiveles", listaNiveles);     	
@@ -213,7 +220,7 @@ public class PucController {
       	
       
 	
-      	List<TblPuc> listaNiveles = tblPucService.pucNiveles(idCuentaMenor, idCuentaMayor, idClase);
+      	List<TblPuc> listaNiveles = tblPucService.pucNiveles(idLocal, idCuentaMenor, idCuentaMayor, idClase);
       	System.out.println("listaNiveles  es  " + listaNiveles);
       	
       	
@@ -301,24 +308,24 @@ public class PucController {
 		
 		
 		//Clase
-		String nombreClase = tblPucService.obtenerNombreCuenta(idClase, idClase);
+		String nombreClase = tblPucService.obtenerNombreCuenta(idLocal, idClase, idClase);
 		response.put("xNombreClase", nombreClase);
 		response.put("xIdClase", idClase);
 		
 		//Grupo
-		String nombreGrupo = tblPucService.obtenerNombreCuenta(grupo, idClase);
+		String nombreGrupo = tblPucService.obtenerNombreCuenta(idLocal, grupo, idClase);
 		System.out.println("nombreGrupo en DetallePuc es " + nombreGrupo);
 		response.put("xNombreGrupo", nombreGrupo);
 		response.put("xIdGrupo", grupo);
 		
 		//Cuenta
-		String nombreCuenta = tblPucService.obtenerNombreCuenta(cuenta, idClase);
+		String nombreCuenta = tblPucService.obtenerNombreCuenta(idLocal, cuenta, idClase);
 		System.out.println("nombreCuenta en DetallePuc es " + nombreCuenta);
 		response.put("xNombreCuenta", nombreCuenta);
 		response.put("xIdCuenta", cuenta);
 		
 		//Subcuenta
-		String nombreSubCuenta = tblPucService.obtenerNombreCuenta(subCuenta, idClase);
+		String nombreSubCuenta = tblPucService.obtenerNombreCuenta(idLocal, subCuenta, idClase);
 		System.out.println("nombreSubCuenta en DetallePuc es " + nombreSubCuenta);
 		response.put("xNombreSubCuenta", nombreSubCuenta);
 		response.put("xIdSubCuenta", subCuenta);
@@ -333,6 +340,83 @@ public class PucController {
       	        .collect(Collectors.toList());  // Crear la lista de enteros
       	
       	response.put("xListaAuxiliares", xListaAuxiliares);    
+      
+	
+       	
+      	     	
+		
+      	return ResponseEntity.ok(response);
+		
+	}
+	
+	
+	
+	@PostMapping("/DetalleSubCuenta")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> DetalleSubCuenta(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,  Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClaseController = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClaseController);
+		
+		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
+		Integer idLocal = usuario.getIdLocal();
+		
+		Map<String, Object> response = new HashMap<>();
+
+		
+		// Obtenemos los datos del JSON recibido
+		String idSubCuentaStr = (String) requestBody.get("idCuenta");	
+		System.out.println("idSubCuentaStr en DetalleSubCuenta es " + idSubCuentaStr);
+		Integer subCuenta =  Integer.parseInt(idSubCuentaStr);
+		
+		
+		String grupoStr = idSubCuentaStr.substring(0,2);
+		System.out.println("grupoStr en DetalleSubCuenta es " + grupoStr);
+		Integer grupo = Integer.parseInt(grupoStr);
+		
+		
+		String cuentaStr = idSubCuentaStr.substring(0,4);
+		System.out.println("cuentaStr en DetalleSubCuenta es " + cuentaStr);
+		Integer cuenta = Integer.parseInt(cuentaStr);
+
+		String idClaseStr = (String) requestBody.get("idClase");
+		Integer idClase = Integer.parseInt(idClaseStr);
+		
+		
+		//Clase
+		String nombreClase = tblPucService.obtenerNombreCuenta(idLocal, idClase, idClase);
+		response.put("xNombreClase", nombreClase);
+		response.put("xIdClase", idClase);
+		
+		//Grupo
+		String nombreGrupo = tblPucService.obtenerNombreCuenta(idLocal, grupo, idClase);
+		System.out.println("nombreGrupo en DetalleSubCuenta es " + nombreGrupo);
+		response.put("xNombreGrupo", nombreGrupo);
+		response.put("xIdGrupo", grupo);
+		
+		//Cuenta
+		String nombreCuenta = tblPucService.obtenerNombreCuenta(idLocal, cuenta, idClase);
+		System.out.println("nombreCuenta en DetalleSubCuenta es " + nombreCuenta);
+		response.put("xNombreCuenta", nombreCuenta);
+		response.put("xIdCuenta", cuenta);
+		
+		//Subcuenta
+		String nombreSubCuenta = tblPucService.obtenerNombreCuenta(idLocal, subCuenta, idClase);
+		System.out.println("nombreSubCuenta en DetalleSubCuenta es " + nombreSubCuenta);
+		response.put("xNombreSubCuenta", nombreSubCuenta);
+		response.put("xIdSubCuenta", subCuenta);
+		
+		
+		List<TblPuc> listaSubCuentas = tblPucService.listaSubCuentas(subCuenta, idLocal);
+      	System.out.println("listaSubCuentas  es  " + listaSubCuentas);
+      	
+     // Crear un array de enteros a partir del campo idCuentaAux
+      	List<Integer> xListaSubCuentas = listaSubCuentas.stream()
+      	        .map(TblPuc::getIdCuenta)  
+      	        .collect(Collectors.toList());  // Crear la lista de enteros
+      	
+      	response.put("xListaSubCuentas", xListaSubCuentas);    
       
 	
        	
@@ -383,24 +467,24 @@ public class PucController {
 		
 		
 		//Clase
-		String nombreClase = tblPucService.obtenerNombreCuenta(idClase, idClase);
+		String nombreClase = tblPucService.obtenerNombreCuenta(idLocal, idClase, idClase);
 		response.put("xNombreClase", nombreClase);
 		response.put("xIdClase", idClase);
 		
 		//Grupo
-		String nombreGrupo = tblPucService.obtenerNombreCuenta(grupo, idClase);
+		String nombreGrupo = tblPucService.obtenerNombreCuenta(idLocal, grupo, idClase);
 		System.out.println("nombreGrupo en DetalleAux es " + nombreGrupo);
 		response.put("xNombreGrupo", nombreGrupo);
 		response.put("xIdGrupo", grupo);
 		
 		//Cuenta
-		String nombreCuenta = tblPucService.obtenerNombreCuenta(cuenta, idClase);
+		String nombreCuenta = tblPucService.obtenerNombreCuenta(idLocal, cuenta, idClase);
 		System.out.println("nombreCuenta en DetalleAux es " + nombreCuenta);
 		response.put("xNombreCuenta", nombreCuenta);
 		response.put("xIdCuenta", cuenta);
 		
 		//Subcuenta
-		String nombreSubCuenta = tblPucService.obtenerNombreCuenta(subCuenta, idClase);
+		String nombreSubCuenta = tblPucService.obtenerNombreCuenta(idLocal, subCuenta, idClase);
 		System.out.println("nombreSubCuenta en DetalleAux es " + nombreSubCuenta);
 		response.put("xNombreSubCuenta", nombreSubCuenta);
 		response.put("xIdSubCuenta", subCuenta);
@@ -418,6 +502,59 @@ public class PucController {
       	return ResponseEntity.ok(response);
 		
 	}
+	
+	
+	@PostMapping("/CrearSubCuenta-Post")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> CrearSubCuenta(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+        
+	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
+	    Integer IdUsuario = usuario.getIdUsuario();
+	    
+	    Integer idLocal = usuario.getIdLocal();
+
+
+	    System.out.println("SI ENTRÓ A  /CrearSubCuenta");
+
+	        // Obtenemos los datos del JSON recibido
+	        String cuenta = (String) requestBody.get("cuenta");
+	        String subCuenta = (String) requestBody.get("subCuenta");
+	        String idSubCuentaStr = cuenta + subCuenta;
+	        Integer idSubCuenta = Integer.parseInt(idSubCuentaStr);
+	        
+	        String idClaseStr = cuenta.substring(0,1);
+	        Integer idClase = Integer.parseInt(idClaseStr);
+	        System.out.println("idClaseStr es " + idClaseStr);
+	        
+	        String nombreSubCuenta = (String) requestBody.get("nombreSubCuenta");
+
+	        
+	        System.out.println("cuenta es " + cuenta);
+	        System.out.println("subCuenta es " + subCuenta);
+	        System.out.println("idSubCuenta es " + idSubCuenta);
+
+	        
+
+	        //INGRESAR NUEVA SUBCUENTA
+	        tblPucRepo.ingresaSubCuenta(idLocal, idClase, idSubCuenta, nombreSubCuenta);
+
+	        
+		    Map<String, Object> response = new HashMap<>();
+		    response.put("message", "LOGGGGGGGGG");
+		    response.put("xNombreSubCuenta", nombreSubCuenta);
+		    response.put("xIdSubCuenta", idSubCuenta);
+
+
+		    return ResponseEntity.ok(response);
+	   
+	    
+	}
+	
 	
 	
 	@PostMapping("/CrearAuxiliar-Post")

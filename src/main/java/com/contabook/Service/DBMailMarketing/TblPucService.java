@@ -14,35 +14,43 @@ public class TblPucService {
 	@Autowired
 	TblPucRepo tblPucRepo;
 	
-	public List<TblPuc> pucNivel1(){
+	public List<TblPuc> pucNivel1(int idLocal){
 		
-		List<TblPuc> listaNivel1 = tblPucRepo.pucNivel1();
+		List<TblPuc> listaNivel1 = tblPucRepo.pucNivel1(idLocal);
 		
 		return listaNivel1;
 	}
 	
-	public List<TblPuc> pucNivel2(int idCuentaMenor, int idCuentaMayor, int idClase){
+	public List<TblPuc> pucNivel2(int idLocal, int idCuentaMenor, int idCuentaMayor, int idClase){
 		
-		List<TblPuc> listaNivel2 = tblPucRepo.pucNivel2(idCuentaMenor, idCuentaMayor, idClase);
+		List<TblPuc> listaNivel2 = tblPucRepo.pucNivel2(idLocal, idCuentaMenor, idCuentaMayor, idClase);
 		
 		return listaNivel2;
 	}
 	
 	
-	public List<TblPuc> pucNiveles(int idCuentaMenor, int idCuentaMayor, int idClase){
+	public List<TblPuc> pucNiveles(int idLocal, int idCuentaMenor, int idCuentaMayor, int idClase){
 		
-		List<TblPuc> listaNiveles = tblPucRepo.pucNiveles(idCuentaMenor, idCuentaMayor, idClase);
+		List<TblPuc> listaNiveles = tblPucRepo.pucNiveles(idLocal, idCuentaMenor, idCuentaMayor, idClase);
 		
 		return listaNiveles;
 		
 	}
 	
 	
-	public String obtenerNombreCuenta(int idCuenta, int idClase) {
+	public String obtenerNombreCuenta(int idLocal, int idCuenta, int idClase) {
 		
-		String nombreCuenta = tblPucRepo.obtenerNombreCuenta(idCuenta, idClase);
+		String nombreCuenta = tblPucRepo.obtenerNombreCuenta(idLocal, idCuenta, idClase);
 		
 		return nombreCuenta;
+		
+	}
+	
+	public List<TblPuc> listaSubCuentas( int idCuenta, int idLocal){
+		
+		List<TblPuc> listasubCuentas = tblPucRepo.listaSubCuentas(idCuenta, idLocal);
+		
+		return listasubCuentas;
 		
 	}
 

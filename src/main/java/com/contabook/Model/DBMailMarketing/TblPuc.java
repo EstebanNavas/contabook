@@ -11,9 +11,14 @@ import javax.persistence.Table;
 @IdClass(TblPucPK.class)
 public class TblPuc {
 	
+	
 	@Id
+	@Column(name= "idLocal")
+	private Integer idLocal;
+	
 	@Column(name= "idClase")
 	private Integer idClase;
+	
 	
 	@Id
 	@Column(name= "idCuenta")

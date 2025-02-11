@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class TblPucPK implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	private Integer idClase;
+	private Integer idLocal;
 	
 	
 	private Integer idCuenta;
@@ -13,21 +13,21 @@ public class TblPucPK implements Serializable {
 	public TblPucPK() {
 		super();
 	}
-	public TblPucPK(Integer idClase,  Integer idCuenta) {
+	public TblPucPK(Integer idLocal,  Integer idCuenta) {
 		super();
-		this.idClase = idClase;
+		this.idLocal = idLocal;
 		this.idCuenta = idCuenta;
 
 	}
-	public Integer getIdClase() {
-		return idClase;
+	public Integer getIdLocal() {
+		return idLocal;
 	}
 
 	public Integer getIdCuenta() {
 		return idCuenta;
 	}
-	public void setIdClase(Integer idClase) {
-		this.idClase = idClase;
+	public void setIdLocal(Integer idLocal) {
+		this.idLocal = idLocal;
 	}
 
 	public void setIdCuenta(Integer idCuenta) {
