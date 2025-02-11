@@ -80,6 +80,7 @@ public class ReporteCuentasContableController {
         System.out.println("CONTROLLER " + nombreClase);
 		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
+		Integer idLocal = usuario.getIdLocal();
 		
 		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
 	    HttpSession session = request.getSession();
@@ -109,7 +110,7 @@ public class ReporteCuentasContableController {
 
 		    
 		    
-	   		List<TblPuc> listaNivel1 = tblPucService.pucNivel1();
+	   		List<TblPuc> listaNivel1 = tblPucService.pucNivel1(idLocal);
 			model.addAttribute("opcionesNivel1", listaNivel1);
 	    
 

@@ -296,6 +296,65 @@ function mostrarLista2(element) {
     const idCuenta = element.getAttribute("data-id");
     const idClase = element.getAttribute("data-id");
     console.log("ID de la opción seleccionada: " + idCuenta);
+    
+    //Limpiar campos  
+        let inputClase = document.getElementById("clase");
+        inputClase.value = "";
+        
+        let inputNombreClase = document.getElementById("nombreClase");
+        inputNombreClase.value = "";
+        
+        let inputGrupo = document.getElementById("grupo");
+        inputGrupo.value = "";
+        
+        let inputNombreGrupo = document.getElementById("nombreGrupo");
+        inputNombreGrupo.value = "";
+        
+        let inputCuenta =  document.getElementById("cuenta");
+        inputCuenta.value = "";
+        
+        let inputNombreCuenta = document.getElementById("nombreCuenta");
+        inputNombreCuenta.value = "";
+        
+    
+        let inputCodidoAux = document.getElementById("codidoAux");
+        inputCodidoAux.readOnly = true; 
+        inputCodidoAux.value = "";
+        inputCodidoAux.style.backgroundColor = "#eee"; 
+        inputCodidoAux.classList.remove("input-barra-verde");
+        
+        let inputNombreAux = document.getElementById("nombreAux");
+        inputNombreAux.readOnly = true; 
+        inputNombreAux.value = "";
+        inputNombreAux.style.backgroundColor = "#eee"; 
+        inputNombreAux.classList.remove("input-barra-verde");
+        
+        let inputSubCuenta = document.getElementById("subCuenta");
+        inputSubCuenta.readOnly = true; 
+        inputSubCuenta.value = "";
+        inputSubCuenta.style.backgroundColor = "#eee"; 
+        inputSubCuenta.classList.remove("input-barra-verde");
+        
+        let inputnombreSubCuenta = document.getElementById("nombreSubCuenta");
+        inputnombreSubCuenta.readOnly = true; 
+        inputnombreSubCuenta.value = "";
+        inputnombreSubCuenta.style.backgroundColor = "#eee"; 
+        inputnombreSubCuenta.classList.remove("input-barra-verde");
+        
+        document.getElementById("subCuentaLabel").innerText = "";
+        document.getElementById("subCuentaAux").innerText = "";
+        
+        const botonCrear = document.getElementById("crearAux");  
+        botonCrear.style.display = "block";
+        
+        const crearSubCuenta = document.getElementById("crearSubCuenta"); 
+        crearSubCuenta.style.display = "none";
+        
+        const botonActualizar = document.getElementById("actualizarAux");  
+        botonActualizar.style.display = "none";
+        
+        const botonEliminar = document.getElementById("eliminarAux");  
+        botonEliminar.style.display = "none";
 
     // Buscar si ya hay filas desplegadas para este idCuenta
     let nextRow = selectedRow.nextElementSibling;
@@ -378,6 +437,61 @@ function mostrarLista3(element) {
     const idClase = element.getAttribute("data-id-clase");
     console.log("ID de la opción seleccionada en mostrarLista3: " + idCuenta);
     console.log("idClase seleccionada en mostrarLista3: " + idClase);
+    
+        //Limpiar campos  
+        let inputClase = document.getElementById("clase");
+        inputClase.value = "";
+        
+        let inputNombreClase = document.getElementById("nombreClase");
+        inputNombreClase.value = "";
+        
+        let inputGrupo = document.getElementById("grupo");
+        inputGrupo.value = "";
+        
+        let inputNombreGrupo = document.getElementById("nombreGrupo");
+        inputNombreGrupo.value = "";
+        
+        let inputCuenta =  document.getElementById("cuenta");
+        inputCuenta.value = "";
+        
+        let inputNombreCuenta = document.getElementById("nombreCuenta");
+        inputNombreCuenta.value = "";
+        
+    
+        let inputCodidoAux = document.getElementById("codidoAux");
+        inputCodidoAux.readOnly = true; 
+        inputCodidoAux.value = "";
+        inputCodidoAux.style.backgroundColor = "#eee"; 
+        inputCodidoAux.classList.remove("input-barra-verde");
+        
+        let inputNombreAux = document.getElementById("nombreAux");
+        inputNombreAux.readOnly = true; 
+        inputNombreAux.value = "";
+        inputNombreAux.style.backgroundColor = "#eee"; 
+        inputNombreAux.classList.remove("input-barra-verde");
+        
+        let inputSubCuenta = document.getElementById("subCuenta");
+        inputSubCuenta.readOnly = true; 
+        inputSubCuenta.value = "";
+        inputSubCuenta.style.backgroundColor = "#eee"; 
+        inputSubCuenta.classList.remove("input-barra-verde");
+        
+        let inputnombreSubCuenta = document.getElementById("nombreSubCuenta");
+        inputnombreSubCuenta.readOnly = true; 
+        inputnombreSubCuenta.value = "";
+        inputnombreSubCuenta.style.backgroundColor = "#eee"; 
+        inputnombreSubCuenta.classList.remove("input-barra-verde");
+        
+        document.getElementById("subCuentaLabel").innerText = "";
+        document.getElementById("subCuentaAux").innerText = "";
+        
+        const botonCrear = document.getElementById("crearAux");  
+        botonCrear.style.display = "block";
+        
+        const crearSubCuenta = document.getElementById("crearSubCuenta"); 
+        crearSubCuenta.style.display = "none";
+        
+
 
 
      // Buscar si ya hay filas desplegadas para este idCuenta
@@ -469,6 +583,30 @@ function mostrarLista4(element) {
     const idClase = element.getAttribute("data-id-clase");
     console.log("ID de la opción seleccionada en mostrarLista3: " + idCuenta);
     console.log("idClase seleccionada en mostrarLista3: " + idClase);
+    
+    
+       //Limpiar campos          
+        let inputCodidoAux = document.getElementById("codidoAux");
+        inputCodidoAux.readOnly = true; 
+        inputCodidoAux.value = "";
+        inputCodidoAux.style.backgroundColor = "#eee"; 
+        inputCodidoAux.classList.remove("input-barra-verde");
+        
+        let inputNombreAux = document.getElementById("nombreAux");
+        inputNombreAux.readOnly = true; 
+        inputNombreAux.value = "";
+        inputNombreAux.style.backgroundColor = "#eee"; 
+        inputNombreAux.classList.remove("input-barra-verde");
+        
+        const botonActualizar = document.getElementById("actualizarAux");  
+        botonActualizar.style.display = "none";
+        
+        const botonEliminar = document.getElementById("eliminarAux");  
+        botonEliminar.style.display = "none";
+        
+
+        
+        document.getElementById("subCuentaAux").innerText = "";
 
 
      // Buscar si ya hay filas desplegadas para este idCuenta
@@ -757,6 +895,24 @@ function CrearAuxiliar() {
     var subCuenta = document.getElementById("subCuenta").value;
     var codidoAux = document.getElementById("codidoAux").value;
    var nombreAux = document.getElementById("nombreAux").value;
+   
+   
+     if(!subCuenta){			
+			alert("Por favor cargue los datos");
+			return;
+		}
+	
+	
+		if(!codidoAux){			
+			alert("Por favor ingrese el código del Auxiliar");
+			return;
+		}
+		
+		if(!nombreAux){
+			
+			alert("Por favor ingrese un nombre para el Auxiliar");
+			return;
+		}
     
     const datos = {
         subCuenta: subCuenta,
@@ -928,7 +1084,26 @@ function mostrarDetalleAux(element) {
         const botonCrear = document.getElementById("crearAux");  
         botonCrear.style.display = "none";
         
+        const crearSubCuenta = document.getElementById("crearSubCuenta"); 
+        crearSubCuenta.style.display = "none";
         
+        let inputNombreAux = document.getElementById("nombreAux");
+        inputNombreAux.readOnly = false; 
+        inputNombreAux.value = vacio;
+        inputNombreAux.style.backgroundColor = "White"; 
+        inputNombreAux.classList.add("input-barra-verde"); // Agregar la clase
+        
+        let inputSubCuenta = document.getElementById("subCuenta");
+        inputSubCuenta.readOnly = true; 
+        inputSubCuenta.style.backgroundColor = "#eee"; 
+        inputSubCuenta.classList.remove("input-barra-verde");
+        
+        let inputnombreSubCuenta = document.getElementById("nombreSubCuenta");
+        inputnombreSubCuenta.readOnly = true; 
+        inputnombreSubCuenta.style.backgroundColor = "#eee"; 
+        inputnombreSubCuenta.classList.remove("input-barra-verde");
+        
+        document.getElementById("subCuentaLabel").innerText = "";
 
 
         })
