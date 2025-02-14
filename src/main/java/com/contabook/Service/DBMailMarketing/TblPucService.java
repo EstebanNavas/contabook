@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.contabook.Model.DBMailMarketing.TblPuc;
+import com.contabook.Projection.TblPucDTO;
 import com.contabook.Repository.DBMailMarketing.TblPucRepo;
 
 @Service
@@ -52,6 +53,13 @@ public class TblPucService {
 		
 		return listasubCuentas;
 		
+	}
+	
+	public List<TblPucDTO> RepEstadoSituacionFinanciera( int idLocal, int idPeriodo){
+		
+		List<TblPucDTO> reporteFinanciero = tblPucRepo.RepEstadoSituacionFinanciera(idLocal, idPeriodo);
+		
+		return reporteFinanciero;
 	}
 
 }

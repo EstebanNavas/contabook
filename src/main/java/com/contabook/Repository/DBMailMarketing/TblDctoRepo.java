@@ -67,7 +67,7 @@ public interface TblDctoRepo extends JpaRepository<TblDcto, Integer> {
 				 + "       tblDcto.idCpte,                                    "
 				 + "       tblDcto.idTipoOrden,                               "
 				 + "       tblDcto.idDcto,                                    "
-				 + "       tblDcto.fechaDcto,                                 "
+				 + "       CONVERT(VARCHAR, tblDcto.fechaDcto, 23) AS fechaDcto,  "
 				 + "       tblDcto.idPeriodo,                                 "
 				 + "       tblTipoCpte.nombreCmpte AS nombreTipoComprobante,  "
 				 + "	   tblDctoDetalle.observacion AS nombreUsuario,       "

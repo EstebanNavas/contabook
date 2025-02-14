@@ -59,6 +59,7 @@
 						<th class="subtituloAF">ITEM</th>
 						<th class="subtituloAF">Cuenta contable</th>
 						<th class="subtituloAF">Usuario</th>
+						<th class="subtituloAF">Cédula</th>
 						<th class="subtituloAF">Descripción</th>
 						<th class="subtituloAF">Débito</th>	
 						<th class="subtituloAF">Crédito</th>	
@@ -70,6 +71,7 @@
 						<td class="detalleAF" th:text="${comprobante.getItem()}"></td>
 						<td class="detalleAF" th:text="${comprobante.getIdCuentaAux() + ' - ' + comprobante.getNombreCuenta()}"></td>
 						<td class="detalleAF" th:text="${comprobante.getObservacion()}"></td>
+						<td class="detalleAF" th:text="${comprobante.getIdCliente()}"></td>
 						<td class="detalleCentrado" text=""></td>
 						<td class="detalleAF" th:text="${comprobante.getVrDebito()}"  id="debito"></td>
 						<td class="detalleAF" th:text="${comprobante.getVrCredito()}" id="credito"></td>

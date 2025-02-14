@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.contabook.Model.DBMailMarketing.TblPuc;
+import com.contabook.Projection.TblPucDTO;
 
 @Repository
 public interface TblPucRepo extends JpaRepository<TblPuc, Integer> {
@@ -68,4 +69,52 @@ public interface TblPucRepo extends JpaRepository<TblPuc, Integer> {
         + "?3,"
         + "?4)", nativeQuery = true)
 	  public void ingresaSubCuenta(int idLocal, int idClase, int idCuenta, String nombreCuenta);
+	 
+	 
+	 @Query(value = "     SELECT  tblPucAux.idLocal                                                       " 
+			 + "         ,tblPucAux.idCuentaAux                                                           "
+			 + "         ,tblPucAux.nombreCuenta AS nombreAuxiliar                                        "
+			 + "   	  ,tblPuc.nombreCuenta AS nombreSubCuenta                                            "
+			 + "   	  ,tblPuc.idCuenta AS  idSubCuenta,                                                  "
+			 + "   	  ( SELECT TOP 1 tblPuc.nombreCuenta                                                 "
+			 + "   	    FROM  tblPuc                                                                     "
+			 + "   		WHERE SUBSTRING(LTRIM(STR(tblPuc.idCuenta)),1,4)=                                "
+			 + "   		     SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,4) ) AS nombreCuenta,         "
+			 + "   	  SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,4) AS idCuenta,                      "
+			 + "       (SELECT TOP 1 tblPuc.nombreCuenta                                                  "
+			 + "   	    FROM  tblPuc                                                                     "
+			 + "   		WHERE SUBSTRING(LTRIM(STR(tblPuc.idCuenta)),1,2)=                                "
+			 + "   		     SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,2) ) AS nombreGrupo,          "
+			 + "   	  SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,2) AS idGrupo,                       "
+			 + "       (SELECT TOP 1 tblPuc.nombreCuenta                                                  "
+			 + "   	    FROM  tblPuc                                                                     "
+			 + "   		WHERE SUBSTRING(LTRIM(STR(tblPuc.idCuenta)),1,1)=                                "
+			 + "   		     SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,1) ) AS nombreClase,          "
+			 + "   	 SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,1) AS idClase,                        "
+			 + "   	  tmpTOT.vrDebito,                                                                   "
+			 + "       tmpTOT.vrCredito                                                                   "
+			 + "     FROM tblPucAux                                                                       "
+			 + "     INNER JOIN tblPuc                                                                    "
+			 + "     ON SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,6) = tblPuc.idCuenta                "
+			 + "     INNER JOIN (                                                                         "
+			 + "     SELECT tblDctoDetalle.idLocal,                                                       "
+			 + "          tblDctoDetalle.idCuentaAux,                                                     "
+			 + "   	   SUM(tblDctoDetalle.vrDebito) AS vrDebito,                                         "
+			 + "   	   SUM(tblDctoDetalle.vrCredito) AS vrCredito                                        "
+			 + "    FROM    tblDcto                                                                       "
+			 + "    INNER JOIN tblDctoDetalle                                                             "
+			 + "    ON tblDcto.idLocal = tblDctoDetalle.idLocal                                           "
+			 + "    AND tblDcto.idTipoCpte = tblDctoDetalle.idTipoCpte                                    "
+			 + "    AND tblDcto.idCpte = tblDctoDetalle.idCpte                                            "
+			 + "    WHERE tblDcto.idLocal = ?1                                                            "
+			 + "    AND   tblDcto.idPeriodo = ?2                                                      "
+			 + "    GROUP BY tblDctoDetalle.idLocal,                                                      "
+			 + "         tblDctoDetalle.idCuentaAux                                                       "
+			 + "     ) AS tmpTOT                                                                          "
+			 + "      ON tmpTOT.idLocal  = tblPucAux.idLocal                                              "
+			 + "      AND tmpTOT.idCuentaAux  = tblPucAux.idCuentaAux                                     "
+			 + "     WHERE tblPucAux.idLocal= ?1                                                          "
+			 + "    ORDER BY 1,11,9,7,5,2                                                                 ",
+             nativeQuery = true)
+	     List<TblPucDTO> RepEstadoSituacionFinanciera( int idLocal, int idPeriodo);
 }
