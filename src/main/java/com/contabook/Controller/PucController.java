@@ -350,6 +350,64 @@ public class PucController {
 	}
 	
 	
+	@PostMapping("/DetalleCuenta")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> DetalleCuenta(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,  Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClaseController = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClaseController);
+		
+		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
+		Integer idLocal = usuario.getIdLocal();
+		
+		Map<String, Object> response = new HashMap<>();
+
+		
+		// Obtenemos los datos del JSON recibido
+		String idSubCuentaStr = (String) requestBody.get("idCuenta");	
+		System.out.println("idSubCuentaStr en DetalleSubCuenta es " + idSubCuentaStr);
+		Integer idCuenta =  Integer.parseInt(idSubCuentaStr);
+		
+		
+
+		String idClaseStr = (String) requestBody.get("idClase");
+		Integer idClase = Integer.parseInt(idClaseStr);
+		
+		
+		//Clase
+		String nombreClase = tblPucService.obtenerNombreCuenta(idLocal, idClase, idClase);
+		response.put("xNombreClase", nombreClase);
+		response.put("xIdClase", idClase);
+		
+		//Grupo
+		String nombreGrupo = tblPucService.obtenerNombreCuenta(idLocal, idCuenta, idClase);
+		System.out.println("nombreGrupo en DetalleSubCuenta es " + nombreGrupo);
+		response.put("xNombreGrupo", nombreGrupo);
+		response.put("xIdGrupo", idCuenta);
+				
+
+		
+		
+		List<TblPuc> listaCuentas = tblPucService.listaCuentas(idCuenta, idLocal);
+      	System.out.println("listaCuentas  es  " + listaCuentas);
+      	
+     // Crear un array de enteros a partir del campo idCuentaAux
+      	List<Integer> xListaCuentas = listaCuentas.stream()
+      	        .map(TblPuc::getIdCuenta)  
+      	        .collect(Collectors.toList());  // Crear la lista de enteros
+      	
+      	response.put("xListaCuentas", xListaCuentas);    
+      
+	
+       	
+      	     	
+		
+      	return ResponseEntity.ok(response);
+		
+	}
+	
+	
 	
 	@PostMapping("/DetalleSubCuenta")
 	@ResponseBody
@@ -502,6 +560,60 @@ public class PucController {
       	return ResponseEntity.ok(response);
 		
 	}
+	
+	
+	
+	@PostMapping("/CrearCuenta-Post")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> CrearCuenta(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+        
+	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
+	    Integer IdUsuario = usuario.getIdUsuario();
+	    
+	    Integer idLocal = usuario.getIdLocal();
+
+
+	    System.out.println("SI ENTRÓ A  /CrearCuenta");
+
+	        // Obtenemos los datos del JSON recibido
+	        String grupo = (String) requestBody.get("grupo");
+	        String cuenta = (String) requestBody.get("cuenta");
+	        String idCuentaStr = grupo + cuenta;
+	        Integer idCuenta = Integer.parseInt(idCuentaStr);
+	        
+	        String idClaseStr = grupo.substring(0,1);
+	        Integer idClase = Integer.parseInt(idClaseStr);
+	        System.out.println("idClaseStr es " + idClaseStr);
+	        
+	        String nombreCuenta = (String) requestBody.get("nombreCuenta");
+
+	        
+	        System.out.println("grupo es " + grupo);
+	        System.out.println("cuenta es " + cuenta);
+	        System.out.println("nombreCuenta es " + nombreCuenta);
+
+	        
+
+	        //INGRESAR NUEVA CUENTA
+	        tblPucRepo.ingresaSubCuenta(idLocal, idClase, idCuenta, nombreCuenta);
+
+	        
+		    Map<String, Object> response = new HashMap<>();
+		    response.put("message", "LOGGGGGGGGG");
+		    response.put("xNombreCuenta", nombreCuenta);
+		    response.put("xIdCuenta", idCuenta);
+
+
+		    return ResponseEntity.ok(response);
+	   
+	    
+	}
+	
 	
 	
 	@PostMapping("/CrearSubCuenta-Post")

@@ -55,6 +55,14 @@ public class TblPucService {
 		
 	}
 	
+	public List<TblPuc> listaCuentas( int idCuenta, int idLocal){
+		
+		List<TblPuc> listaCuentas = tblPucRepo.listaCuentas(idCuenta, idLocal);
+		
+		return listaCuentas;
+		
+	}
+	
 	public List<TblPucDTO> RepEstadoSituacionFinanciera( int idLocal, int idPeriodo){
 		
 		List<TblPucDTO> reporteFinanciero = tblPucRepo.RepEstadoSituacionFinanciera(idLocal, idPeriodo);

@@ -97,11 +97,16 @@
 				   </div>
 				   
 			   </div>
+			   
+			   <!-- CUENTA -->
 			   <div class="fila" style="margin-top: 10px; margin-left: 20;">
 				    <div class="formGroup">
 					  <label for="descripcion">Cuenta</label>
 				   </div>
-				   <div class="formGroup" style="margin-left: 109px;">
+				   <div class="formGroup" style="width: 50px; margin-left: 25px;">
+					  <label for="Cuenta" id="cuentaLabel"></label>
+				   </div>
+				   <div class="formGroup" style="margin-left: 33px;">
 					  <input style="width: 66px; height: 24px; background-color: #eee;" id="cuenta" readonly>
 				   </div>
     			   <div class="formGroup" style="margin-left: 120px;">
@@ -109,6 +114,9 @@
 				   </div>
 				   
 			   </div>
+			   <div id="error-message-cuenta" style="color: red; font-size: 12px; display: none;">El código Cuenta ya existe.</div>
+			   
+			   <!-- SUBCUENTA -->
 			   <div class="fila" style="margin-top: 10px; margin-left: 20;">
 				    <div class="formGroup"   >
 					  <label for="descripcion">Subcuenta</label>
@@ -126,6 +134,7 @@
 			   </div>
 			   <div id="error-message-subCuenta" style="color: red; font-size: 12px; display: none;">El código subCuenta ya existe.</div>
 			   
+			   <!-- AUXILIAR -->
 			   <div class="fila" style="margin-top: 10px; margin-left: 20;">
 				    <div class="formGroup" style="margin-right: 50px;" >
 					  <label for="descripcion">Auxiliar</label>
@@ -148,6 +157,7 @@
 					<!-- Botón para enviar el formulario -->
 					<button type="button" class="btn btn-success" value="Guardar" onclick="CrearAuxiliar()" id="crearAux">Crear Auxiliar</button>
 					<button type="button" class="btn btn-success" value="Guardar" onclick="CrearSubCuenta()" id="crearSubCuenta" style="display: none;">Crear SubCuenta</button>
+					<button type="button" class="btn btn-success" value="Guardar" onclick="CrearCuenta()" id="crearCuenta" style="display: none;">Crear Cuenta</button>
 					<button type="button" class="btn btn-primary" value="Guardar" onclick="ActualizarAuxiliar()" id="actualizarAux" style="display: none;">Actualizar Auxiliar</button>
 					<button type="button" class="btn btn-danger" value="Guardar" onclick="EliminarAuxiliar()" id="eliminarAux" style="display: none;">Eliminar</button>
 				</div>
@@ -159,15 +169,79 @@
 		
 let xListaAuxiliares = [];  // Asegúrate de que este array esté siendo correctamente llenado con los valores de Integer
 let xListaSubCuentas = [];
+let xListaCuentas = [];
 
 // Validar código auxiliar y verificar existencia en xListaAuxiliares
 const codigoAuxInput = document.getElementById("codidoAux"); //input
 const subCuentaAux = document.getElementById("subCuentaAux"); //label
 const subCuentaInput = document.getElementById("subCuenta"); //input
 const subCuentaLabel = document.getElementById("subCuentaLabel"); //label
+const cuentaInput = document.getElementById("cuenta"); //input
+const cuentaLabel = document.getElementById("cuentaLabel"); //label
 
 const errorMessage = document.getElementById("error-message");  // Obtener el contenedor del mensaje de error
 const errorMessageSubCuenta =  document.getElementById("error-message-subCuenta");  // Obtener el contenedor del mensaje de error
+const errorMessageCuenta =  document.getElementById("error-message-cuenta");  // Obtener el contenedor del mensaje de error
+
+
+
+cuentaInput.addEventListener("blur", (event) => {
+    let value = event.target.value;
+
+    if (value === "") return;
+
+    value = value.replace(/\D/g, ""); // Eliminar caracteres no numéricos
+    if (parseInt(value) < 1) value = "01";
+    else if (parseInt(value) > 99) value = "99";
+
+    const codigoCuentaFinal = value.padStart(2, "0");
+    event.target.value = codigoCuentaFinal;
+
+    // Obtener el contenido de subCuentaAux (el valor del label)
+    const cuentaLabelValue = cuentaLabel.innerText.trim(); // Usamos innerText para obtener el texto dentro del label
+
+    // Verificar que subCuentaValue tenga un valor válido
+    if (!cuentaLabelValue || isNaN(cuentaLabelValue)) {
+        console.error("El valor de subCuentaAux no es válido.");
+        return;
+    }
+
+    // Concatenar subCuentaAux y codigoAuxInput y convertirlo a número
+    const idCuentaCuenta= parseInt(`${cuentaLabelValue}${codigoCuentaFinal}`);  // Convertir a Integer
+
+    // Verificar si la conversión fue exitosa
+    if (isNaN(idCuentaCuenta)) {
+        console.error("idCuentaSubCuenta es NaN. Verifica los valores concatenados.");
+        return;
+    }
+
+    console.log("idCuentaSubCuenta es :", idCuentaCuenta);
+
+    // Verificar si idCuentaAux ya existe en xListaAuxiliares
+    const existe = xListaCuentas.includes(idCuentaCuenta);  // Usar includes para verificar existencia
+
+    // Imprimir xListaAuxiliares en la consola
+    console.log("Contenido actual de xListaSubCuentas:", xListaCuentas);
+
+    if (existe) {
+        // Mostrar el mensaje de error debajo del input
+        errorMessageCuenta.style.display = "block";
+        // Limpiar el campo de entrada
+        cuentaInput.value = "";
+    } else {
+        // Ocultar el mensaje de error si el código no existe
+        errorMessageCuenta.style.display = "none";
+    }
+});
+
+// Permitir edición en tiempo real
+cuentaInput.addEventListener("input", (event) => {
+    let value = event.target.value;
+    if (value === "") return;
+
+    event.target.value = value.replace(/\D/g, "").slice(0, 2);
+});
+
 
 
 
@@ -291,6 +365,7 @@ codigoAuxInput.addEventListener("input", (event) => {
 		
 		
 function mostrarLista2(element) {
+	console.log("Entró en mostrarLista2 ");
     // Obtener la fila seleccionada
     const selectedRow = element.closest("tr");
     const idCuenta = element.getAttribute("data-id");
@@ -311,10 +386,16 @@ function mostrarLista2(element) {
         inputNombreGrupo.value = "";
         
         let inputCuenta =  document.getElementById("cuenta");
+        inputCuenta.readOnly = true; 
         inputCuenta.value = "";
+        inputCuenta.style.backgroundColor = "#eee"; 
+        inputCuenta.classList.remove("input-barra-verde");
         
         let inputNombreCuenta = document.getElementById("nombreCuenta");
+        inputNombreCuenta.readOnly = true; 
         inputNombreCuenta.value = "";
+        inputNombreCuenta.style.backgroundColor = "#eee"; 
+        inputNombreCuenta.classList.remove("input-barra-verde");
         
     
         let inputCodidoAux = document.getElementById("codidoAux");
@@ -341,11 +422,17 @@ function mostrarLista2(element) {
         inputnombreSubCuenta.style.backgroundColor = "#eee"; 
         inputnombreSubCuenta.classList.remove("input-barra-verde");
         
+        
+
+        document.getElementById("cuentaLabel").innerText = "";
         document.getElementById("subCuentaLabel").innerText = "";
         document.getElementById("subCuentaAux").innerText = "";
         
         const botonCrear = document.getElementById("crearAux");  
         botonCrear.style.display = "block";
+        
+        const crearCuenta = document.getElementById("crearCuenta"); 
+        crearCuenta.style.display = "none";
         
         const crearSubCuenta = document.getElementById("crearSubCuenta"); 
         crearSubCuenta.style.display = "none";
@@ -401,28 +488,37 @@ function mostrarLista2(element) {
             const xlistaNivel2 = data.xlistaNivel2;
 
             // Crear e insertar las nuevas filas debajo de la fila seleccionada
-           xlistaNivel2.reverse().forEach((item) => {
-             const newRow = document.createElement("tr");
-             newRow.classList.add("level-2"); // Clase para estilo escalonado
-             newRow.setAttribute("data-parent-id", idCuenta); // Asignar el ID del padre
+            xlistaNivel2.reverse().forEach((item) => {
+                const newRow = document.createElement("tr");
+                newRow.classList.add("level-2"); // Clase para estilo escalonado
+                newRow.setAttribute("data-id", item.idCuenta); 
+                newRow.setAttribute("data-parent-id", idCuenta); // Asignar el ID del padre
 
-             newRow.innerHTML = `
-              <td style="display: flex; align-items: center;">
+                newRow.innerHTML = `
+                <td style="display: flex; align-items: center;">
+                 <!-- Triángulo para mostrarLista4 -->
+                 <span 
+                  onclick="mostrarLista3(this)" 
+                  data-id="${item.idCuenta}" 
+                  data-id-clase="${idClase}" 
+                  style="cursor: pointer; color: #ea7722; margin-right: 5px; font-size: 11px;"
+                  >
+                  ►
+                </span>  
                 <span 
-                 onclick="mostrarLista3(this)" 
-                 data-id="${item.idCuenta}" 
-                 data-id-clase="${idClase}" 
-                 style="cursor: pointer; color: blue; margin-right: 5px; font-size: 11px;"
+                 onclick="mostrarDetalleCuenta(this)" 
+                 data-id-cuenta="${item.idCuenta}" 
+                 data-id-claseCuenta="${idClase}"
+                 style="cursor: pointer; color: #000; text-decoration: underline;"
                  >
-                   ►
+                ${item.idCuenta}
                </span>
-              ${item.idCuenta}
-            </td>
-             <td>${item.nombreCuenta}</td>
-              `;
+               </td>
+               <td>${item.nombreCuenta}</td>
+                 `;
 
-             selectedRow.parentNode.insertBefore(newRow, selectedRow.nextSibling);
-          });
+                selectedRow.parentNode.insertBefore(newRow, selectedRow.nextSibling);
+            });
         })
         .catch((error) => {
             console.error("Error al registrar el log:", error);
@@ -430,7 +526,13 @@ function mostrarLista2(element) {
 }
 
 
-function mostrarLista3(element) {
+
+
+
+
+function mostrarLista3(element) {	
+	 console.log("Entró en mostrarLista3 ");
+	
     // Obtener la fila seleccionada
     const selectedRow = element.closest("tr");
     const idCuenta = element.getAttribute("data-id");
@@ -439,17 +541,6 @@ function mostrarLista3(element) {
     console.log("idClase seleccionada en mostrarLista3: " + idClase);
     
         //Limpiar campos  
-        let inputClase = document.getElementById("clase");
-        inputClase.value = "";
-        
-        let inputNombreClase = document.getElementById("nombreClase");
-        inputNombreClase.value = "";
-        
-        let inputGrupo = document.getElementById("grupo");
-        inputGrupo.value = "";
-        
-        let inputNombreGrupo = document.getElementById("nombreGrupo");
-        inputNombreGrupo.value = "";
         
         let inputCuenta =  document.getElementById("cuenta");
         inputCuenta.value = "";
@@ -485,8 +576,11 @@ function mostrarLista3(element) {
         document.getElementById("subCuentaLabel").innerText = "";
         document.getElementById("subCuentaAux").innerText = "";
         
+        const crearCuenta = document.getElementById("crearCuenta"); 
+        crearCuenta.style.display = "block";
+        
         const botonCrear = document.getElementById("crearAux");  
-        botonCrear.style.display = "block";
+        botonCrear.style.display = "none";
         
         const crearSubCuenta = document.getElementById("crearSubCuenta"); 
         crearSubCuenta.style.display = "none";
@@ -577,6 +671,7 @@ function mostrarLista3(element) {
 
 
 function mostrarLista4(element) {
+	console.log("ingresó a  mostrarLista4 ");
     // Obtener la fila seleccionada
     const selectedRow = element.closest("tr");
     const idCuenta = element.getAttribute("data-id");
@@ -603,6 +698,10 @@ function mostrarLista4(element) {
         
         const botonEliminar = document.getElementById("eliminarAux");  
         botonEliminar.style.display = "none";
+        
+        
+        const crearCuenta = document.getElementById("crearCuenta"); 
+        crearCuenta.style.display = "none";
         
 
         
@@ -767,6 +866,138 @@ function mostrarLista5(element) {
 }
 
 
+function CrearCuenta() {
+
+  var grupo = document.getElementById("grupo").value;
+  var cuenta = document.getElementById("cuenta").value;
+  var nombreCuenta = document.getElementById("nombreCuenta").value;
+
+	
+	   if(!grupo){			
+			alert("Por favor cargue los datos");
+			return;
+		}
+	
+	
+		if(!cuenta){			
+			alert("Por favor ingrese el código de la Cuenta");
+			return;
+		}
+		
+		if(!nombreCuenta){
+			
+			alert("Por favor ingrese un nombre para la Cuenta");
+			return;
+		}
+				
+		
+		
+			// Crear un objeto que contenga los datos a enviar
+    var datos = {
+		grupo: grupo,
+		cuenta: cuenta,
+		nombreCuenta: nombreCuenta			
+    };
+    
+    // Realizar una solicitud POST al controlador
+    fetch("./CrearCuenta-Post", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+		
+    var xNombreCuenta = data.xNombreCuenta;    
+	var xIdCuenta = data.xIdCuenta;  
+    
+    let idClase = grupo.substring(0, 1);
+    console.log("idClase:", idClase);
+
+    Swal.fire("Éxito", "Cuenta: " + xIdCuenta + " - " + xNombreCuenta + ". creada correctamente", "success");
+    console.log("xIdCuenta:", xIdCuenta);
+    
+    
+        let inputCodidoAux = document.getElementById("codidoAux");
+        inputCodidoAux.value = "";
+
+        
+        let inputNombreAux = document.getElementById("nombreAux");
+        inputNombreAux.value = "";
+
+
+
+
+    // Obtener la fila padre correcta
+    const parentRow = document.querySelector(`tr[data-id='${grupo}']`);
+    
+    // Buscar la última fila con el mismo `data-parent-id`
+    let lastChildRow = null;
+    document.querySelectorAll(`tr[data-parent-id='${grupo}']`).forEach(row => {
+        lastChildRow = row; // Guardar la última fila con este parent
+    });
+
+    // Crear la nueva fila con el auxiliar agregado
+    const newRow = document.createElement("tr");
+    newRow.classList.add("level-3");
+    newRow.setAttribute("data-parent-id", grupo);
+
+
+    newRow.innerHTML = `
+                <td style="display: flex; align-items: center;">
+                 <!-- Triángulo para mostrarLista4 -->
+                 <span 
+                  onclick="mostrarLista4(this)" 
+                  data-id="${xIdCuenta}" 
+                  data-id-clase="${idClase}" 
+                  style="cursor: pointer; color: #ea7722; margin-right: 5px; font-size: 11px;"
+                  >
+                  ►
+                </span>  
+                <span 
+                 onclick="mostrarDetalleSubCuenta(this)" 
+                 data-id-cuenta="${xIdCuenta}" 
+                 data-id-claseCuenta="${idClase}"
+                 style="cursor: pointer; color: #000; text-decoration: underline;"
+                 >
+                ${xIdCuenta}
+               </span>
+               </td>
+               <td>${xNombreCuenta}</td>
+          `;
+
+
+
+    // Si hay una fila hija, insertar después de la última fila hija
+    if (lastChildRow) {
+        lastChildRow.parentNode.insertBefore(newRow, lastChildRow.nextSibling);
+    } else if (parentRow) {
+        // Si no hay hijos, insertar justo después de la fila padre
+        parentRow.parentNode.insertBefore(newRow, parentRow.nextSibling);
+    }
+    
+        let inputCuenta = document.getElementById("cuenta");
+        inputCuenta.value = ""; 
+
+        
+        let inputnombreCuenta = document.getElementById("nombreCuenta");
+        inputnombreCuenta.value = ""; 
+        
+        errorMessageCuenta.style.display = "none";
+
+    })
+    .catch((error) => {
+        console.error("Error al registrar el log:", error);
+    });
+		
+		
+}	
+	
+	
+
+
 function CrearSubCuenta() {
 
   var cuenta = document.getElementById("cuenta").value;
@@ -878,6 +1109,16 @@ function CrearSubCuenta() {
         // Si no hay hijos, insertar justo después de la fila padre
         parentRow.parentNode.insertBefore(newRow, parentRow.nextSibling);
     }
+    
+    
+    
+    let inputnombreSubCuenta = document.getElementById("nombreSubCuenta");
+    inputnombreSubCuenta.value = "";
+
+    let inputSubCuenta = document.getElementById("subCuenta");
+    inputSubCuenta.value = "";
+
+    errorMessageSubCuenta.style.display = "none";
     
 
     })
@@ -991,6 +1232,7 @@ function CrearAuxiliar() {
 
 
 function mostrarDetalleAux(element) {
+	console.log("ingresó a  mostrarDetalleAux" );
     // Obtener la fila seleccionada
     const selectedRow = element.closest("tr");
     const idCuentaAux = element.getAttribute("data-id-aux");
@@ -1114,6 +1356,7 @@ function mostrarDetalleAux(element) {
 
 
 function mostrarDetalleSubCuenta(element) {
+	console.log("ingresó a  mostrarDetalleSubCuenta" );
     // Obtener la fila seleccionada
     const selectedRow = element.closest("tr");
     const idCuenta = element.getAttribute("data-id-cuenta");
@@ -1134,6 +1377,10 @@ function mostrarDetalleSubCuenta(element) {
         const crearSubCuenta = document.getElementById("crearSubCuenta"); 
         crearSubCuenta.style.display = "block";
         
+        const crearCuenta = document.getElementById("crearCuenta"); 
+        crearCuenta.style.display = "none";
+        
+        
         errorMessage.style.display = "none";
         errorMessageSubCuenta.style.display = "none";
         
@@ -1153,6 +1400,21 @@ function mostrarDetalleSubCuenta(element) {
         document.getElementById("nombreSubCuenta").value = vacio;
         
         
+        
+        let inputCuenta = document.getElementById("cuenta");
+        inputCuenta.readOnly = true;
+        inputCuenta.value = vacio 
+        inputCuenta.style.backgroundColor = "#eee"; 
+        inputCuenta.classList.remove("input-barra-verde"); // Agregar la clase
+        
+        let inputnombreCuenta = document.getElementById("nombreCuenta");
+        inputnombreCuenta.readOnly = true; 
+        inputnombreCuenta.value = vacio 
+        inputnombreCuenta.style.backgroundColor = "#eee"; 
+        inputnombreCuenta.classList.remove("input-barra-verde"); // Agregar la clase
+
+               
+        
         let inputCodidoAux = document.getElementById("codidoAux");
         inputCodidoAux.readOnly = true; 
         inputCodidoAux.value = vacio;
@@ -1169,6 +1431,7 @@ function mostrarDetalleSubCuenta(element) {
         document.getElementById("codidoAux").value = vacio;
         document.getElementById("nombreAux").value = vacio;
         
+        document.getElementById("cuentaLabel").innerText = vacio;
         document.getElementById("subCuentaAux").innerText = vacio;
 
 
@@ -1252,6 +1515,173 @@ function mostrarDetalleSubCuenta(element) {
 
         
         document.getElementById("subCuentaLabel").innerText = idCuenta;
+        
+        
+
+
+        })
+        .catch((error) => {
+            console.error("Error al registrar el log:", error);
+        });
+}
+
+
+
+
+function mostrarDetalleCuenta(element) {
+	console.log("ingresó a  mostrarDetalleCuenta ");
+    // Obtener la fila seleccionada
+    const selectedRow = element.closest("tr");
+    const idCuenta = element.getAttribute("data-id-cuenta");
+    const idClase = element.getAttribute("data-id-claseCuenta");
+    console.log("ID de la opción seleccionada en mostrarDetalleCuenta: " + idCuenta);
+    console.log("idClase seleccionada en mostrarDetalleCuenta: " + idClase);
+    
+    
+        const botonActualizar = document.getElementById("actualizarAux");  
+        botonActualizar.style.display = "none";
+        
+        const botonEliminar = document.getElementById("eliminarAux");  
+        botonEliminar.style.display = "none";
+        
+        const botonCrear = document.getElementById("crearAux");  
+        botonCrear.style.display = "none";
+        
+        const crearSubCuenta = document.getElementById("crearSubCuenta"); 
+        crearSubCuenta.style.display = "none";
+        
+        const crearCuenta = document.getElementById("crearCuenta"); 
+        crearCuenta.style.display = "block";
+        
+        errorMessage.style.display = "none";
+        errorMessageSubCuenta.style.display = "none";
+        
+    
+    const vacio = "";
+    
+        document.getElementById("clase").value = vacio;
+        document.getElementById("nombreClase").value = vacio;
+
+        document.getElementById("grupo").value = vacio;
+        document.getElementById("nombreGrupo").value = vacio;
+
+        document.getElementById("cuenta").value = vacio;
+        document.getElementById("nombreCuenta").value = vacio;
+
+        document.getElementById("subCuenta").value = vacio;
+        document.getElementById("nombreSubCuenta").value = vacio;
+        
+        
+        let inputCodidoAux = document.getElementById("codidoAux");
+        inputCodidoAux.readOnly = true; 
+        inputCodidoAux.value = vacio;
+        inputCodidoAux.style.backgroundColor = "#eee"; 
+        inputCodidoAux.classList.remove("input-barra-verde");
+        
+        let inputNombreAux = document.getElementById("nombreAux");
+        inputNombreAux.readOnly = true; 
+        inputNombreAux.value = vacio;
+        inputNombreAux.style.backgroundColor = "#eee"; 
+        inputNombreAux.classList.remove("input-barra-verde");
+        
+        
+        document.getElementById("codidoAux").value = vacio;
+        document.getElementById("nombreAux").value = vacio;
+        
+        document.getElementById("subCuentaAux").innerText = vacio;
+
+
+     // Buscar si ya hay filas desplegadas para este idCuenta
+    let nextRow = selectedRow.nextElementSibling;
+    let isExpanded = false;
+
+    // Verificar si las filas siguientes pertenecen al mismo `idCuenta`
+    while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+        isExpanded = true;
+        nextRow = nextRow.nextElementSibling;
+    }
+
+    // Si ya está expandido, eliminar las filas desplegadas
+    if (isExpanded) {
+        console.log("Cerrando las filas desplegadas para ID: " + idCuenta);
+        nextRow = selectedRow.nextElementSibling;
+        while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+            const rowToRemove = nextRow;
+            nextRow = nextRow.nextElementSibling;
+            rowToRemove.remove();
+        }
+        return; // Terminar la ejecución aquí
+    }
+
+
+    // Crear un objeto con los datos a enviar
+    const datos = {
+        idCuenta: idCuenta,
+        idClase: idClase
+    };
+
+    // Realizar una solicitud POST al controlador
+    fetch("./DetalleCuenta", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+			
+             xListaCuentas = data.xListaCuentas;
+            
+            const nombreClase = data.xNombreClase;
+            const idClase = data.xIdClase;
+            
+            const nombreGrupo = data.xNombreGrupo;
+            const idGrupo = data.xIdGrupo;
+            
+            const nombreCuenta = data.xNombreCuenta;
+            const idCuenta = data.xIdCuenta;
+            
+            const nombreSubCuenta = data.xNombreSubCuenta;
+            const idSubCuenta = data.xIdSubCuenta;
+            
+             // Asignar los valores a los inputs
+        document.getElementById("clase").value = idClase;
+        document.getElementById("nombreClase").value = nombreClase;
+
+        document.getElementById("grupo").value = idGrupo;
+        document.getElementById("nombreGrupo").value = nombreGrupo;
+
+
+        
+        
+        
+        let inputCuenta = document.getElementById("cuenta");
+        inputCuenta.readOnly = false; 
+        inputCuenta.style.backgroundColor = "white"; 
+        inputCuenta.classList.add("input-barra-verde"); // Agregar la clase
+        
+        let inputnombreCuenta = document.getElementById("nombreCuenta");
+        inputnombreCuenta.readOnly = false; 
+        inputnombreCuenta.style.backgroundColor = "white"; 
+        inputnombreCuenta.classList.add("input-barra-verde"); // Agregar la clase
+        
+        let inputSubCuenta = document.getElementById("subCuenta");
+        inputSubCuenta.readOnly = true; 
+        inputSubCuenta.value = vacio
+        inputSubCuenta.style.backgroundColor = "#eee"; 
+        inputSubCuenta.classList.remove("input-barra-verde"); 
+        
+        let inputnombreSubCuenta = document.getElementById("nombreSubCuenta");
+        inputnombreSubCuenta.readOnly = true; 
+        inputnombreSubCuenta.value = vacio
+        inputnombreSubCuenta.style.backgroundColor = "#eee"; 
+        inputnombreSubCuenta.classList.remove("input-barra-verde"); 
+         
+         
+
+        document.getElementById("cuentaLabel").innerText = idGrupo;
+        document.getElementById("subCuentaLabel").innerText = vacio;
         
         
 

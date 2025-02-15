@@ -57,6 +57,14 @@ public interface TblPucRepo extends JpaRepository<TblPuc, Integer> {
              nativeQuery = true)
 	 List<TblPuc> listaSubCuentas( int idCuenta, int idLocal);
 	 
+	 @Query(value = "SELECT * " +
+             "FROM BDMailMarketing.dbo.tblPuc " +
+             "WHERE (tblPuc.idCuenta LIKE %?1%) " +
+             "AND idLocal = ?2 " +
+             "AND LEN(idCuenta) = 4",
+             nativeQuery = true)
+	 List<TblPuc> listaCuentas( int idCuenta, int idLocal);
+	 
 	 
 	 @Modifying
 	  @Transactional
