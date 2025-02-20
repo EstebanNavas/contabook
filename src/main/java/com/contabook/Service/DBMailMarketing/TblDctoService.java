@@ -14,9 +14,9 @@ public class TblDctoService {
 	@Autowired
 	TblDctoRepo tblDctoRepo;
 	
-	public Boolean ExisteDcto(int idLocal, int idTipoOrden, int idDcto) {
+	public Boolean ExisteDcto(int idLocal, int idTipoOrden, int idCpte) {
 		
-		Boolean existe = tblDctoRepo.ExisteDcto(idLocal, idTipoOrden, idDcto);		
+		Boolean existe = tblDctoRepo.ExisteDcto(idLocal, idTipoOrden, idCpte);		
 		if(existe == null) {			
 			existe = false;
 		}
@@ -56,6 +56,14 @@ public class TblDctoService {
 		List<TblDctoDTO> listaComprobantes = tblDctoRepo.listaComprobantes(idLocal, idTipoCpte, idPeriodo);
 		
 		return listaComprobantes;
+		
+	}
+	
+	public List<TblDctoDTO> ObtenerIdCpte(int idLocal, int idCpte) {
+		
+		List<TblDctoDTO> comprobante = tblDctoRepo.ObtenerIdCpte(idLocal, idCpte);
+		
+		return comprobante;
 		
 	}
 

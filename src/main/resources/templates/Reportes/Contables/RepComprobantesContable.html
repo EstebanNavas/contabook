@@ -47,7 +47,7 @@
 		   </div>		
 		   <div>
 			  <select id="idPeriodo" style="width: 200px; height: 25px;">
-				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}"></option>
+				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
 			</select>
 		   </div>		
 	   </div>

@@ -22,7 +22,7 @@
 			<h2 class="letraBlue" th:replace="combo/comboLocal.html :: comboLocal"></h2>
 		</div>
 		<div class="descripcion">
-			<h2 class="tituloAFcenter">DETALLES COMPROBANTE CONTABLE</h2>
+			<h2 class="tituloAFcenter">DETALLE COMPROBANTE CONTABLE</h2>
 			<h3 th:replace="combo/comboPeriodo.html :: comboPeriodo"></h3>
 		</div>
 		<div class="fechahora">
@@ -104,6 +104,7 @@
 	
 	<div class="divCencer" style="margin-top: 50px; margin-right: 15px;">				
     	<a href="./ReporteCptesContable" class="btn btn-primary" >Regresar</a>	
+    	<button type="button" class="btn btn-warning" value="Guardar" style="width: 150px;" onclick="EditarDctoContable()" >Editar/Eliminar</button>
 	</div>
 	
 	
@@ -115,6 +116,51 @@
 
 
 	<script type="text/javascript" th:inline="javascript">
+		
+		
+function EditarDctoContable() {
+
+	var idCpte = document.getElementById("idCpte").value;
+
+
+	// Crear un objeto que contenga los datos a enviar
+	var datos = {
+	idCpte: idCpte
+	};
+
+	// Realizar una solicitud POST al controlador
+	fetch("./EditarComprobanteContable-Post", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(datos),
+	})
+
+		.then((response) => {
+			// Verifica si la respuesta es una redirección
+			if (response.redirected) {
+				// Redirige al URL especificado en la respuesta
+				window.location.href = response.url;
+			} else {
+				// Parsea la respuesta JSON si no es una redirección
+				return response.json();
+			}
+		})
+		.then((data) => {
+			if (data) {
+				var message = data.message;
+				console.log(message);
+			}
+		})
+		.catch((error) => {
+			console.error("Error al registrar el log:", error);
+		});
+
+}	
+		
+		
+		
 		
 // Llama a la función al cargar la página 
 calcularTotales();
@@ -138,132 +184,9 @@ function calcularTotales() {
 }
 
 		
-  	function BuscarComprobantes(){			
-	   event.preventDefault();
-	   
-	   const button = document.getElementById('generarBtn');
-	   // Deshabilitar el botón
-       button.disabled = true;
-       // Mostrar el spinner de carga
-       document.getElementById('loadingSpinner').style.display = 'block';
-         
-         
-	   var tipoComprobante = document.getElementById("tipoComprobante").value;
-	   var idPeriodo = document.getElementById("idPeriodo").value;
-			 
-		// Crear un objeto que contenga los datos a enviar
-        var datos = {
-            tipoComprobante: tipoComprobante,
-            idPeriodo: idPeriodo
-        };
-
-        // Realizar una solicitud POST al controlador
-        fetch("./BuscarComprobantes", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(datos),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("data es : ", data);
-
-            var listaComprobantes = data.listaComprobantes;
-            console.log("listaComprobantes es : ", JSON.stringify(listaComprobantes));
-            
-            // Verificar si ReferenciaPorPlu es null o está vacía
-           if (!listaComprobantes || listaComprobantes.length === 0) {
-             alert("No se encontraron comprobantes.");
-             // Ocultar el spinner de carga
-             document.getElementById('loadingSpinner').style.display = 'none';
-             button.disabled = false;
-             return; 
-             }
-
-            // Llamar a la función para actualizar la tabla
-            actualizarTabla(listaComprobantes);
-            
-            // Ocultar el spinner de carga
-            document.getElementById('loadingSpinner').style.display = 'none';
-            button.disabled = false;
-        })
-        .catch((error) => {
-            console.error("Error en la solicitud:", error);
-        });
-			 
-	}
+ 
 	
 	
-	// Función para actualizar la tabla
-function actualizarTabla(listaComprobantes) {
-	
-	// Obtener el contenedor de la tabla
-    var tablaContainer = document.getElementById("tabla");
-	
-    // Limpiar la tabla antes de agregar nuevos datos
-    var tbody = document.querySelector("#tabla tbody");
-    tbody.innerHTML = "";
-    
-
-
-    // Iterar sobre la lista de resultados y agregar filas a la tabla
-    listaComprobantes.forEach(function(lista) {
-        var row = "<tr>" +
-                    "<td class='detalleCentrado' text=''></td>" +
-                    "<td class='detalleAF'>" + lista.nombreTipoComprobante + "</td>" +
-                    // Modificación en esta línea para incluir un enlace con onclick
-                    "<td class='detalleAF'><a href='#' onclick='mostrarDetalle(" + lista.idCpte + ")'>" + lista.idCpte + "</a></td>" +
-                    "<td class='detalleAF'>" + lista.fechaDcto + "</td>" +
-                    "<td class='detalleAF'>" + lista.nombreUsuario + "</td>" +
-                    "<td class='detalleAF'>" + lista.idPeriodo + "</td>" +
-                    "<td class='detalleAF'>" + lista.vrTotal + "</td>" +
-
-                    // ... (agregar las demás columnas)
-                "</tr>";
-        tbody.innerHTML += row;
-    });
-    
-    tablaContainer.style.display = "block";
-}
-
-
-    function mostrarDetalle(idCpte) {
-			
-
-		// Crear un objeto que contenga los datos a enviar
-		var datos = {
-		idCpte: idCpte
-		};
-
-		// Realizar una solicitud POST al controlador
-		fetch("./TraerComprobanteContable-Post", {
-				method: "POST",
-				headers: {
-				"Content-Type": "application/json",
-				},
-				body: JSON.stringify(datos),
-		 })
-			.then((response) => {
-			// Verifica si la respuesta es una redirección
-			if (response.redirected) {
-				// Redirige al URL especificado en la respuesta
-				window.location.href = response.url;
-				} else {
-				// Parsea la respuesta JSON si no es una redirección
-				return response.json();
-				}
-				})
-				.then((data) => {
-					if (data) {
-					var message = data.message;
-					console.log(message);
-						}
-				})
-				.catch((error) => {
-			console.error("Error al registrar el log:", error);
-				});
-		}				
 
 
 function GenerarReporte(formato) {

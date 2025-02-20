@@ -22,7 +22,7 @@
 			<h2 class="letraBlue" th:replace="combo/comboLocal.html :: comboLocal"></h2>
 		</div>
 		<div class="descripcion">
-			<h2 class="tituloAFcenter">NUEVO DOCUMENTO CONTABLE</h2>
+			<h2 class="tituloAFcenter">EDITAR DOCUMENTO CONTABLE</h2>
 			<h3 th:replace="combo/comboPeriodo.html :: comboPeriodo"></h3>
 		</div>
 		<div class="fechahora">
@@ -36,9 +36,15 @@
 		</div>
 		<div style="margin-left: 60px; ">
 			<select  id="tipoComprobante" style="width: 400px; height: 25px;">
-        	 <option th:text="${xLista.getIdTipoCpte() + ' - ' + xLista.getNombreCmpte()}" th:each="xLista:${xListaComprobantes}" th:value="${xLista.getIdTipoCpte()}" ></option>
+        	 <option th:text="${xLista.getIdTipoCpte() + ' - ' + xLista.getNombreCmpte()}" th:each="xLista:${xListaComprobantes}" th:value="${xLista.getIdTipoCpte()}"  th:selected="${xLista.getIdTipoCpte() == xIdTipoCpte}" ></option>
 			</select>
-		</div>		
+		</div>	
+		
+		<div class="divCentrado" style="margin-left: 200px;" >
+		    <label style="font-size: 20px;">Comprobante contable a editar No. <span th:text="${xNumeroComprobante}"></span></label>
+		    <input type="hidden" th:value="${xNumeroComprobante}" id="idCpte">
+	   </div>
+	   	
 
 	</div>
 	
@@ -51,7 +57,9 @@
 		</div>			
 	</div>
 	
-	
+	<input type="hidden" th:value="${xIdTipoOrden}" id="idTipoOrden">
+	<input type="hidden" th:value="${xIdDcto}" id="idDcto">
+	<input type="hidden" th:value="${xIPeriodo}" id="idPeriodo">
 	<div class="tablaContable">
 		 <table id="tabla">
         <thead>
@@ -67,33 +75,39 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>
+            <tr th:each="comprobante : ${xComprobanteDetalle}">
+                <td th:text="${comprobante.getItem()}"></td>
+                <td >
                     <div class="search-container">
-                            <input type="text" placeholder="Buscar" id="buscarCuenta" onfocus="BuscarCuentas(1)" autocomplete="off">
+                            <input type="text" placeholder="Buscar" th:id="'buscarCuenta' + ${comprobante.getItem()}" 
+                             th:onfocus="|BuscarCuentas(${comprobante.getItem()})|"
+                             autocomplete="off" th:value="${comprobante.getIdCuentaAux() + ' - ' + comprobante.getNombreCuenta()}"
+                             th:attr="data-idCuenta=${comprobante.getIdCuentaAux()}">
                             <span class="icon">🔍</span>
-                            <div class="results-container" id="results" style="height: 200px;"></div>
+                            <div class="results-container" th:id="'results' + ${comprobante.getItem()}" style="height: 200px;"></div>
                       </div>
                 </td>
                 <td>
                     <div class="search-container">
-                        <input type="text" placeholder="Buscar" id="buscarTercero" onfocus="BuscarTerceros(1)" autocomplete="off">
+                        <input type="text" placeholder="Buscar" th:id="'buscarTercero' + ${comprobante.getItem()}"  
+                         th:onfocus="|BuscarTerceros(${comprobante.getItem()})|" 
+                         autocomplete="off" th:value="${comprobante.getIdCliente()}"
+                         th:attr="data-idTercero=${comprobante.getIdCliente()}">
                         <span class="icon">🔍</span>
-                        <div class="results-container" id="terceros" style="height: 200px;" ></div>
+                        <div class="results-container"  th:id="'terceros' + ${comprobante.getItem()}" style="height: 200px;" ></div>
                     </div>
                 </td>
                 <td>
-					<input type="text" id="detalleContable">
+					<input type="text" id="detalleContable" th:value="${comprobante.getObservacion()}" >
                 </td>
                 <td>
-					<input type="text" style="width: 350px;" id="descripcion">
+					<input type="text" style="width: 350px;"  th:id="'descripcion' + ${comprobante.getItem()}" th:value="${comprobante.getIdCuentaAux() + ' - ' + comprobante.getNombreCuenta()}">
 				</td>
                 <td>
-					<input type="number" value="0.00" style="width: 80px;" id="debito" onblur="restablecerValor(this)">
+					<input type="number" value="0.00" style="width: 80px;" id="debito" th:value="${comprobante.getVrDebito()}" onblur="restablecerValor(this)">
 				</td>
                 <td>
-					<input type="number" value="0.00" style="width: 80px;" id="credito" onblur="restablecerValor(this)">
+					<input type="number" value="0.00" style="width: 80px;" id="credito" th:value="${comprobante.getVrCredito()}" onblur="restablecerValor(this)">
 				</td>
 				<td>
                   <div class="credito-container">
@@ -152,7 +166,8 @@
 	
 	<div class="divCencer" style="margin-top: 100px;">				
     	<a href="./menuPrincipal" class="btn btn-primary" style="margin: 25px;">Regresar</a>
-		<button type="button" class="btn btn-success" value="Guardar" style="width: 100px;" onclick="GuardarDctoContable()" >Guardar</button>
+		<button type="button" class="btn btn-success" value="Guardar" style="width: 100px;" onclick="ActualizarDctoContable()" >Actualizar</button>
+		<button type="button" class="btn btn-danger" value="Guardar" style="width: 100px;" onclick="EliminarDctoContable()" >Eliminar</button>
 	</div>
 
 
@@ -162,7 +177,15 @@
 let listaCuentas = []; // Almacena todas las cuentas 
 let listaTerceros = [];
 
-// Resstablecer valores
+
+    // Ejecutar la función al cargar la página 
+    document.addEventListener("DOMContentLoaded", function() {
+       
+        calcularTotales();
+    });
+    
+    
+   // Resstablecer valores
     function restablecerValor(input) {
     if (input.value.trim() === "") {
         input.value = "0.00";
@@ -306,9 +329,9 @@ function mostrarCuentas(cuentas, fila) {
     console.log(`Fila en mostrarCuentas es ${fila}`);
 
     // Si es la primera fila, usa los IDs sin número
-    let resultsContainer = fila === 1 ? document.getElementById("results") : document.getElementById(`results${fila}`);
-    let inputCuenta = fila === 1 ? document.getElementById("buscarCuenta") : document.getElementById(`buscarCuenta${fila}`);
-    let inputDescripcion = fila === 1 ? document.getElementById("descripcion") : document.getElementById(`descripcion${fila}`);
+    let resultsContainer = document.getElementById(`results${fila}`);
+    let inputCuenta =  document.getElementById(`buscarCuenta${fila}`);
+    let inputDescripcion = document.getElementById(`descripcion${fila}`);
 
     resultsContainer.innerHTML = "";
 
@@ -357,8 +380,8 @@ function mostrarTerceros(terceros, fila) {
     
     
     // Si es la primera fila, usa los IDs sin número
-    let resultsContainer = fila === 1 ? document.getElementById("terceros") : document.getElementById(`terceros${fila}`);
-    let inputTercero = fila === 1 ? document.getElementById("buscarTercero") : document.getElementById(`buscarTercero${fila}`);
+    let resultsContainer =  document.getElementById(`terceros${fila}`);
+    let inputTercero = document.getElementById(`buscarTercero${fila}`);
 
     resultsContainer.innerHTML = "";
     
@@ -399,30 +422,24 @@ function eliminarFila(elemento) {
 
 //----------------------------------------------------------------------------------
 
-// Filtrar en tiempo real
-document.querySelectorAll("#buscarCuenta, .buscarCuenta").forEach(input => {
-    input.addEventListener("input", function() {
-        let fila = this.closest('tr').rowIndex; // Obtén el índice de la fila
-        console.log("la fila es:  " + fila)
-        let filtro = this.value.toLowerCase();
+document.addEventListener("input", function(event) {
+    if (event.target.id.startsWith("buscarCuenta")) {
+        let fila = event.target.closest('tr').rowIndex; // Obtén el índice de la fila
+        let filtro = event.target.value.toLowerCase();
         let cuentasFiltradas = listaCuentas.filter(cuenta =>
             `${cuenta.idCuentaAux} - ${cuenta.nombreCuenta}`.toLowerCase().includes(filtro)
         );
-        mostrarCuentas(cuentasFiltradas, fila); // Pasamos el número de fila dinámicamente
-    });
-});
+        mostrarCuentas(cuentasFiltradas, fila);
+    }
 
-
-document.querySelectorAll("#buscarTercero, .buscarTercero").forEach(input => {
-    input.addEventListener("input", function() {
-        let fila = this.closest('tr').rowIndex; // Obtén el índice de la fila
-        console.log("la fila es:  " + fila)
-        let filtro = this.value.toLowerCase();
+    if (event.target.id.startsWith("buscarTercero")) {
+        let fila = event.target.closest('tr').rowIndex;
+        let filtro = event.target.value.toLowerCase();
         let tercerosFiltrados = listaTerceros.filter(tercero =>
             `${tercero.cc_Nit} - ${tercero.nombreTercero}`.toLowerCase().includes(filtro)
         );
-        mostrarTerceros(tercerosFiltrados, fila); // Pasamos el número de fila dinámicamente
-    });
+        mostrarTerceros(tercerosFiltrados, fila);
+    }
 });
 
 
@@ -463,7 +480,7 @@ function calcularTotales() {
 
 
 
-function GuardarDctoContable() {
+function ActualizarDctoContable() {
     
     calcularTotales();
     
@@ -476,6 +493,10 @@ function GuardarDctoContable() {
     
     var tipoComprobante = document.getElementById("tipoComprobante").value;
     var fechaComprobante = document.getElementById("fechaComprobante").value;
+    var idTipoOrden = document.getElementById("idTipoOrden").value;
+    var idCpte = document.getElementById("idCpte").value;
+    var idDcto = document.getElementById("idDcto").value;
+    var idPeriodo = document.getElementById("idPeriodo").value;
 
     // Obtener totalDébito y totalCrédito
     let totalDebito = parseFloat(document.getElementById("totalDebitoResumen").textContent) || 0;
@@ -551,11 +572,15 @@ function GuardarDctoContable() {
         xDebitoArr: xDebitoArr,
         xCreditoArr: xCreditoArr,
         tipoComprobante: tipoComprobante,
-        fechaComprobante: fechaComprobante
+        fechaComprobante: fechaComprobante,
+        idTipoOrden: idTipoOrden,
+        idCpte: idCpte,
+        idDcto: idDcto,
+        idPeriodo: idPeriodo
     };
 
     // Realizar la solicitud POST solo si todas las filas tienen datos
-    fetch("./GuardarDctoContable-Post", {
+    fetch("./ActualizarDctoContable-Post", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -568,18 +593,75 @@ function GuardarDctoContable() {
 		var numComprobante = data.xComprobante;
 		
         swal({
-            title: "¡Documento contable " + numComprobante + " guardado correctamente!",
+            title: "¡Documento contable " + numComprobante + " actualizado correctamente!",
             icon: "success",
             button: "Continuar",
         }).then((value) => {
             if (value) {
-                window.location.href = "./ComprobanteContable";
+                window.location.href = "./ReporteCptesContable";
             }
         });
     })
     .catch((error) => {
         console.error("Error al registrar el log:", error);
     });
+}
+
+
+
+
+function EliminarDctoContable() {
+   
+    var idCpte = document.getElementById("idCpte").value;
+
+    // Crear un objeto con los datos a enviar
+    var datos = {
+        idCpte: idCpte
+    };
+
+    // Mostrar mensaje de confirmación antes de eliminar
+  swal({
+    title: "¿Está seguro?",
+    text: "¿Desea eliminar el documento contable " + idCpte + "? Esta acción no se puede deshacer.",
+    icon: "warning",
+    buttons: ["Cancelar", "Eliminar"],
+    dangerMode: true,
+  }).then((willDelete) => {
+    if (willDelete) {
+      // Realizar la solicitud POST al controlador
+      fetch("./EliminarDctoContable-Post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          var xComprobante = data.xComprobante;
+
+          swal({
+            title: "¡Eliminado!",
+            text: "Docuemnto contable " + xComprobante +  " eliminado correctamente.",
+            icon: "success",
+            button: "Continuar",
+          }).then((value) => {
+            if (value) {
+              window.location.href = "./ReporteCptesContable";
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Error al registrar el log:", error);
+          swal({
+            title: "Error",
+            text: "Ocurrió un error al eliminar el auxiliar.",
+            icon: "error",
+            button: "Cerrar",
+          });
+        });
+    }
+  });
 }
 		
 	</script>

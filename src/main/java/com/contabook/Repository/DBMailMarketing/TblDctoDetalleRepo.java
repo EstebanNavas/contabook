@@ -95,5 +95,16 @@ public interface TblDctoDetalleRepo extends JpaRepository<TblDctoDetalle, Intege
 			  + "   AND tblDctoDetalle.idCpte = ?2                                      ", 
 			  nativeQuery = true)
 	  List<TblDctoDetalleDTO> comprobanteContableDetalle(int idLocal, int idTipoCpte);
+	
+	
+	
+	
+	  @Modifying
+	  @Transactional
+	  @Query(value = "DELETE FROM tblDctoDetalle " +
+	                 "WHERE tblDctoDetalle.idLocal = ?1 " +
+	                 "AND tblDctoDetalle.idCpte =  ?2 ",
+	                 nativeQuery = true)
+	  public void retiraComprobanteDetalle(int idLocal, int idCpte);
 
 }

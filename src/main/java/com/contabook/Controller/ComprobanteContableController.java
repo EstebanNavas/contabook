@@ -334,5 +334,180 @@ public class ComprobanteContableController {
 	   
 	    
 	}
+	
+	
+	
+	@PostMapping("/ActualizarDctoContable-Post")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> ActualizarDctoContable(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
+	    Integer IdUsuario = usuario.getIdUsuario();
+	    
+	    Integer idLocal = usuario.getIdLocal();
+
+
+	    System.out.println("SI ENTRÓ A  /GuardarDctoContable");
+
+	    @SuppressWarnings("unchecked")
+		List<String> xCuentaArr = (List<String>) requestBody.get("xCuentaArr");
+	    @SuppressWarnings("unchecked")
+	    List<String> xTerceroArr = (List<String>) requestBody.get("xTerceroArr");
+	    @SuppressWarnings("unchecked")
+	    List<String> xDetalleContableArr = (List<String>) requestBody.get("xDetalleContableArr");
+	    @SuppressWarnings("unchecked")
+	    List<String> xDescripcionArr = (List<String>) requestBody.get("xDescripcionArr");
+	    @SuppressWarnings("unchecked")
+	    List<String> xDebitoArr = (List<String>) requestBody.get("xDebitoArr");
+	    @SuppressWarnings("unchecked")
+	    List<String> xCreditoArr = (List<String>) requestBody.get("xCreditoArr");
+	    
+	    
+	    String tipoComprobanteStr = (String) requestBody.get("tipoComprobante");	    
+	    Integer idTipoCpte = Integer.parseInt(tipoComprobanteStr);
+	    
+	    String fechaDcto = (String) requestBody.get("fechaComprobante");
+	    
+	    String idTipoOrdenStr = (String) requestBody.get("idTipoOrden");
+	    Integer idTipoOrden = Integer.parseInt(idTipoOrdenStr);
+	        
+	    String idCpteStr = (String) requestBody.get("idCpte");
+	    Integer idCpte = Integer.parseInt(idCpteStr);
+	    
+	    String idDctoStr = (String) requestBody.get("idDcto");
+	    Integer idDcto = Integer.parseInt(idDctoStr);
+	    
+	    String iPeriodoStr = (String) requestBody.get("idPeriodo");
+	    Integer idPeriodo = Integer.parseInt(iPeriodoStr);
+	    
+	    
+	    String[] xCuentaArray = xCuentaArr.toArray(new String[0]);
+	    String[] xTerceroArray = xTerceroArr.toArray(new String[0]);
+	    String[] xDetalleContableArray = xDetalleContableArr.toArray(new String[0]);
+	    String[] xDescripcionArray = xDescripcionArr.toArray(new String[0]);
+	    String[] xDebitoArray = xDebitoArr.toArray(new String[0]);
+	    String[] xCreditoArray = xCreditoArr.toArray(new String[0]);
+	    
+	    
+	    System.out.println("xCuentaArray es: " + xCuentaArray);
+	    System.out.println("xTerceroArray es: " + xTerceroArray);
+	    System.out.println("xDetalleContableArray es: " + xDetalleContableArray);
+	    System.out.println("xDescripcionArray es: " + xDescripcionArray);
+	    System.out.println("xDebitoArray es: " + xDebitoArray);
+	    System.out.println("xCreditoArray es: " + xCreditoArray);
+	    
+	    
+	    String siglaMoneda = "COP";
+	
+		
+		//Eliminamos DctoDetalle
+		tblDctoDetalleRepo.retiraComprobanteDetalle(idLocal, idCpte);
+    	
+    	//Eliminamos idDcto
+    	tblDctoRepo.retiraDcto(idLocal, idCpte);
+    	
+    	
+	    
+    	for(int i = 0; i < xCuentaArray.length; i ++  ) {
+	    	
+	    	
+	    	 // Verifica si el Dcto ya existe
+	        Boolean existe = tblDctoService.ExisteDcto(idLocal, idTipoOrden, idCpte);
+	        System.out.println("existe Dcto es " + existe);
+
+	        if (!existe) {
+	            System.out.println("El documento no existe ");
+	            
+	            //(int idLocal, int idTipoCpte, int idCpte, int idTipoOrden, int idDcto, String FechaDcto, String siglaMoneda, int idTasa, int idPeriodo)
+	            tblDctoRepo.ingresaDcto(idLocal, idTipoCpte, idCpte, idTipoOrden, idDcto, fechaDcto, siglaMoneda, 0, idPeriodo);
+	            System.out.println("ingresaDcto ");
+	            
+	            int item = 1;
+
+	            // Ciclo para ingresar detalle
+	            for (int l = 0; l < xCuentaArray.length; l ++) {
+	            	
+	    	    	Integer idCuenta = Integer.parseInt(xCuentaArray[l]);
+	    	    	System.out.println("idCuenta es " + idCuenta);
+	    	    	
+	    	    	String cliente = xTerceroArray[l];
+	    	    	Double vrDebito = Double.parseDouble(xDebitoArray[l]);
+	    	    	Double vrCredito = Double.parseDouble(xCreditoArray[l]);
+	    	        String descripcion = xDescripcionArray[l];
+	    	        String observación = xDetalleContableArray[l];
+	            		                	
+	                	                	
+                       //(int idLocal, int idTipoCpte, int idCpte, int idCuentaAux, String idCliente, int item, int sucursal, int codProducto, int codBodega, 
+	      			    // int accion, int cantProducto, int prefijo, int consecutivo, int numeroCuota, String fechaVencimiento, int codImpuesto, int codGrupoActivoFijo, int codActivoFijo,
+	    			   //String descripcion, int codCentroSubCentro, Double vrDebito, Double vrCredito, String observacion, Double baseGravable, int mesCierre )
+	                 	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, idCpte, idCuenta, cliente, item, 0, 0, 0, 
+	                	 0, 0, 0, 0, 0, fechaDcto, 0, 0, 0, descripcion, 0, vrDebito, vrCredito, observación, 0.0, idPeriodo);
+	                 	
+	                	System.out.println("ingresaDctoDetalle ");
+	                    
+	                    item++;
+	               
+	            }
+
+	        } else {
+	        	
+
+	        }
+	    	
+	    	
+	    }
+	    
+
+	        
+		    Map<String, Object> response = new HashMap<>();
+		    response.put("message", "LOGGGGGGGGG");
+		    response.put("xComprobante", idCpte);
+
+		    return ResponseEntity.ok(response);
+	   
+	    
+	}
+	
+	
+	
+	@PostMapping("/EliminarDctoContable-Post")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> EliminarDctoContable(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
+	    Integer IdUsuario = usuario.getIdUsuario();
+	    
+	    Integer idLocal = usuario.getIdLocal();
+	        
+	    String idCpteStr = (String) requestBody.get("idCpte");
+	    Integer idCpte = Integer.parseInt(idCpteStr);
+	    
+	
+		
+		//Eliminamos DctoDetalle
+		tblDctoDetalleRepo.retiraComprobanteDetalle(idLocal, idCpte);
+    	
+    	//Eliminamos idDcto
+    	tblDctoRepo.retiraDcto(idLocal, idCpte);
+    		    
+
+	        
+		    Map<String, Object> response = new HashMap<>();
+		    response.put("message", "LOGGGGGGGGG");
+		    response.put("xComprobante", idCpte);
+
+		    return ResponseEntity.ok(response);
+	   
+	    
+	}
+	
 
 }
