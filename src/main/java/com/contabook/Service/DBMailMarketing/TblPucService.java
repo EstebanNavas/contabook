@@ -69,5 +69,14 @@ public class TblPucService {
 		
 		return reporteFinanciero;
 	}
+	
+	
+	public List<TblPucDTO> RepEstadoResultadoIntegral( int idLocal, int idPeriodo){
+		
+		List<TblPucDTO> reporteResultado = tblPucRepo.RepEstadoResultadoIntegral(idLocal, idPeriodo);
+		
+		return reporteResultado;
+		
+	}
 
 }
