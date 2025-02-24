@@ -198,14 +198,22 @@ function agregarFila() {
     // Filas de la tabla
     var filas = tablaContable.querySelectorAll("tr");    
     var xDetalleContableArr = [];
+    var xTerceroArrAtribute = [];
+    var xTerceroArrValue = [];
 
     // Iterar sobre cada fila de la tabla
     filas.forEach(function(fila) {
         var elementos = fila.querySelectorAll("td");
 
+        var terceroAtrr = elementos[2].querySelector("input").getAttribute("data-idTercero") || "";
+        var terceroValue = elementos[2].querySelector("input").value;
         var detalleContable = elementos[3].querySelector("input").value.trim();
+        console.log("terceroAtrr: " + terceroAtrr);
+        console.log("terceroValue: " + terceroValue);
         console.log("detalleContable: " + detalleContable);
 
+        xTerceroArrAtribute.push(terceroAtrr);
+        xTerceroArrValue.push(terceroValue);
         xDetalleContableArr.push(detalleContable);
 
     });
@@ -213,7 +221,12 @@ function agregarFila() {
 
     let detalle = xDetalleContableArr[0];
     console.log("detalle: " + detalle);
-
+    
+    let idClienteAtrr = xTerceroArrAtribute[0];
+    console.log("idClienteAtrr: " + idClienteAtrr);
+    
+    let idClienteValue = xTerceroArrValue[0];
+    console.log("idClienteValue: " + idClienteValue);
 	
 	//------------------------------
     let tabla = document.querySelector(".tablaContable tbody");
@@ -233,7 +246,7 @@ function agregarFila() {
         </td>
         <td>
             <div class="search-container">
-                <input type="text" placeholder="Buscar" id="buscarTercero${numFila}" onfocus="BuscarTerceros(${numFila})" autocomplete="off">
+                <input type="text" placeholder="Buscar" id="buscarTercero${numFila}" onfocus="BuscarTerceros(${numFila})" value="${idClienteValue}" data-idTercero="${idClienteAtrr}"  autocomplete="off">
                 <span class="icon">🔍</span>
                 <div class="results-container" id="terceros${numFila}" style="height: 200px;"></div>
             </div>
