@@ -187,8 +187,8 @@ let listaTerceros = [];
     
    // Resstablecer valores
     function restablecerValor(input) {
-    if (input.value.trim() === "") {
-        input.value = "0.00";
+    if (input.value < 0 || input.value === "") {
+        input.value = "0.00"; // Restablecer a 0 si el valor es negativo o vacío
     }
 }
 

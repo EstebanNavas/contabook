@@ -202,6 +202,44 @@ public class ReporteEstadoSituacionFinancieraController {
 			xPathReport = L.getPathReportContaBook() + "contabook" + xCharSeparator;
 
 		}
+		
+		
+		
+        List<TblPucDTO> RepEstadoResultadoIntegral = tblPucService.RepEstadoResultadoIntegral(idLocal, idPeriodo);
+        
+        Double totalIngreso = 0.0;
+        Double totalGastos = 0.0;
+        Double totalCostoVenta = 0.0;
+        Double totalCostosProduccion = 0.0;
+        
+        
+        for(TblPucDTO rep : RepEstadoResultadoIntegral ) {
+        	
+        	Double diferencia = rep.getVrDebito() - rep.getVrCredito();
+        	
+        	if (rep.getIdClase() == 4) {
+                totalIngreso += diferencia;
+            } else if (rep.getIdClase() == 5) {
+                totalGastos += diferencia;
+            } else if (rep.getIdClase() == 6) {
+                totalCostoVenta += diferencia;
+            } else if (rep.getIdClase() == 7) {
+                totalCostosProduccion += diferencia;
+            }       	
+        	
+        }
+        
+       // Double gananciaPerdida  = -515.0;
+        Double gananciaPerdida = totalIngreso -  (Math.abs(totalGastos) +  Math.abs(totalCostoVenta) +   Math.abs(totalCostosProduccion));
+        params.put("p_gananciaPerdida", gananciaPerdida);
+        
+        
+        
+        System.out.println("totalIngreso es : " + totalIngreso);
+        System.out.println("totalGastos es : " + totalGastos);
+        System.out.println("totalCostoVenta es : " + totalCostoVenta);
+        System.out.println("totalCostosProduccion es : " + totalCostosProduccion);
+        System.out.println("gananciaPerdida es : " + gananciaPerdida);
 
 		List<TblPucDTO> lista = null;
 		

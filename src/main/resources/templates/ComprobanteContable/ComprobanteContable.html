@@ -90,10 +90,10 @@
 					<input type="text" style="width: 350px;" id="descripcion">
 				</td>
                 <td>
-					<input type="number" value="0.00" min="0" style="width: 80px;" id="debito" onblur="restablecerValor(this)">
+					<input type="number" value="0.00"  style="width: 80px;" id="debito" onblur="restablecerValor(this)">
 				</td>
                 <td>
-					<input type="number" value="0.00" min="0" style="width: 80px;" id="credito" onblur="restablecerValor(this)">
+					<input type="number" value="0.00"  style="width: 80px;" id="credito" onblur="restablecerValor(this)">
 				</td>
 				<td>
                   <div class="credito-container">
@@ -163,12 +163,11 @@ let listaCuentas = []; // Almacena todas las cuentas
 let listaTerceros = [];
 
 // Resstablecer valores
-    function restablecerValor(input) {
-    if (input.value.trim() === "") {
-        input.value = "0.00";
+ function restablecerValor(input) {
+    if (input.value < 0 || input.value === "") {
+        input.value = "0.00"; // Restablecer a 0 si el valor es negativo o vacío
     }
 }
-
 
 // Cerrar el dropdown si se hace clic fuera
 document.addEventListener("click", function(event) {
