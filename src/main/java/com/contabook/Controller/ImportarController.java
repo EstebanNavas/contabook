@@ -159,6 +159,7 @@ public class ImportarController {
 
         int idTipoCpteFactura= 2;
         int idTipoCpteRecaudo= 3;
+        int idTipoCpteNomina= 10;
         
         // FACTURAS
         if(idTipoCpte == idTipoCpteFactura) {
@@ -255,8 +256,60 @@ public class ImportarController {
    	        } else {
    	        	
 
-   	        }
-     	    }
+   	         }
+     	   }
+        	
+        	
+        }
+        
+        
+        // NOMINA ELECTRONICA
+        if(idTipoCpte == idTipoCpteNomina) {
+        	
+        	
+        	List<TblDctosDTO> nominaDetallado = tblDctosService.listaComprobanteNominaDetallado(idLocal, idPeriodo);
+        	
+        	Integer idDcto = 0;
+        	
+        	for (TblDctosDTO nomina : nominaDetallado) {
+     	       // idTipoOrden = cpte.getIdTipoOrden();
+     	        idDcto = nomina.getIdDctoNitCC();
+     	        
+     	       System.out.println("Dcto es " + idDcto);
+
+     	        // Verifica si el Dcto ya existe
+     	        Boolean existe = tblDctoService.ExisteDctoCpte(idLocal, idTipoOrden, idDcto, idTipoCpte);
+     	        System.out.println("existe Dcto es " + existe);
+
+     	       if (!existe) {
+   	            System.out.println("El documento no existe " + idDcto);
+
+   	            Integer maxIdCpte = tblDctoService.MaximoiIdCpte(idLocal) + 1;
+
+   	            tblDctoRepo.ingresaDcto(idLocal, idTipoCpte, maxIdCpte, idTipoOrden, idDcto, nomina.getFechaDctoSiigo(), nomina.getSiglaMoneda(), 0, idPeriodo);
+   	            System.out.println("ingresaDcto " + idDcto);
+   	            
+   	            int item = 1;
+
+   	            // Ciclo para ingresar detalle
+   	            for (TblDctosDTO detalle : nominaDetallado) {
+   	                if (detalle.getIdDctoNitCC().equals(idDcto)) {
+   	                	
+   	                	Integer idCuentaAux = detalle.getIdSubcuenta()  != null ? detalle.getIdSubcuenta() : 0;
+
+   	                	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, maxIdCpte, idCuentaAux, detalle.getIdCliente(), item, 0, 0, 0, 
+   	                	 0, 0, 0, 0, 0, detalle.getFechaDctoSiigo(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, idPeriodo);
+   	                	System.out.println("ingresaDctoDetalle " + idDcto);
+   	                    
+   	                    item++;
+   	                }
+   	            }
+
+   	        } else {
+   	        	
+
+   	         }
+     	   }
         	
         	
         }

@@ -33,5 +33,13 @@ public class TblDctosService {
 		return recaudoDetallado;
 		
 	}
+     
+     
+     public List<TblDctosDTO> listaComprobanteNominaDetallado(int idLocal, int idPeriodo){
+    	 
+    	 List<TblDctosDTO> nominaDetallado = tblDctosRepo.listaComprobanteNominaDetallado(idLocal, idPeriodo);
+    	 
+    	 return nominaDetallado;
+     }
 
 }
