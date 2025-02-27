@@ -11,5 +11,10 @@ public interface TblDctoDTO {
 	String getNombreTipoComprobante();
 	String getNombreUsuario();
 	Double getVrTotal();
+	
+	String getIdCliente();
+	Integer getIdCuentaAux();
+	String getNombreCuenta();
+	String getNombreTercero();
 
 }
