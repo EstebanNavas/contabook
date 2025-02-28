@@ -15,7 +15,7 @@ public interface TblTercerosRepo extends JpaRepository<TblTerceros, Integer> {
 	@Query(value = "SELECT * " + 
 	        "FROM tblTerceros " +
 			"WHERE idLocal = ?1 " +
-			"AND idTipoTercero IN (1,2,3) " +
+			"AND idTipoTercero IN (1,2,3, 4) " +
 			"AND estado= 1 " +
 			"ORDER BY nombreTercero ",
 			nativeQuery = true)

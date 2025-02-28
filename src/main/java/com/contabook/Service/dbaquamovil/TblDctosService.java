@@ -10,6 +10,8 @@ import com.contabook.Projection.TblDctosDTO;
 import com.contabook.Repository.dbaquamovil.TblDctosRepo;
 
 
+
+
 @Service
 public class TblDctosService {
 	
@@ -41,5 +43,16 @@ public class TblDctosService {
     	 
     	 return nominaDetallado;
      }
+     
+     
+     public List<TblDctosDTO> listaComprobanteDctoSoporteDetallado(int idLocal, int idPeriodo){
+    	 
+    	 List<TblDctosDTO> dctoSoporteDetallado = tblDctosRepo.listaComprobanteDctoSoporteDetallado(idLocal, idPeriodo);
+    	 
+    	 return dctoSoporteDetallado;
+    	 
+     }
+     
+
 
 }

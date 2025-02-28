@@ -160,6 +160,7 @@ public class ImportarController {
         int idTipoCpteFactura= 2;
         int idTipoCpteRecaudo= 3;
         int idTipoCpteNomina= 10;
+        int idTipoCpDctoSoporte= 8;
         
         // FACTURAS
         if(idTipoCpte == idTipoCpteFactura) {
@@ -293,6 +294,60 @@ public class ImportarController {
 
     	            // Ciclo para ingresar detalle
     	            for (TblDctosDTO detalle : nominaDetallado) {
+    	                if (detalle.getIdDcto().equals(idDcto)) {
+    	                	
+    	                	Integer idCuentaAux = detalle.getIdSubcuenta()  != null ? detalle.getIdSubcuenta() : 0;
+
+    	                	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, maxIdCpte, idCuentaAux, detalle.getIdCliente(), item, 0, 0, 0, 
+    	                	 0, 0, 0, 0, 0, detalle.getFechaDcto(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, detalle.getIdPeriodo());
+    	                	System.out.println("ingresaDctoDetalle " + idDcto);
+    	                    
+    	                    item++;
+    	                }
+    	            }
+
+    	        } else {
+    	        	
+
+    	        }
+    	    }
+        	
+        	
+        }
+      
+      
+      
+      
+      
+      // DOCUMENTO SOPORTE
+      if(idTipoCpte == idTipoCpDctoSoporte) {
+        	
+        	List<TblDctosDTO> DctoSoporteDetallado = tblDctosService.listaComprobanteDctoSoporteDetallado(idLocal, idPeriodo);
+    	    System.out.println("DctoSoporteDetallado es " + DctoSoporteDetallado);
+    	    
+    	   // Integer idTipoOrden = 0;
+    	    Integer idDcto = 0;
+    	    
+    	    for (TblDctosDTO dctoSoporte : DctoSoporteDetallado) {
+    	       // idTipoOrden = cpte.getIdTipoOrden();
+    	        idDcto = dctoSoporte.getIdDcto();
+
+    	        // Verifica si el Dcto ya existe
+    	        Boolean existe = tblDctoService.ExisteDctoCpte(idLocal, idTipoOrden, idDcto, idTipoCpte);
+    	        System.out.println("existe Dcto es " + existe);
+
+    	        if (!existe) {
+    	            System.out.println("El documento no existe " + idDcto);
+
+    	            Integer maxIdCpte = tblDctoService.MaximoiIdCpte(idLocal) + 1;
+
+    	            tblDctoRepo.ingresaDcto(idLocal, idTipoCpte, maxIdCpte, idTipoOrden, idDcto, dctoSoporte.getFechaDcto(), dctoSoporte.getSiglaMoneda(), 0, dctoSoporte.getIdPeriodo());
+    	            System.out.println("ingresaDcto " + idDcto);
+    	            
+    	            int item = 1;
+
+    	            // Ciclo para ingresar detalle
+    	            for (TblDctosDTO detalle : DctoSoporteDetallado) {
     	                if (detalle.getIdDcto().equals(idDcto)) {
     	                	
     	                	Integer idCuentaAux = detalle.getIdSubcuenta()  != null ? detalle.getIdSubcuenta() : 0;
