@@ -115,5 +115,128 @@ public interface TblDctoRepo extends JpaRepository<TblDcto, Integer> {
 		                 "AND tblDcto.idCpte =  ?2 ",
 		                 nativeQuery = true)
 		  public void retiraDcto(int idLocal, int idCpte);
+		 
+		 
+		 
+		 
+		 @Query(value = "        SELECT DISTINCT tblDcto.idTipoCpte,                                               "   
+					+ "	        tblDcto.idCpte,                                                                  "     
+					+ "	        CONVERT(VARCHAR, tblDcto.fechaDcto, 23) AS fechaDcto,                            "
+					+ "	        tblDcto.idPeriodo,                                                               "	        
+					+ "			MAX(tblDctoDetalle.idCliente) AS idCliente,                                      "
+					+ "			tblDctoDetalle.idCuentaAux,                                                      "
+					+ "			MAX(tblPucAux.nombreCuenta) AS nombreCuenta,                                     "
+					+ "			MAX(tercero.nombreTercero ) AS nombreTercero,                                    "
+					+ "			CASE                                                                             "
+					+ "			 WHEN SUM(tblDctoDetalle.vrDebito) = 0                                           "
+					+ "			 THEN SUM(tblDctoDetalle.vrCredito)                                              "
+					+ "			 ELSE SUM(tblDctoDetalle.vrDebito)                                               "
+                    + "            END AS vrTotal                                                                "
+					+ "	 	FROM BDMailMarketing.dbo.tblDcto                                                     "
+					+ "	 	INNER JOIN tblTipoCpte                                                               "
+					+ "	 	ON tblDcto.idTipoCpte = tblTipoCpte.idTipoCpte  							         "
+					+ "	 	INNER JOIN tblDctoDetalle                                                            "
+					+ "	 	ON tblDcto.idLocal = tblDctoDetalle.idLocal                                          "
+					+ "	 	AND tblDcto.idCpte = tblDctoDetalle.idCpte                                           "
+					+ "	 	AND tblDcto.idTipoCpte = tblDctoDetalle.idTipoCpte    							     "
+					+ "		INNER JOIN tblPucAux                                                                 "
+					+ "		ON tblDctoDetalle.idLocal = tblPucAux.idLocal                                        "
+					+ "		AND tblDctoDetalle.idCuentaAux = tblPucAux.idCuentaAux                               "
+					+ "		INNER JOIN bdaquamovil.dbo.tblTerceros tercero                                       "
+					+ "		ON tblDctoDetalle.idLocal = tercero.idLocal                                          "
+                    + "        AND tblDctoDetalle.idCliente = tercero.idCliente COLLATE DATABASE_DEFAULT         "
+					+ "	 	WHERE tblDcto.idLocal = ?1                                                          "            
+					+ "	 	AND tblDcto.idPeriodo = ?2                                                       "
+					+ "		AND tblDctoDetalle.idCuentaAux IN ?3                                         "
+					+ "	 	GROUP BY tblDcto.idTipoCpte,                                                         "
+					+ "	          tblDcto.idCpte,                                                                "  
+					+ "	          tblDcto.fechaDcto,                                                             "
+					+ "	          tblDcto.idPeriodo,                                                             "
+					+ "	          tblDctoDetalle.idCuentaAux 			                                         "
+					+ "			  ORDER BY idCliente desc                                                        ",
+	             nativeQuery = true)
+		    List<TblDctoDTO> listaMovimientoPorAuxiliar(int idLocal, int idPeriodo, List<Integer> cuentasContables);
+		 
+		 
+		 
+		 @Query(value = "        SELECT DISTINCT tblDcto.idTipoCpte,                                               "   
+					+ "	        tblDcto.idCpte,                                                                  "     
+					+ "	        CONVERT(VARCHAR, tblDcto.fechaDcto, 23) AS fechaDcto,                            "
+					+ "	        tblDcto.idPeriodo,                                                               "		        
+					+ "			MAX(tblDctoDetalle.idCliente) AS idCliente,                                      "
+					+ "			tblDctoDetalle.idCuentaAux,                                  "
+					+ "			MAX(tblPucAux.nombreCuenta) AS nombreCuenta,                                     "
+					+ "			MAX(tercero.nombreTercero ) AS nombreTercero,                                    "
+					+ "			CASE                                                                             "
+					+ "			 WHEN SUM(tblDctoDetalle.vrDebito) = 0                                           "
+					+ "			 THEN SUM(tblDctoDetalle.vrCredito)                                              "
+					+ "			 ELSE SUM(tblDctoDetalle.vrDebito)                                               "
+                    + "            END AS vrTotal                                                                "
+					+ "	 	FROM BDMailMarketing.dbo.tblDcto                                                     "
+					+ "	 	INNER JOIN tblTipoCpte                                                               "
+					+ "	 	ON tblDcto.idTipoCpte = tblTipoCpte.idTipoCpte  							         "
+					+ "	 	INNER JOIN tblDctoDetalle                                                            "
+					+ "	 	ON tblDcto.idLocal = tblDctoDetalle.idLocal                                          "
+					+ "	 	AND tblDcto.idCpte = tblDctoDetalle.idCpte                                           "
+					+ "	 	AND tblDcto.idTipoCpte = tblDctoDetalle.idTipoCpte    							     "
+					+ "		INNER JOIN tblPucAux                                                                 "
+					+ "		ON tblDctoDetalle.idLocal = tblPucAux.idLocal                                        "
+					+ "		AND tblDctoDetalle.idCuentaAux = tblPucAux.idCuentaAux                               "
+					+ "		INNER JOIN bdaquamovil.dbo.tblTerceros tercero                                       "
+					+ "		ON tblDctoDetalle.idLocal = tercero.idLocal                                          "
+                    + "        AND tblDctoDetalle.idCliente = tercero.idCliente COLLATE DATABASE_DEFAULT         "
+					+ "	 	WHERE tblDcto.idLocal = ?1                                                          "            
+					+ "	 	AND tblDcto.idPeriodo = ?2                                                       "
+					+ "		AND tblDctoDetalle.idCliente = ?3                                         "
+					+ "	 	GROUP BY tblDcto.idTipoCpte,                                                         "
+					+ "	          tblDcto.idCpte,                                                                "  
+					+ "	          tblDcto.fechaDcto,                                                             "
+					+ "	          tblDcto.idPeriodo,                                                             "
+					+ "	          tblDctoDetalle.idCuentaAux					                                     "
+					+ "			  ORDER BY idCliente desc                                                        ",
+	             nativeQuery = true)
+		    List<TblDctoDTO> listaMovimientoPorTercero(int idLocal, int idPeriodo, String idCliente);
+		 
+		 
+		 
+		 
+		 @Query(value = "        SELECT DISTINCT tblDcto.idTipoCpte,                                               "   
+					+ "	        tblDcto.idCpte,                                                                  "     
+					+ "	        CONVERT(VARCHAR, tblDcto.fechaDcto, 23) AS fechaDcto,                            "
+					+ "	        tblDcto.idPeriodo,                                                               "		        
+					+ "			MAX(tblDctoDetalle.idCliente) AS idCliente,                                      "
+					+ "			tblDctoDetalle.idCuentaAux,                                  "
+					+ "			MAX(tblPucAux.nombreCuenta) AS nombreCuenta,                                     "
+					+ "			MAX(tercero.nombreTercero ) AS nombreTercero,                                    "
+					+ "			CASE                                                                             "
+					+ "			 WHEN SUM(tblDctoDetalle.vrDebito) = 0                                           "
+					+ "			 THEN SUM(tblDctoDetalle.vrCredito)                                              "
+					+ "			 ELSE SUM(tblDctoDetalle.vrDebito)                                               "
+                 + "            END AS vrTotal                                                                "
+					+ "	 	FROM BDMailMarketing.dbo.tblDcto                                                     "
+					+ "	 	INNER JOIN tblTipoCpte                                                               "
+					+ "	 	ON tblDcto.idTipoCpte = tblTipoCpte.idTipoCpte  							         "
+					+ "	 	INNER JOIN tblDctoDetalle                                                            "
+					+ "	 	ON tblDcto.idLocal = tblDctoDetalle.idLocal                                          "
+					+ "	 	AND tblDcto.idCpte = tblDctoDetalle.idCpte                                           "
+					+ "	 	AND tblDcto.idTipoCpte = tblDctoDetalle.idTipoCpte    							     "
+					+ "		INNER JOIN tblPucAux                                                                 "
+					+ "		ON tblDctoDetalle.idLocal = tblPucAux.idLocal                                        "
+					+ "		AND tblDctoDetalle.idCuentaAux = tblPucAux.idCuentaAux                               "
+					+ "		INNER JOIN bdaquamovil.dbo.tblTerceros tercero                                       "
+					+ "		ON tblDctoDetalle.idLocal = tercero.idLocal                                          "
+                 + "        AND tblDctoDetalle.idCliente = tercero.idCliente COLLATE DATABASE_DEFAULT         "
+					+ "	 	WHERE tblDcto.idLocal = ?1                                                          "            
+					+ "	 	AND tblDcto.idPeriodo = ?2                                                       "
+					+ "		AND tblDctoDetalle.idCliente = ?3                                         "
+					+ "		AND tblDctoDetalle.idCuentaAux IN ?4                                         "
+					+ "	 	GROUP BY tblDcto.idTipoCpte,                                                         "
+					+ "	          tblDcto.idCpte,                                                                "  
+					+ "	          tblDcto.fechaDcto,                                                             "
+					+ "	          tblDcto.idPeriodo,                                                             "
+					+ "	          tblDctoDetalle.idCuentaAux					                                     "
+					+ "			  ORDER BY idCliente desc                                                        ",
+	             nativeQuery = true)
+		     List<TblDctoDTO> listaMovimientoPorTerceroYAuxiiar(int idLocal, int idPeriodo, String idCliente, List<Integer> cuentasContables);
 
 }

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+ 	<head th:replace ="combo/head.html :: head" ></head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" th:href="@{/styles/login.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/styles/General.css}"> 
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/fuenteColor.css}">  	
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/NavBar.css}"> 
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/ComprobanteContable.css}">
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <title> Contabook</title>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+	<header th:replace="combo/navBar.html :: navbar"></header>
+	<div class="containerFlex" id="encabezado">
+		<div class="local">
+			<h2 class="letraBlue" th:replace="combo/comboLocal.html :: comboLocal"></h2>
+		</div>
+		<div class="descripcion">
+			<h2 class="tituloAFcenter">MOVIMIENTO AUXILIAR DE TERCERO POR CUENTA CONTABLE</h2>
+			<h3 th:replace="combo/comboPeriodo.html :: comboPeriodo"></h3>
+		</div>
+		<div class="fechahora">
+			<h2 class="letra" th:replace="combo/FechaHoraActual.html :: comboFechaHora"></h2>
+		</div>
+	</div>
+	
+	<div class="tipoComprobante">
+		<div>
+			<label style="font-size: 19px;">Código contable</label>			
+		</div>
+		<div style="margin-left: 50px;">
+			<div class="search-container" style="width: 500px;">
+				<input type="text" placeholder="Buscar" id="buscarCuenta1" onfocus="BuscarCuentas(1)" autocomplete="off">
+				<div class="results-container" id="results1" style="height: 500px;"></div>
+			</div>
+		
+			<div class="search-container" style="width: 500px; margin-top: 5px;">
+				<input type="text" placeholder="Buscar" id="buscarCuenta2" onfocus="BuscarCuentas(2)" autocomplete="off">	
+				<div class="results-container" id="results2" style="height: 500px;"></div>
+			</div>
+		
+		</div>
+		
+		<div style="margin-left: 200px;">		  
+			   <label style="font-size: 19px; margin-bottom: 10px;">Periodo:</label>		   				   
+			  <select id="idPeriodo" style="width: 200px; height: 25px; margin-left: 20px;">
+				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
+			</select>
+		   		
+	   </div>
+
+	</div>
+	
+    <div class="fechaComprobante" style="margin-top: 50px;">
+		<div>
+			<label style="font-size: 19px;">Tercero</label>			
+		</div>
+		<div class="search-container" style="margin-left: 128px; width: 500px;">
+			<input type="text" placeholder="Buscar" id="buscarTercero" onfocus="BuscarTerceros(1)" autocomplete="off">
+			<div class="results-container" id="terceros" style="height: 200px;"></div>
+		</div>
+	</div>
+	
+	
+   <div  style="margin-top: 50px; margin-left: 70px;">				
+		<button type="button" class="btn btn-success" id="generarBtn" value="Guardar" style="width: 100px;" onclick="BuscarComprobantes()" >Buscar</button>
+	</div>
+	
+   <div class="form-group" id="tabla" style="margin-top: 30px; margin-left: 20px; margin-right: 20px;">		
+			<table class="table">
+				<thead style="background-color: #ade4f2;">		
+					<tr>		
+						
+						<th class="subtituloAF">Identificación</th>
+						<th class="subtituloAF">Nombre tercero</th>
+						<th class="subtituloAF">Cuenta contable</th>
+						<th class="subtituloAF">Nombre cuenta</th>
+						<th class="subtituloAF">#Comprobante</th>	
+						<th class="subtituloAF">Fecha elaboración</th>	
+						<th class="subtituloAF">Valor</th>	
+					</tr>
+				</thead>
+				<tbody>		
+					<tr th:each="referencia : ${TodasLasReferencias}">
+						
+						<td class="detalleCentrado" th:text="${referencia.getIDPLU()}"></td>
+						<td>
+							<a href="#" th:text="${referencia.getNombrePlu()}"
+								th:onclick="'mostrarDetalle(\'' + ${referencia.getIDPLU()} + '\')'"></a>
+						</td>
+						<td class="detalleAF" th:text="${referencia.getIdEstracto()}"></td>
+						<td class="detalleAF" th:text="${referencia.getIdTIPO()}"></td>
+						<td class="detalleAF" th:text="${referencia.getVrGeneral()}"></td>
+						
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	
+	
+	<div class="divCencer" style="margin-top: 100px;">				
+    	<a href="./menuPrincipal" class="btn btn-primary" style="margin: 25px;">Regresar</a>
+	</div>
+	
+	<div id="loadingSpinner" style="display: none;">
+   				 
+  	   <div class="spinner"></div>
+	</div>
+
+
+
+	<script type="text/javascript" th:inline="javascript">
+
+let listaCuentas = []; // Almacena todas las cuentas 
+let listaTerceros = [];
+
+
+
+function BuscarComprobantes(){
+			
+	   event.preventDefault();
+	   
+	   const button = document.getElementById('generarBtn');
+	   // Deshabilitar el botón
+       button.disabled = true;
+       // Mostrar el spinner de carga
+       document.getElementById('loadingSpinner').style.display = 'block';
+         
+         
+	   var Cuenta1 = document.getElementById("buscarCuenta1").getAttribute("data-idCuenta");
+	   var Cuenta1Value = document.getElementById("buscarCuenta1").value;
+	   var Cuenta2 = document.getElementById("buscarCuenta2").getAttribute("data-idCuenta");
+	   var Cuenta2Value = document.getElementById("buscarCuenta2").value;
+	   var Tercero = document.getElementById("buscarTercero").getAttribute("data-idTercero");
+	   var TerceroValue = document.getElementById("buscarTercero").value;
+	   var idPeriodo = document.getElementById("idPeriodo").value;
+	   
+	   if(Cuenta1 == null || Cuenta1Value == ""){
+		    console.log("Ingreso al if cuenta1" );
+		   
+		   Cuenta1 = "0";
+	   }
+	   
+	   if(Cuenta2 == null || Cuenta2Value == ""){
+		   
+		   Cuenta2 = "0";
+	   }
+	   
+	   
+	   //Si el campo (Value) está vacio
+	   if(TerceroValue == ""){		   
+		   Tercero = "";
+	   }
+
+	   
+			 
+		// Crear un objeto que contenga los datos a enviar
+        var datos = {
+            Cuenta1: Cuenta1,
+            Cuenta2: Cuenta2,
+            Tercero: Tercero,
+            idPeriodo: idPeriodo
+        };
+
+        // Realizar una solicitud POST al controlador
+        fetch("./BuscarMovimientoAux", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(datos),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("data es : ", data);
+
+            var listaComprobantes = data.listaComprobantes;
+            console.log("listaComprobantes es : ", JSON.stringify(listaComprobantes));
+            
+            // Verificar si ReferenciaPorPlu es null o está vacía
+           if (!listaComprobantes || listaComprobantes.length === 0) {
+             alert("No se encontraron comprobantes.");
+             // Ocultar el spinner de carga
+             document.getElementById('loadingSpinner').style.display = 'none';
+             button.disabled = false;
+             return; 
+             }
+
+            // Llamar a la función para actualizar la tabla
+            actualizarTabla(listaComprobantes);
+            
+            // Ocultar el spinner de carga
+            document.getElementById('loadingSpinner').style.display = 'none';
+            button.disabled = false;
+        })
+        .catch((error) => {
+            console.error("Error en la solicitud:", error);
+        });
+			 
+	}
+	
+		
+	
+	// Función para actualizar la tabla
+function actualizarTabla(listaComprobantes) {
+	
+	// Obtener el contenedor de la tabla
+    var tablaContainer = document.getElementById("tabla");
+	
+    // Limpiar la tabla antes de agregar nuevos datos
+    var tbody = document.querySelector("#tabla tbody");
+    tbody.innerHTML = "";
+    
+
+
+    // Iterar sobre la lista de resultados y agregar filas a la tabla
+    listaComprobantes.forEach(function(lista) {
+        var row = "<tr>" +
+                    
+                    "<td class='detalleAF'>" + lista.idCliente + "</td>" +
+                    "<td class='detalleAF'>" + lista.nombreTercero + "</td>" +
+                    "<td class='detalleAF'>" + lista.idCuentaAux + "</td>" +
+                    "<td class='detalleAF'>" + lista.nombreCuenta + "</td>" +
+                    // Modificación en esta línea para incluir un enlace con onclick
+                    "<td class='detalleAF'><a href='#' onclick='mostrarDetalle(" + lista.idCpte + ")'>" + lista.idCpte + "</a></td>" +
+                    "<td class='detalleAF'>" + lista.fechaDcto + "</td>" +
+                    "<td class='detalleAF'>" + lista.vrTotal + "</td>" +
+
+                    // ... (agregar las demás columnas)
+                "</tr>";
+        tbody.innerHTML += row;
+    });
+    
+    tablaContainer.style.display = "block";
+}
+
+
+
+ function mostrarDetalle(idCpte) {
+		// Crear un objeto que contenga los datos a enviar
+		var datos = {
+		idCpte: idCpte
+		};
+
+		// Realizar una solicitud POST al controlador
+		fetch("./TraerMovimientoContable-Post", {
+				method: "POST",
+				headers: {
+				"Content-Type": "application/json",
+				},
+				body: JSON.stringify(datos),
+		 })
+			.then((response) => {
+			// Verifica si la respuesta es una redirección
+			if (response.redirected) {
+				// Redirige al URL especificado en la respuesta
+				window.location.href = response.url;
+				} else {
+				// Parsea la respuesta JSON si no es una redirección
+				return response.json();
+				}
+				})
+				.then((data) => {
+					if (data) {
+					var message = data.message;
+					console.log(message);
+						}
+				})
+				.catch((error) => {
+			console.error("Error al registrar el log:", error);
+				});
+		}					
+
+
+// Actualización de las funciones para recibir un parámetro dinámico (número de fila)
+function BuscarCuentas(fila) {
+    console.log(`Ingresó a BuscarCuentas en fila ${fila}`);
+
+    fetch("./ObtenerCuentas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        listaCuentas = data.xlistaCuentas; 
+        mostrarCuentas(listaCuentas, fila); // Pasamos la fila para saber dónde actualizar
+    })
+    .catch(error => console.error("Error al obtener cuentas:", error));
+}
+
+function mostrarCuentas(cuentas, fila) {
+    console.log(`Fila en mostrarCuentas es ${fila}`);
+
+    let resultsContainer = document.getElementById(`results${fila}`);
+    let inputCuenta = document.getElementById(`buscarCuenta${fila}`);
+
+    console.log("resultsContainer es ", resultsContainer);
+
+    if (!resultsContainer) {
+        console.error(`No se encontró el contenedor results${fila}`);
+        return;
+    }
+
+    resultsContainer.innerHTML = "";
+
+    if (cuentas.length === 0) {
+        resultsContainer.style.display = "none";
+        return;
+    }
+
+    cuentas.forEach(cuenta => {
+        let item = document.createElement("div");
+        item.classList.add("result-item");
+        item.textContent = `${cuenta.idCuentaAux} - ${cuenta.nombreCuenta}`;
+        item.onclick = () => {
+            inputCuenta.value = `${cuenta.idCuentaAux} - ${cuenta.nombreCuenta}`;
+            inputCuenta.setAttribute("data-idCuenta", cuenta.idCuentaAux);
+            
+            resultsContainer.style.display = "none";
+        };
+        resultsContainer.appendChild(item);
+    });
+
+    resultsContainer.style.display = "block";
+}
+
+// Resstablecer valores
+ function restablecerValor(input) {
+    if (input.value < 0 || input.value === "") {
+        input.value = "0.00"; // Restablecer a 0 si el valor es negativo o vacío
+    }
+}
+
+// Cerrar el dropdown si se hace clic fuera
+document.addEventListener("click", function(event) {
+    // Selecciona todos los inputs y contenedores de búsqueda
+    document.querySelectorAll("input[id^='buscarCuenta']").forEach(inputCuenta => {
+        let fila = inputCuenta.id.replace("buscarCuenta", ""); // Obtiene el número de fila
+        let resultsContainer = document.getElementById(fila ? `results${fila}` : "results");
+
+        if (resultsContainer && !inputCuenta.contains(event.target) && !resultsContainer.contains(event.target)) {
+            resultsContainer.style.display = "none";
+        }
+    });
+
+    document.querySelectorAll("input[id^='buscarTercero']").forEach(inputTercero => {
+        let fila = inputTercero.id.replace("buscarTercero", ""); // Obtiene el número de fila
+        let tercerosContainer = document.getElementById(fila ? `terceros${fila}` : "terceros");
+
+        if (tercerosContainer && !inputTercero.contains(event.target) && !tercerosContainer.contains(event.target)) {
+            tercerosContainer.style.display = "none";
+        }
+    });
+});
+
+
+
+
+
+
+function BuscarTerceros(fila) {
+    console.log(`Ingresó a BuscarTerceros en fila ${fila}`);
+
+    fetch("./ObtenerTerceros", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        listaTerceros = data.xListaTerceros; 
+        mostrarTerceros(listaTerceros, fila);
+    })
+    .catch(error => console.error("Error al obtener terceros:", error));
+}
+
+function mostrarTerceros(terceros, fila) {
+	console.log(`Fila en mostrarTerceros es ${fila}`);
+
+    
+    
+    // Si es la primera fila, usa los IDs sin número
+    let resultsContainer = fila === 1 ? document.getElementById("terceros") : document.getElementById(`terceros${fila}`);
+    let inputTercero = fila === 1 ? document.getElementById("buscarTercero") : document.getElementById(`buscarTercero${fila}`);
+
+    resultsContainer.innerHTML = "";
+    
+    if (terceros.length === 0) {
+        resultsContainer.style.display = "none";
+        return;
+    }
+
+    terceros.forEach(tercero => {
+        let item = document.createElement("div");
+        item.classList.add("result-item");
+        item.textContent = `${tercero.cc_Nit} - ${tercero.nombreTercero}`;
+        item.onclick = () => {
+            inputTercero.value = `${tercero.cc_Nit} - ${tercero.nombreTercero}`;
+            inputTercero.setAttribute("data-idTercero", tercero.cc_Nit);
+            console.log("CC_NIT esssss" + tercero.cc_Nit );
+            
+            resultsContainer.style.display = "none";
+        };
+        resultsContainer.appendChild(item);
+    });
+
+    resultsContainer.style.display = "block";
+}
+
+
+
+//----------------------------------------------------------------------------------
+
+// Filtrar en tiempo real para cuentas
+document.querySelectorAll("#buscarCuenta1, #buscarCuenta2").forEach(input => {
+    input.addEventListener("input", function() {
+        let idInput = this.id.replace("buscarCuenta", ""); // Obtener el número (1 o 2)
+       
+        
+        let filtro = this.value.toLowerCase();
+        let cuentasFiltradas = listaCuentas.filter(cuenta =>
+            `${cuenta.idCuentaAux} - ${cuenta.nombreCuenta}`.toLowerCase().includes(filtro)
+        );
+
+        mostrarCuentas(cuentasFiltradas, idInput);
+    });
+});
+
+// Filtrar en tiempo real para terceros
+document.getElementById("buscarTercero").addEventListener("input", function() {
+    let resultsContainer = document.getElementById("terceros");
+
+    let filtro = this.value.toLowerCase();
+    let tercerosFiltrados = listaTerceros.filter(tercero =>
+        `${tercero.cc_Nit} - ${tercero.nombreTercero}`.toLowerCase().includes(filtro)
+    );
+
+    mostrarTerceros(tercerosFiltrados, 1);
+});
+
+
+
+
+
+
+
+		
+	</script>
+</body>
+
+</html>

@@ -66,5 +66,43 @@ public class TblDctoService {
 		return comprobante;
 		
 	}
+	
+	
+	public List<TblDctoDTO> listaMovimientoPorAuxiliar(int idLocal, int idPeriodo, List<Integer> cuentasContables){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaMovimientoPorAuxiliar(idLocal, idPeriodo, cuentasContables);
+		
+		return lista;
+		
+	}
+	
+	
+	public List<TblDctoDTO> listaMovimientoPorTercero(int idLocal, int idPeriodo, String idCliente){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaMovimientoPorTercero(idLocal, idPeriodo, idCliente);
+		
+		return lista;
+		
+	}
+	
+	
+	public List<TblDctoDTO> listaMovimientoPorTerceroYAuxiiar(int idLocal, int idPeriodo, String idCliente, List<Integer> cuentasContables){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, idCliente, cuentasContables);
+		
+		return lista;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

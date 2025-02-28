@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+ 	<head th:replace ="combo/head.html :: head" ></head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" th:href="@{/styles/login.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/styles/General.css}"> 
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/fuenteColor.css}">  	
+    	<link rel="stylesheet" type="text/css" th:href="@{/styles/NavBar.css}"> 
+    	
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <title> Contabook</title>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+	<header th:replace="combo/navBar.html :: navbar"></header>
+	<div class="containerFlex" id="encabezado">
+		<div class="local">
+			<h2 class="letraBlue" th:replace="combo/comboLocal.html :: comboLocal"></h2>
+		</div>
+		<div class="descripcion">
+			<h2 class="tituloAFcenter">DETALLE COMPROBANTE CONTABLE</h2>
+			<h3 th:replace="combo/comboPeriodo.html :: comboPeriodo"></h3>
+		</div>
+		<div class="fechahora">
+			<h2 class="letra" th:replace="combo/FechaHoraActual.html :: comboFechaHora"></h2>
+		</div>
+	</div>
+	
+	   <div class="divCentrado" style="margin-top: 50px ;">
+		    <label style="font-size: 20px;">Comprobante contable No. <span th:text="${xNumeroComprobante}"></span></label>
+		    <input type="hidden" th:value="${xNumeroComprobante}" id="idCpte">
+	   </div>
+
+       <div style="display: flex; justify-content: flex-end; margin-right: 20px; margin-top: 10px; align-items: center; gap: 10px;">
+        <span style="font-weight: bold;">Exportar:</span>
+    
+         <!-- Botón PDF -->
+         <button onclick="GenerarReporte('PDF')" style="border: none; background: none; cursor: pointer;">
+          <img src="./imagenes/logoPDF.png" alt="PDF" title="Exportar a PDF" width="45">
+         </button>
+
+         <!-- Botón Excel -->
+        <button onclick="GenerarReporte('EXCEL')" style="border: none; background: none; cursor: pointer;">
+          <img src="./imagenes/logoEXCEL.png" alt="Excel" title="Exportar a Excel" width="45">
+         </button>
+       </div>
+       
+       
+
+		<div class="form-group" id="tabla" style="margin-top: 5px; margin-left: 20px; margin-right: 20px;">		
+			<table class="table">
+				<thead style="background-color: #ade4f2;">		
+					<tr>		
+						<th></th>
+						<th class="subtituloAF">ITEM</th>
+						<th class="subtituloAF">Cuenta contable</th>
+						<th class="subtituloAF">Usuario</th>
+						<th class="subtituloAF">Cédula</th>
+						<th class="subtituloAF">Descripción</th>
+						<th class="subtituloAF">Débito</th>	
+						<th class="subtituloAF">Crédito</th>	
+					</tr>
+				</thead>
+				<tbody>		
+					<tr th:each="comprobante : ${xComprobanteDetalle}">
+						<td class="detalleCentrado" text=""></td>
+						<td class="detalleAF" th:text="${comprobante.getItem()}"></td>
+						<td class="detalleAF" th:text="${comprobante.getIdCuentaAux() + ' - ' + comprobante.getNombreCuenta()}"></td>
+						<td class="detalleAF" th:text="${comprobante.getObservacion()}"></td>
+						<td class="detalleAF" th:text="${comprobante.getIdCliente()}"></td>
+						<td class="detalleCentrado" text=""></td>
+						<td class="detalleAF" th:text="${comprobante.getVrDebito()}"  id="debito"></td>
+						<td class="detalleAF" th:text="${comprobante.getVrCredito()}" id="credito"></td>
+						
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+	 <div class="totals-row">
+        <div class="empty-space"></div>
+        <div class="totales">
+		   <div class="total-debito">
+			<strong>Total:</strong> 
+		  </div>
+		  <div class="total-debito" >
+			<span id="totalDebitoResumen">0.00</span>
+		  </div>
+		  <div class="total-debito" style="margin-left: 58px;">
+			<span id="totalCreditoResumen">0.00</span>
+		  </div>
+		  <div class="total-debito" style="width: 86px;">
+			<span id="totalCreditoResumen"></span>
+		  </div>
+			
+		</div>
+
+    </div>
+
+	
+	<div class="divCencer" style="margin-top: 50px; margin-right: 15px;">				
+    	<a href="./ReporteMovimientoAuxTerceroPorCtaContable" class="btn btn-primary" >Regresar</a>	
+    	<button type="button" class="btn btn-warning" value="Guardar" style="width: 150px;" onclick="EditarDctoContable()" >Editar/Eliminar</button>
+	</div>
+	
+	
+	<div id="loadingSpinner" style="display: none;">
+   				 
+  	   <div class="spinner"></div>
+	</div>
+
+
+
+	<script type="text/javascript" th:inline="javascript">
+		
+		
+function EditarDctoContable() {
+
+	var idCpte = document.getElementById("idCpte").value;
+
+
+	// Crear un objeto que contenga los datos a enviar
+	var datos = {
+	idCpte: idCpte
+	};
+
+	// Realizar una solicitud POST al controlador
+	fetch("./EditarComprobanteContable-Post", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(datos),
+	})
+
+		.then((response) => {
+			// Verifica si la respuesta es una redirección
+			if (response.redirected) {
+				// Redirige al URL especificado en la respuesta
+				window.location.href = response.url;
+			} else {
+				// Parsea la respuesta JSON si no es una redirección
+				return response.json();
+			}
+		})
+		.then((data) => {
+			if (data) {
+				var message = data.message;
+				console.log(message);
+			}
+		})
+		.catch((error) => {
+			console.error("Error al registrar el log:", error);
+		});
+
+}	
+		
+		
+		
+		
+// Llama a la función al cargar la página 
+calcularTotales();
+		
+function calcularTotales() {
+    let totalDebito = 0, totalCredito = 0;
+
+    // Sumar valores de la columna Débito
+    document.querySelectorAll(".detalleAF[id='debito']").forEach(td => {
+        totalDebito += parseFloat(td.textContent) || 0;
+    });
+
+    // Sumar valores de la columna Crédito
+    document.querySelectorAll(".detalleAF[id='credito']").forEach(td => {
+        totalCredito += parseFloat(td.textContent) || 0;
+    });
+
+    // Actualizar los valores en la fila de totales
+    document.getElementById("totalDebitoResumen").textContent = totalDebito.toFixed(2);
+    document.getElementById("totalCreditoResumen").textContent = totalCredito.toFixed(2);
+}
+
+		
+ 
+	
+	
+
+
+function GenerarReporte(formato) {
+	
+	   var idCpte = document.getElementById("idCpte").value;
+
+        // Crear un objeto que contenga los datos a enviar
+		var datos = {
+			idCpte: idCpte,
+			formato: formato
+			};
+
+		 // Realizar una solicitud POST al controlador
+		 fetch("./DescargarDetalleComprobanteContable", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(datos),
+		})
+		.then(response => {
+     if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.blob();  // Convierte la respuesta a un Blob (secuencia de bytes)
+   })
+  .then(blob => {
+     const url = window.URL.createObjectURL(blob);
+        
+     if (formato === 'PDF') {
+        // Abrir el PDF en una nueva pestaña
+        window.open(url, '_blank');
+      } else if (formato === 'EXCEL') {
+         // Descargar el archivo Excel
+         const a = document.createElement('a');
+         a.href = url;
+         a.download = 'reporte.xlsx';
+         document.body.appendChild(a);
+         a.click();
+         a.remove();
+       }
+
+      // Liberar la URL del objeto para liberar recursos
+      window.URL.revokeObjectURL(url);
+   })
+   .catch(error => console.error('Error al descargar el archivo', error))
+   .finally(() => {
+      // Ocultar el spinner de carga
+      document.getElementById('loadingSpinner').style.display = 'none';
+      button.disabled = false;
+  });
+  
+ }
+		
+	</script>
+</body>
+
+</html>

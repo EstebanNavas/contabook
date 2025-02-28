@@ -172,6 +172,7 @@ function actualizarTabla(listaComprobantes) {
     
 
 
+
     // Iterar sobre la lista de resultados y agregar filas a la tabla
     listaComprobantes.forEach(function(lista) {
         var row = "<tr>" +
@@ -187,6 +188,8 @@ function actualizarTabla(listaComprobantes) {
                     // ... (agregar las demás columnas)
                 "</tr>";
         tbody.innerHTML += row;
+        
+
     });
     
     tablaContainer.style.display = "block";
