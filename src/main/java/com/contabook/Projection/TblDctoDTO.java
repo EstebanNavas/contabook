@@ -16,5 +16,9 @@ public interface TblDctoDTO {
 	Integer getIdCuentaAux();
 	String getNombreCuenta();
 	String getNombreTercero();
+	
+	Integer getItem();
+	Double getVrDebito();
+	Double getVrCredito();
 
 }

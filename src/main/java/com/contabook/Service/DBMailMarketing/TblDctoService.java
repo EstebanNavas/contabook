@@ -96,10 +96,15 @@ public class TblDctoService {
 	
 	
 	
+	public List<TblDctoDTO> listaComprobantesLibroDiario(int idLocal, List<Integer> idTipoCpte, String fechaIncial, String fechaFinal){
+		
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaComprobantesLibroDiario(idLocal, idTipoCpte, fechaIncial, fechaFinal);
+		
+		return lista;
 	
 	
-	
-	
+	}
 	
 	
 	

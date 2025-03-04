@@ -238,5 +238,40 @@ public interface TblDctoRepo extends JpaRepository<TblDcto, Integer> {
 					+ "			  ORDER BY idCliente desc                                                        ",
 	             nativeQuery = true)
 		     List<TblDctoDTO> listaMovimientoPorTerceroYAuxiiar(int idLocal, int idPeriodo, String idCliente, List<Integer> cuentasContables);
+		 
+		 
+		 
+		 
+		 @Query(value = "        SELECT   tblDcto.idTipoCpte,                                     "             
+					+ "	        tblDcto.idCpte,                                                 "                      
+					+ "	        CONVERT(VARCHAR, tblDcto.fechaDcto, 23) AS fechaDcto,           "
+					+ "			MAX(tblDctoDetalle.idCuentaAux) AS idCuentaAux,                 "
+					+ "			MAX(tblPucAux.nombreCuenta) AS  nombreCuenta,                   "
+					+ "	        SUM(tblDctoDetalle.vrDebito) AS vrDebito,                       "
+					+ "			SUM(tblDctoDetalle.vrCredito) AS vrCredito,                     "
+					+ "			tblDctoDetalle.item                                             "
+					+ "	 	FROM BDMailMarketing.dbo.tblDcto                                    "
+					+ "	 	INNER JOIN tblTipoCpte                                              "
+					+ "	 	ON tblDcto.idTipoCpte = tblTipoCpte.idTipoCpte 						"	
+					+ "	 	INNER JOIN tblDctoDetalle                                           "
+					+ "	 	ON tblDcto.idLocal = tblDctoDetalle.idLocal                         "
+					+ "	 	AND tblDcto.idCpte = tblDctoDetalle.idCpte                          "
+					+ "	 	AND tblDcto.idTipoCpte = tblDctoDetalle.idTipoCpte   				"			
+					+ "		INNER JOIN BDMailMarketing.dbo.tblPucAux                            "
+			        + "        ON tblDctoDetalle.idLocal = tblPucAux.idLocal                    "   
+			        + "        AND tblDctoDetalle.idCuentaAux = tblPucAux.idCuentaAux           "
+					+ "	 	WHERE tblDcto.idLocal = ?1                                         "
+					+ "	 	AND tblDcto.idTipoCpte IN ?2                                          "
+					+ "	    AND   CONVERT(VARCHAR(10), tblDcto.fechaDcto, 23)                   "
+					+ "		BETWEEN ?3 AND  ?4                                                  "
+					+ "	 	GROUP BY tblDcto.idTipoCpte,                                        "
+					+ "	          tblDcto.idCpte,                                               "                   
+					+ "	          tblDcto.fechaDcto,                                            "
+					+ "	          tblDcto.idPeriodo,                                            "       
+					+ "	          tblTipoCpte.nombreCmpte,                                      "
+					+ "			  tblDctoDetalle.item                                           "
+					+ "			  ORDER BY idCpte desc                                          ",
+	             nativeQuery = true)
+		 List<TblDctoDTO> listaComprobantesLibroDiario(int idLocal, List<Integer> idTipoCpte, String fechaIncial, String fechaFinal);
 
 }
