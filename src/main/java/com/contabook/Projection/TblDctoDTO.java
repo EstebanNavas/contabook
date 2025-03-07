@@ -20,5 +20,17 @@ public interface TblDctoDTO {
 	Integer getItem();
 	Double getVrDebito();
 	Double getVrCredito();
+	
+	Double getVrTotalAnterior();
+	Integer getIdLocal();
+	
+	Integer getIdClase();
+	String getNombreClase();
+	Integer getIdGrupo();
+	String getNombreGrupo();
+	Integer getIdCuenta();
+	Integer getIdSubCuenta();
+	String getNombreSubCuenta();
+	String getNombreAuxiliar();
 
 }

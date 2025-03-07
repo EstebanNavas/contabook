@@ -107,7 +107,22 @@ public class TblDctoService {
 	}
 	
 	
+	public List<TblDctoDTO> listaBalancePruebaGeneralIdPeriodoYAuxiiar(int idLocal, int idPeriodo,  List<Integer> cuentasContables)	{
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodo, cuentasContables);
+		
+		return lista;
+		
 	
+	}
+	
+	
+	public List<TblDctoDTO> listaBalancePruebaGeneralPorIdPeriodo(int idLocal, int idPeriodo){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaGeneralPorIdPeriodo(idLocal, idPeriodo);
+		
+		return lista;
+	}
 	
 
 }

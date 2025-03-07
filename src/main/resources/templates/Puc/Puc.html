@@ -1859,76 +1859,6 @@ function mostrarDetalle(element) {
 	
 	
  function ActualizarAuxiliar() {
-
-  var subCuenta = document.getElementById("subCuenta").value;
-  var codidoAux = document.getElementById("codidoAux").value;
-  var nombreAux = document.getElementById("nombreAux").value;
-  
-  
-        if(!subCuenta){			
-			alert("Por favor cargue los datos");
-			return;
-		}
-
-	
-		if(!codidoAux){			
-			alert("Por ingrese el código del Auxiliar");
-			return;
-		}
-		
-		if(!nombreAux){
-			
-			alert("Por ingrese un nombre para el Auxiliar");
-			return;
-		}
-				
-		
-		
-			// Crear un objeto que contenga los datos a enviar
-    var datos = {
-		subCuenta: subCuenta,
-		codidoAux: codidoAux,
-		nombreAux: nombreAux			
-    };
-    
-    // Realizar una solicitud POST al controlador
-    fetch("./ActualizarAuxiliar-Post", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(datos),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-		
-		var xNombreAux = data.xNombreAux;    
-		var xIdCuentaAux = data.xIdCuentaAux;    
-       
-          swal({
-            title: "¡Auxiliar " + xIdCuentaAux + " - " + xNombreAux + " actualizado correctamente!",
-            //text: "La PQR  " + numeroRadicado + " ha sido creada correctamente",
-            icon: "success",
-            button: "Continuar",
-        })
-        .then((value) => {
-            // Redirigimos a la vista "CrearSuscriptor"" al hacer clic en el botón Continuar
-            if (value) {
-                window.location.href = "./Puc";
-            }
-        });
-
-    })
-    .catch((error) => {
-        console.error("Error al registrar el log:", error);
-    });
-		
-		
-	}
-	
-	
-	
-function EliminarAuxiliar() {
   var subCuenta = document.getElementById("subCuenta").value;
   var codidoAux = document.getElementById("codidoAux").value;
   var nombreAux = document.getElementById("nombreAux").value;
@@ -1948,23 +1878,80 @@ function EliminarAuxiliar() {
     return;
   }
 
-  // Crear un objeto que contenga los datos a enviar
   var datos = {
     subCuenta: subCuenta,
     codidoAux: codidoAux,
     nombreAux: nombreAux,
   };
 
-  // Mostrar mensaje de confirmación antes de eliminar
-  swal({
+  fetch("./ActualizarAuxiliar-Post", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(datos),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      var xNombreAux = data.xNombreAux;
+      var xIdCuentaAux = data.xIdCuentaAux;
+
+      Swal.fire({
+        title: "¡Actualización exitosa!",
+        text: "Auxiliar " + xIdCuentaAux + " - " + xNombreAux + " actualizado correctamente.",
+        icon: "success",
+        confirmButtonText: "Continuar",
+      }).then(() => {
+        window.location.href = "./Puc";
+      });
+    })
+    .catch((error) => {
+      console.error("Error al actualizar el auxiliar:", error);
+      Swal.fire({
+        title: "Error",
+        text: "Ocurrió un error al actualizar el auxiliar.",
+        icon: "error",
+        confirmButtonText: "Cerrar",
+      });
+    });
+}
+	
+	
+function EliminarAuxiliar() {
+  var subCuenta = document.getElementById("subCuenta").value;
+  var codidoAux = document.getElementById("codidoAux").value;
+  var nombreAux = document.getElementById("nombreAux").value;
+  
+  console.log("subCuenta es " + subCuenta);
+  console.log("codidoAux es " + codidoAux);
+  console.log("nombreAux es " + nombreAux);
+
+  if (!subCuenta) {
+    alert("Por favor cargue los datos");
+    return;
+  }
+
+  if (!codidoAux) {
+    alert("Por favor ingrese el código del Auxiliar");
+    return;
+  }
+
+  var datos = {
+    subCuenta: subCuenta,
+    codidoAux: codidoAux,
+    nombreAux: nombreAux,
+  };
+
+  Swal.fire({
     title: "¿Está seguro?",
-    text: "¿Desea eliminar el auxiliar " + nombreAux + "? Esta acción no se puede deshacer.",
+    text: "¿Desea eliminar el auxiliar " + subCuenta + codidoAux + "? Esta acción no se puede deshacer.",
     icon: "warning",
-    buttons: ["Cancelar", "Eliminar"],
+    showCancelButton: true,
+    confirmButtonText: "Eliminar",
+    cancelButtonText: "Cancelar",
     dangerMode: true,
-  }).then((willDelete) => {
-    if (willDelete) {
-      // Realizar la solicitud POST al controlador
+  }).then((result) => {
+    if (result.isConfirmed) {
       fetch("./EliminarAuxiliar-Post", {
         method: "POST",
         headers: {
@@ -1977,30 +1964,27 @@ function EliminarAuxiliar() {
           var xNombreAux = data.xNombreAux;
           var xIdCuentaAux = data.xIdCuentaAux;
 
-          swal({
+          Swal.fire({
             title: "¡Eliminado!",
             text: "Auxiliar " + xIdCuentaAux + " - " + xNombreAux + " eliminado correctamente.",
             icon: "success",
-            button: "Continuar",
-          }).then((value) => {
-            if (value) {
-              window.location.href = "./Puc";
-            }
+            confirmButtonText: "Continuar",
+          }).then(() => {
+            window.location.href = "./Puc";
           });
         })
         .catch((error) => {
-          console.error("Error al registrar el log:", error);
-          swal({
+          console.error("Error al eliminar el auxiliar:", error);
+          Swal.fire({
             title: "Error",
             text: "Ocurrió un error al eliminar el auxiliar.",
             icon: "error",
-            button: "Cerrar",
+            confirmButtonText: "Cerrar",
           });
         });
     }
   });
 }
-
 
 
 
