@@ -124,5 +124,13 @@ public class TblDctoService {
 		return lista;
 	}
 	
+	public  List<TblDctoDTO> listaLibroMayorYBalance(int idLocal, int idPeriodo,  List<Integer> tipoComprobante){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaLibroMayorYBalance(idLocal, idPeriodo, tipoComprobante);
+		
+		return lista;
+		
+	}
+	
 
 }

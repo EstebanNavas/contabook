@@ -32,5 +32,12 @@ public interface TblDctoDTO {
 	Integer getIdSubCuenta();
 	String getNombreSubCuenta();
 	String getNombreAuxiliar();
+	
+	Double getVrTotalDebitoAnterior();
+	Double getVrTotalCreditoAnterior();
+	Double getVrTotalDebitoActual();
+	Double getVrTotalCreditoActual();
+	Double getvrSaldoDebito();
+	Double getVrSaldoCredito();
 
 }
