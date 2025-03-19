@@ -79,11 +79,13 @@
 						
 						<th class="subtituloAF">Identificación</th>
 						<th class="subtituloAF">Nombre tercero</th>
+						<th class="subtituloAF">Tipo Comprobante</th>
 						<th class="subtituloAF">Cuenta contable</th>
 						<th class="subtituloAF">Nombre cuenta</th>
 						<th class="subtituloAF">#Comprobante</th>	
 						<th class="subtituloAF">Fecha elaboración</th>	
 						<th class="subtituloAF">Valor</th>	
+						<th class="subtituloAF">Detalle</th>	
 					</tr>
 				</thead>
 				<tbody>		
@@ -225,12 +227,14 @@ function actualizarTabla(listaComprobantes) {
                     
                     "<td class='detalleAF'>" + lista.idCliente + "</td>" +
                     "<td class='detalleAF'>" + lista.nombreTercero + "</td>" +
+                    "<td class='detalleAF'>" + lista.tipoComprobante + "</td>" +
                     "<td class='detalleAF'>" + lista.idCuentaAux + "</td>" +
                     "<td class='detalleAF'>" + lista.nombreCuenta + "</td>" +
                     // Modificación en esta línea para incluir un enlace con onclick
                     "<td class='detalleAF'><a href='#' onclick='mostrarDetalle(" + lista.idCpte + ")'>" + lista.idCpte + "</a></td>" +
                     "<td class='detalleAF'>" + lista.fechaDcto + "</td>" +
                     "<td class='detalleAF'>" + lista.vrTotal + "</td>" +
+                    "<td class='detalleAF'>" + lista.detalle + "</td>" +
 
                     // ... (agregar las demás columnas)
                 "</tr>";

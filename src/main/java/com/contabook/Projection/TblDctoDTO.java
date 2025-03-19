@@ -39,5 +39,8 @@ public interface TblDctoDTO {
 	Double getVrTotalCreditoActual();
 	Double getvrSaldoDebito();
 	Double getVrSaldoCredito();
+	
+	String getDetalle();
+	String getTipoComprobante();
 
 }

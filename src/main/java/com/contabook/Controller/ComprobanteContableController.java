@@ -181,6 +181,7 @@ public class ComprobanteContableController {
 		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		Integer idLocal = usuario.getIdLocal();
+		System.out.println("idLocal en ObtenerTerceros es  " + idLocal);
 		
 		Map<String, Object> response = new HashMap<>();
 		
