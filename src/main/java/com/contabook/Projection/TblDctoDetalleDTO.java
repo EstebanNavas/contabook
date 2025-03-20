@@ -13,4 +13,6 @@ public interface TblDctoDetalleDTO {
 	Double getVrCredito();
 	String getObservacion();
 	String getNombreCuenta();
+	
+	String getNombreUsuario();
 }
