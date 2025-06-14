@@ -15,4 +15,6 @@ public interface TblDctoDetalleDTO {
 	String getNombreCuenta();
 	
 	String getNombreUsuario();
+	String getFechaDcto();
+	String getNombreTipoComprobante();
 }

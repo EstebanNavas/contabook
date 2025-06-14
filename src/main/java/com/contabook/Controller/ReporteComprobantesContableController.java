@@ -233,8 +233,19 @@ public class ReporteComprobantesContableController {
 		//------------------------------------------------------------------------------------------------------------------------------------------
 
 	           List<TblDctoDetalleDTO> comprobanteDetalle = tblDctoDetalleService.comprobanteContableDetalle(idLocal, idCpte);
+	           
+	           String nombreTipoComprobante = "";
+	           
+	           for (TblDctoDetalleDTO detalle : comprobanteDetalle) {
+	        	   
+	        	   nombreTipoComprobante = detalle.getNombreTipoComprobante();
+	           }
+	           
+	           
+	           
 	           model.addAttribute("xComprobanteDetalle", comprobanteDetalle);
 	           model.addAttribute("xNumeroComprobante", idCpte);
+	           model.addAttribute("xNombreTipoComprobante", nombreTipoComprobante);
 		   
 
 			

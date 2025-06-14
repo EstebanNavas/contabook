@@ -31,7 +31,7 @@
 	</div>
 	
 	   <div class="divCentrado" style="margin-top: 50px ;">
-		    <label style="font-size: 20px;">Comprobante contable No. <span th:text="${xNumeroComprobante}"></span></label>
+		    <label style="font-size: 20px;">Comprobante - <span th:text="${xNombreTipoComprobante}"></span> - No. <span th:text="${xNumeroComprobante}"></span></label>
 		    <input type="hidden" th:value="${xNumeroComprobante}" id="idCpte">
 	   </div>
 
@@ -60,6 +60,7 @@
 						<th class="subtituloAF">Cuenta contable</th>
 						<th class="subtituloAF">Usuario</th>
 						<th class="subtituloAF">Cédula</th>
+						<th class="subtituloAF">Fecha</th>
 						<th class="subtituloAF">Descripción</th>
 						<th class="subtituloAF">Débito</th>	
 						<th class="subtituloAF">Crédito</th>	
@@ -72,7 +73,8 @@
 						<td class="detalleAF" th:text="${comprobante.getIdCuentaAux() + ' - ' + comprobante.getNombreCuenta()}"></td>
 						<td class="detalleAF" th:text="${comprobante.getNombreUsuario()}"></td>
 						<td class="detalleAF" th:text="${comprobante.getIdCliente()}"></td>
-						<td class="detalleCentrado" text=""></td>
+						<td class="detalleAF" th:text="${comprobante.getFechaDcto()}"></td>
+						<td class="detalleAF" th:text="${comprobante.getObservacion()}"></td>
 						<td class="detalleAF" th:text="${comprobante.getVrDebito()}"  id="debito"></td>
 						<td class="detalleAF" th:text="${comprobante.getVrCredito()}" id="credito"></td>
 						
