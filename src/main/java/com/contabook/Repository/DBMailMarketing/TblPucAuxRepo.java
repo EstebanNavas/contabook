@@ -116,7 +116,8 @@ public interface TblPucAuxRepo extends JpaRepository<TblPucAux, Integer> {
 				 + "	 SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,1) AS idClase                    "
 				 + " FROM BDMailMarketing.dbo.tblPucAux                                                 "
 				 + " INNER JOIN BDMailMarketing.dbo.tblPuc                                              "
-				 + " ON SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,6) = tblPuc.idCuenta              "
+				 + " ON tblPucAux.idLocal = tblPuc.idlocal                                              "
+				 + " AND SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,6) = tblPuc.idCuenta              "
 				 + " WHERE tblPucAux.idLocal= ?1 ) AS tmpPUC                                            "
 				 + " ON tblPucAux.idLocal= tmpPUC.idLocal                                               "
 				 + " AND tblPucAux.idCuentaAux= tmpPUC.idCuentaAux                                      "
@@ -150,8 +151,9 @@ public interface TblPucAuxRepo extends JpaRepository<TblPucAux, Integer> {
 				 + "   		     SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,1) ) AS nombreClase,      "          
 				 + "   	 SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,1) AS idClase                     "          
 				 + "    FROM BDMailMarketing.dbo.tblPucAux                                                "           
-				 + "    INNER JOIN BDMailMarketing.dbo.tblPuc                                             "           
-				 + "    ON SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,6) = tblPuc.idCuenta             "           
+				 + "    INNER JOIN BDMailMarketing.dbo.tblPuc                                             "
+				 + "    ON tblPucAux.idLocal = tblPuc.idlocal                                             "
+				 + "    AND SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,6) = tblPuc.idCuenta             "           
 				 + "    WHERE tblPucAux.idLocal= ?1                                                      "          
 				 + "    and tblPuc.idClase = ?2                                                            ",
 	             nativeQuery = true)
