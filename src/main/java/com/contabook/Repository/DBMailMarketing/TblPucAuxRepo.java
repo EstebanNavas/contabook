@@ -127,5 +127,34 @@ public interface TblPucAuxRepo extends JpaRepository<TblPucAux, Integer> {
 				 + "     ,tblPucAux.idCuentaAux                                                         ",
 	             nativeQuery = true)
 		 List<TblPucAuxDTO> listaCuentasContables(int idLocal);
+		 
+		 
+		 @Query(value = "       SELECT  tblPucAux.idLocal                                                      "                                      
+				 + "        ,tblPucAux.idCuentaAux                                                        "           
+				 + "        ,tblPucAux.nombreCuenta AS nombreAuxiliar                                     "           
+				 + "   	  ,tblPuc.nombreCuenta AS nombreSubCuenta                                        "          
+				 + "   	  ,tblPuc.idCuenta AS  idSubCuenta,                                              "          
+				 + "   	  ( SELECT TOP 1 tblPuc.nombreCuenta                                             "          
+				 + "   	    FROM  tblPuc                                                                 "          
+				 + "   		WHERE SUBSTRING(LTRIM(STR(tblPuc.idCuenta)),1,4)=                            "          
+				 + "   		     SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,4) ) AS nombreCuenta,     "          
+				 + "   	 SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,4) AS idCuenta,                   "          
+				 + "    (SELECT TOP 1 tblPuc.nombreCuenta                                                 "           
+				 + "   	    FROM  tblPuc                                                                 "          
+				 + "   		WHERE SUBSTRING(LTRIM(STR(tblPuc.idCuenta)),1,2)=                            "          
+				 + "   		     SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,2) ) AS nombreGrupo,      "          
+				 + "   	 SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,2) AS idGrupo,                    "          
+				 + "    (SELECT TOP 1 tblPuc.nombreCuenta                                                 "           
+				 + "   	    FROM  tblPuc                                                                 "          
+				 + "   		WHERE SUBSTRING(LTRIM(STR(tblPuc.idCuenta)),1,1)=                            "          
+				 + "   		     SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,1) ) AS nombreClase,      "          
+				 + "   	 SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,1) AS idClase                     "          
+				 + "    FROM BDMailMarketing.dbo.tblPucAux                                                "           
+				 + "    INNER JOIN BDMailMarketing.dbo.tblPuc                                             "           
+				 + "    ON SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,6) = tblPuc.idCuenta             "           
+				 + "    WHERE tblPucAux.idLocal= ?1                                                      "          
+				 + "    and tblPuc.idClase = ?2                                                            ",
+	             nativeQuery = true)
+		 List<TblPucAuxDTO> listaCuentasContablesPorClase(int idLocal, int idClase);
 
 }

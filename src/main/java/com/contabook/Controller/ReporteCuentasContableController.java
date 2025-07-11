@@ -202,7 +202,8 @@ public class ReporteCuentasContableController {
 
 		List<TblPucAuxDTO> lista = null;
 		
-		lista = tblPucAuxService.listaCuentasContables(idLocal);
+		//lista = tblPucAuxService.listaCuentasContables(idLocal);
+		lista = tblPucAuxService.listaCuentasContablesPorClase(idLocal, idClase);
 		System.out.println("lista es : " + lista);
 
 		System.out.println("formato es : " + formato);
