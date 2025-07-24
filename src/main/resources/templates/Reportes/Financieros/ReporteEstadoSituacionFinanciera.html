@@ -33,10 +33,22 @@
 	<div style="display: flex; margin-top: 60px;" class="divCencer" >
 	<div  style="display: flex;"  >
 		<div>
-			<label class="letra" >PERIODO</label>			
+			<label class="letra" >PERIODO DESDE</label>			
 		</div>
 		<div>
-			  <select id="idPeriodo" style="width: 200px; height: 25px;	margin-left: 10px;">
+			  <select id="idPeriodo1" style="width: 200px; height: 25px;	margin-left: 10px;">
+				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}"></option>
+			</select>
+		   </div>	
+
+	</div>
+	
+	<div  style="display: flex; margin-left: 60px;"  >
+		<div>
+			<label class="letra" >PERIODO HASTA</label>			
+		</div>
+		<div>
+			  <select id="idPeriodo2" style="width: 200px; height: 25px;	margin-left: 10px;">
 				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}"></option>
 			</select>
 		   </div>	
@@ -78,12 +90,17 @@
 
 		 // Mostrar el spinner de carga
          document.getElementById('loadingSpinner').style.display = 'block';
-         var idPeriodo = document.getElementById("idPeriodo").value;
+         var idPeriodo1 = document.getElementById("idPeriodo1").value;
+         var idPeriodo2 = document.getElementById("idPeriodo2").value;
          var formato = document.getElementById("formato").value;
+         
+         console.log("idPeriodo1 es " + idPeriodo1);
+         console.log("idPeriodo2 es " + idPeriodo2);
 
 	     // Crear un objeto que contenga los datos a enviar
 		var datos = {
-			idPeriodo: idPeriodo,
+			idPeriodo1: idPeriodo1,
+			idPeriodo2: idPeriodo2,
 			formato: formato
 			};
 

@@ -47,13 +47,27 @@
 		
 		</div>
 		
-		<div style="margin-left: 200px;">		  
+		<div style="margin-left: 100px;">		  
 			   <label style="font-size: 19px; margin-bottom: 10px;">Periodo:</label>		   				   
 			  <select id="idPeriodo" style="width: 200px; height: 25px; margin-left: 20px;">
 				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
 			</select>
 		   		
 	   </div>
+	   
+	   <div style="display: flex; justify-content: flex-end; margin-left: 100px; margin-top: 0px; align-items: center; gap: 10px;">
+        <span style="font-weight: bold;">Exportar:</span>
+    
+         <!-- Botón PDF -->
+         <button onclick="GenerarReporte('PDF')" style="border: none; background: none; cursor: pointer;">
+          <img src="./imagenes/logoPDF.png" alt="PDF" title="Exportar a PDF" width="45">
+         </button>
+
+         <!-- Botón Excel -->
+        <button onclick="GenerarReporte('EXCEL')" style="border: none; background: none; cursor: pointer;">
+          <img src="./imagenes/logoEXCEL.png" alt="Excel" title="Exportar a Excel" width="45">
+         </button>
+       </div>
 
 	</div>
 	
@@ -121,6 +135,94 @@
 
 let listaCuentas = []; // Almacena todas las cuentas 
 let listaTerceros = [];
+
+
+function GenerarReporte(formato) {
+	
+	   event.preventDefault();
+	   
+	   const button = document.getElementById('generarBtn');
+	   // Deshabilitar el botón
+       button.disabled = true;
+       // Mostrar el spinner de carga
+       document.getElementById('loadingSpinner').style.display = 'block';
+         
+         
+	   var Cuenta1 = document.getElementById("buscarCuenta1").getAttribute("data-idCuenta");
+	   var Cuenta1Value = document.getElementById("buscarCuenta1").value;
+	   var Cuenta2 = document.getElementById("buscarCuenta2").getAttribute("data-idCuenta");
+	   var Cuenta2Value = document.getElementById("buscarCuenta2").value;
+	   var Tercero = document.getElementById("buscarTercero").getAttribute("data-idTercero");
+	   var TerceroValue = document.getElementById("buscarTercero").value;
+	   var idPeriodo = document.getElementById("idPeriodo").value;
+	   
+	   if(Cuenta1 == null || Cuenta1Value == ""){
+		    console.log("Ingreso al if cuenta1" );
+		   
+		   Cuenta1 = "0";
+	   }
+	   
+	   if(Cuenta2 == null || Cuenta2Value == ""){
+		   
+		   Cuenta2 = "0";
+	   }
+	   
+	   
+	   //Si el campo (Value) está vacio
+	   if(TerceroValue == ""){		   
+		   Tercero = "";
+	   }
+
+        // Crear un objeto que contenga los datos a enviar
+		var datos = {
+			Cuenta1: Cuenta1,
+            Cuenta2: Cuenta2,
+            Tercero: Tercero,
+            idPeriodo: idPeriodo,
+			formato: formato
+			};
+
+		 // Realizar una solicitud POST al controlador
+		 fetch("./DescargarReporteMovimientoAuxTerceroPorCtaContable", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(datos),
+		})
+		.then(response => {
+     if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.blob();  // Convierte la respuesta a un Blob (secuencia de bytes)
+   })
+  .then(blob => {
+     const url = window.URL.createObjectURL(blob);
+        
+     if (formato === 'PDF') {
+        // Abrir el PDF en una nueva pestaña
+        window.open(url, '_blank');
+      } else if (formato === 'EXCEL') {
+         // Descargar el archivo Excel
+         const a = document.createElement('a');
+         a.href = url;
+         a.download = 'reporte.xlsx';
+         document.body.appendChild(a);
+         a.click();
+         a.remove();
+       }
+
+      // Liberar la URL del objeto para liberar recursos
+      window.URL.revokeObjectURL(url);
+   })
+   .catch(error => console.error('Error al descargar el archivo', error))
+   .finally(() => {
+      // Ocultar el spinner de carga
+      document.getElementById('loadingSpinner').style.display = 'none';
+      button.disabled = false;
+  });
+  
+ }
 
 
 

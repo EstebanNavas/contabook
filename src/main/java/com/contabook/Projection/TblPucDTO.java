@@ -16,5 +16,13 @@ public interface TblPucDTO {
 	Double getVrDebito();
 	Double getVrCredito();
 	
+	Double getTotalClaseVrDebito();
+	Double getTotalClaseVrCredito();
+	Double getTotalGrupoVrDebito();
+	Double getTotalGrupoVrCredito();
+	Double getTotalCuentaVrDebito();
+	Double getTotalCuentaVrCredito();
+	Double getTotalSubCuentaVrDebito();
+	Double getTotalSubCuentaVrCredito();
 
 }

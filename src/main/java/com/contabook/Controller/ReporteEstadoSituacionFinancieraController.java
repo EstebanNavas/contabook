@@ -146,15 +146,29 @@ public class ReporteEstadoSituacionFinancieraController {
 		String sistema = (String) request.getSession().getAttribute("sistema");
 
 		// Obtenemos los datos del JSON recibido
-		String idPeriodoStr = (String) requestBody.get("idPeriodo");
-		System.out.println("idPeriodoStr es  : " + idPeriodoStr);
-		Integer idPeriodo = Integer.parseInt(idPeriodoStr);
+		String idPeriodo1Str = (String) requestBody.get("idPeriodo1");
+		System.out.println("idPeriodo1Str es  : " + idPeriodo1Str);
+		Integer idPeriodo1 = Integer.parseInt(idPeriodo1Str);
+		
+		String idPeriodo2Str = (String) requestBody.get("idPeriodo2");
+		System.out.println("idPeriodo2Str es  : " + idPeriodo2Str);
+		Integer idPeriodo2 = Integer.parseInt(idPeriodo2Str);
 
 		String formato = (String) requestBody.get("formato");
 
 		int idLocal = usuario.getIdLocal();
 
 		int xIdReporte = 1200;
+		
+		String textoPeriodo = "";
+		
+		if(idPeriodo1.equals(idPeriodo2)) {
+			
+			textoPeriodo = idPeriodo1Str;
+		}else {
+			
+			textoPeriodo = idPeriodo1Str + " AL " + idPeriodo2Str;
+		}
 		
 		
 
@@ -191,7 +205,8 @@ public class ReporteEstadoSituacionFinancieraController {
 		for (TblLocales L : Local) {
 
 			// Parametros del encabezado
-			params.put("p_idPeriodo", idPeriodo);
+			//params.put("p_idPeriodo", idPeriodo);
+			params.put("p_TextoPeriodo", textoPeriodo);
 			params.put("p_nombreLocal", L.getNombreLocal());
 			params.put("p_nit", L.getNit());
 			params.put("p_titulo", xTituloReporte);
@@ -205,7 +220,7 @@ public class ReporteEstadoSituacionFinancieraController {
 		
 		
 		
-        List<TblPucDTO> RepEstadoResultadoIntegral = tblPucService.RepEstadoResultadoIntegral(idLocal, idPeriodo);
+        List<TblPucDTO> RepEstadoResultadoIntegral = tblPucService.RepEstadoResultadoIntegral(idLocal, idPeriodo1, idPeriodo2);
         
         Double totalIngreso = 0.0;
         Double totalGastos = 0.0;
@@ -243,7 +258,7 @@ public class ReporteEstadoSituacionFinancieraController {
 
 		List<TblPucDTO> lista = null;
 		
-		lista = tblPucService.RepEstadoSituacionFinanciera(idLocal, idPeriodo);
+		lista = tblPucService.RepEstadoSituacionFinanciera(idLocal, idPeriodo1, idPeriodo2);
 		System.out.println("lista es : " + lista);
 
 		System.out.println("formato es : " + formato);

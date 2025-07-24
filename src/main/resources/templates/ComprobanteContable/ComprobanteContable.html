@@ -344,6 +344,8 @@ function mostrarCuentas(cuentas, fila) {
     });
 
     resultsContainer.style.display = "block";
+    
+    enableKeyboardNavigation(inputCuenta, resultsContainer);
 }
 
 // Misma lógica aplicada a `BuscarTerceros`
@@ -406,6 +408,43 @@ function eliminarFila(elemento) {
     filas.forEach((fila, index) => {
         fila.children[0].textContent = index + 1;
     });
+}
+
+
+//--------------------------------- PERMITE NAVEGAR EN LOS RESULTADOS DEL DIV QUE MUESTRA LAS CUENTAS BUSCADAS
+
+function enableKeyboardNavigation(input, container) {
+    let currentIndex = -1;
+
+    input.addEventListener("keydown", function (e) {
+        const items = container.querySelectorAll(".result-item");
+
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            if (currentIndex < items.length - 1) {
+                currentIndex++;
+                updateHighlight(items, currentIndex);
+            }
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateHighlight(items, currentIndex);
+            }
+        } else if (e.key === "Enter") {
+            e.preventDefault();
+            if (currentIndex >= 0 && currentIndex < items.length) {
+                items[currentIndex].click(); // simula clic
+                currentIndex = -1; // reinicia
+            }
+        }
+    });
+
+    function updateHighlight(items, index) {
+        items.forEach((item, i) => {
+            item.classList.toggle("highlight", i === index);
+        });
+    }
 }
 
 
@@ -531,7 +570,7 @@ function GuardarDctoContable() {
         console.log("credito: " + credito);
 
         // Verificar si hay una fila vacía
-        if (!cuenta || !tercero || !detalleContable || !descripcion || (!debito && !credito)) {
+        if (!cuenta || !tercero  || !descripcion || (!debito && !credito)) {
             filasVacias = true;
         }
 

@@ -816,5 +816,51 @@ public class PucController {
 	   
 	    
 	}
+	
+	
+	@PostMapping("/EliminarSubCuenta-Post")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> EliminarSubCuenta(@RequestBody Map<String, Object> requestBody, HttpServletRequest request,Model model) {
+		
+		Class tipoObjeto = this.getClass();					
+        String nombreClase = tipoObjeto.getName();		
+        System.out.println("CONTROLLER " + nombreClase);
+        
+        
+	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
+	    Integer IdUsuario = usuario.getIdUsuario();
+	    
+	    Integer idLocal = usuario.getIdLocal();
+
+
+	    System.out.println("SI ENTRÓ A  /EliminarSubCuenta");
+
+	        // Obtenemos los datos del JSON recibido
+	        String subCuenta = (String) requestBody.get("subCuenta");
+	        Integer idCuenta = Integer.parseInt(subCuenta);
+	        
+	        
+	        String nombreSubCuenta = (String) requestBody.get("nombreSubCuenta");
+
+	        
+	        System.out.println("subCuenta es " + subCuenta);
+	        System.out.println("nombreSubCuenta es " + nombreSubCuenta);
+
+	        
+
+	        //ELIMINAR SUBCUENTA
+	        tblPucRepo.eliminarSubCuenta(idLocal, idCuenta);
+
+	        
+		    Map<String, Object> response = new HashMap<>();
+		    response.put("message", "LOGGGGGGGGG");
+		    response.put("xNombreSubCuenta", nombreSubCuenta);
+		    response.put("xIdCuentaAux", idCuenta);
+
+
+		    return ResponseEntity.ok(response);
+	   
+	    
+	}
 
 }

@@ -159,7 +159,8 @@
 					<button type="button" class="btn btn-success" value="Guardar" onclick="CrearSubCuenta()" id="crearSubCuenta" style="display: none;">Crear SubCuenta</button>
 					<button type="button" class="btn btn-success" value="Guardar" onclick="CrearCuenta()" id="crearCuenta" style="display: none;">Crear Cuenta</button>
 					<button type="button" class="btn btn-primary" value="Guardar" onclick="ActualizarAuxiliar()" id="actualizarAux" style="display: none;">Actualizar Auxiliar</button>
-					<button type="button" class="btn btn-danger" value="Guardar" onclick="EliminarAuxiliar()" id="eliminarAux" style="display: none;">Eliminar</button>
+					<button type="button" class="btn btn-danger" value="Guardar" onclick="EliminarAuxiliar()" id="eliminarAux" style="display: none;">Eliminar Auxiliar</button>
+					<button type="button" class="btn btn-danger" value="Guardar" onclick="EliminarSubCuenta()" id="eliminarSubCuenta" style="display: none;">Eliminar subCuenta</button>
 				</div>
 			</form>
 		</div>
@@ -442,6 +443,9 @@ function mostrarLista2(element) {
         
         const botonEliminar = document.getElementById("eliminarAux");  
         botonEliminar.style.display = "none";
+        
+         const botonEliminarSubCuenta = document.getElementById("eliminarSubCuenta");  
+        botonEliminarSubCuenta.style.display = "none";
 
     // Buscar si ya hay filas desplegadas para este idCuenta
     let nextRow = selectedRow.nextElementSibling;
@@ -698,6 +702,9 @@ function mostrarLista4(element) {
         
         const botonEliminar = document.getElementById("eliminarAux");  
         botonEliminar.style.display = "none";
+        
+        const botonEliminarSubCuenta = document.getElementById("eliminarSubCuenta");  
+        botonEliminarSubCuenta.style.display = "none";
         
         
         const crearCuenta = document.getElementById("crearCuenta"); 
@@ -1231,15 +1238,45 @@ function CrearAuxiliar() {
 
 
 
-function mostrarDetalleAux(element) {
-	console.log("ingresó a  mostrarDetalleAux" );
+
+
+
+
+
+
+
+
+function mostrarDetalleCuenta(element) {
+	console.log("ingresó a  mostrarDetalleCuenta ");
     // Obtener la fila seleccionada
     const selectedRow = element.closest("tr");
-    const idCuentaAux = element.getAttribute("data-id-aux");
     const idCuenta = element.getAttribute("data-id-cuenta");
-    const idClase = element.getAttribute("data-id-clase");
-
-   console.log("Ingresó a mostrarDetalleAux");
+    const idClase = element.getAttribute("data-id-claseCuenta");
+    console.log("ID de la opción seleccionada en mostrarDetalleCuenta: " + idCuenta);
+    console.log("idClase seleccionada en mostrarDetalleCuenta: " + idClase);
+    
+    
+        const botonActualizar = document.getElementById("actualizarAux");  
+        botonActualizar.style.display = "none";
+        
+        const botonEliminar = document.getElementById("eliminarAux");  
+        botonEliminar.style.display = "none";
+        
+        const botonEliminarSubCuenta = document.getElementById("eliminarSubCuenta");  
+        botonEliminarSubCuenta.style.display = "none";
+        
+        const botonCrear = document.getElementById("crearAux");  
+        botonCrear.style.display = "none";
+        
+        const crearSubCuenta = document.getElementById("crearSubCuenta"); 
+        crearSubCuenta.style.display = "none";
+        
+        const crearCuenta = document.getElementById("crearCuenta"); 
+        crearCuenta.style.display = "block";
+        
+        errorMessage.style.display = "none";
+        errorMessageSubCuenta.style.display = "none";
+        
     
     const vacio = "";
     
@@ -1254,20 +1291,58 @@ function mostrarDetalleAux(element) {
 
         document.getElementById("subCuenta").value = vacio;
         document.getElementById("nombreSubCuenta").value = vacio;
+        
+        
+        let inputCodidoAux = document.getElementById("codidoAux");
+        inputCodidoAux.readOnly = true; 
+        inputCodidoAux.value = vacio;
+        inputCodidoAux.style.backgroundColor = "#eee"; 
+        inputCodidoAux.classList.remove("input-barra-verde");
+        
+        let inputNombreAux = document.getElementById("nombreAux");
+        inputNombreAux.readOnly = true; 
+        inputNombreAux.value = vacio;
+        inputNombreAux.style.backgroundColor = "#eee"; 
+        inputNombreAux.classList.remove("input-barra-verde");
+        
+        
+        document.getElementById("codidoAux").value = vacio;
+        document.getElementById("nombreAux").value = vacio;
+        
+        document.getElementById("subCuentaAux").innerText = vacio;
 
 
+     // Buscar si ya hay filas desplegadas para este idCuenta
+    let nextRow = selectedRow.nextElementSibling;
+    let isExpanded = false;
 
+    // Verificar si las filas siguientes pertenecen al mismo `idCuenta`
+    while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+        isExpanded = true;
+        nextRow = nextRow.nextElementSibling;
+    }
+
+    // Si ya está expandido, eliminar las filas desplegadas
+    if (isExpanded) {
+        console.log("Cerrando las filas desplegadas para ID: " + idCuenta);
+        nextRow = selectedRow.nextElementSibling;
+        while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
+            const rowToRemove = nextRow;
+            nextRow = nextRow.nextElementSibling;
+            rowToRemove.remove();
+        }
+        return; // Terminar la ejecución aquí
+    }
 
 
     // Crear un objeto con los datos a enviar
     const datos = {
         idCuenta: idCuenta,
-        idCuentaAux: idCuentaAux,
         idClase: idClase
     };
 
     // Realizar una solicitud POST al controlador
-    fetch("./DetalleAux", {
+    fetch("./DetalleCuenta", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -1276,7 +1351,9 @@ function mostrarDetalleAux(element) {
     })
         .then((response) => response.json())
         .then((data) => {
-            // Obtener la lista del segundo nivel
+			
+             xListaCuentas = data.xListaCuentas;
+            
             const nombreClase = data.xNombreClase;
             const idClase = data.xIdClase;
             
@@ -1289,11 +1366,6 @@ function mostrarDetalleAux(element) {
             const nombreSubCuenta = data.xNombreSubCuenta;
             const idSubCuenta = data.xIdSubCuenta;
             
-            const nombreCuentaAux = data.xNombreCuentaAux;
-            const coidgoAux = data.xCoidgoAux;
-            
-            xListaAuxiliares = [];
-            
              // Asignar los valores a los inputs
         document.getElementById("clase").value = idClase;
         document.getElementById("nombreClase").value = nombreClase;
@@ -1301,51 +1373,38 @@ function mostrarDetalleAux(element) {
         document.getElementById("grupo").value = idGrupo;
         document.getElementById("nombreGrupo").value = nombreGrupo;
 
-        document.getElementById("cuenta").value = idCuenta;
-        document.getElementById("nombreCuenta").value = nombreCuenta;
 
-        document.getElementById("subCuenta").value = idSubCuenta;
-        document.getElementById("nombreSubCuenta").value = nombreSubCuenta;
-        
-        document.getElementById("subCuentaAux").innerText = idSubCuenta;
-        
-        document.getElementById("codidoAux").value = coidgoAux;
-        document.getElementById("nombreAux").value = nombreCuentaAux;
-        
-        const codigoAux = document.getElementById("codidoAux");
-        codigoAux.readOnly = true;
-        codigoAux.style.backgroundColor = "#eee";
         
         
-        const botonActualizar = document.getElementById("actualizarAux");  
-        botonActualizar.style.display = "block";
         
-        const botonEliminar = document.getElementById("eliminarAux");  
-        botonEliminar.style.display = "block";
+        let inputCuenta = document.getElementById("cuenta");
+        inputCuenta.readOnly = false; 
+        inputCuenta.style.backgroundColor = "white"; 
+        inputCuenta.classList.add("input-barra-verde"); // Agregar la clase
         
-        const botonCrear = document.getElementById("crearAux");  
-        botonCrear.style.display = "none";
-        
-        const crearSubCuenta = document.getElementById("crearSubCuenta"); 
-        crearSubCuenta.style.display = "none";
-        
-        let inputNombreAux = document.getElementById("nombreAux");
-        inputNombreAux.readOnly = false; 
-        inputNombreAux.value = vacio;
-        inputNombreAux.style.backgroundColor = "White"; 
-        inputNombreAux.classList.add("input-barra-verde"); // Agregar la clase
+        let inputnombreCuenta = document.getElementById("nombreCuenta");
+        inputnombreCuenta.readOnly = false; 
+        inputnombreCuenta.style.backgroundColor = "white"; 
+        inputnombreCuenta.classList.add("input-barra-verde"); // Agregar la clase
         
         let inputSubCuenta = document.getElementById("subCuenta");
         inputSubCuenta.readOnly = true; 
+        inputSubCuenta.value = vacio
         inputSubCuenta.style.backgroundColor = "#eee"; 
-        inputSubCuenta.classList.remove("input-barra-verde");
+        inputSubCuenta.classList.remove("input-barra-verde"); 
         
         let inputnombreSubCuenta = document.getElementById("nombreSubCuenta");
         inputnombreSubCuenta.readOnly = true; 
+        inputnombreSubCuenta.value = vacio
         inputnombreSubCuenta.style.backgroundColor = "#eee"; 
-        inputnombreSubCuenta.classList.remove("input-barra-verde");
+        inputnombreSubCuenta.classList.remove("input-barra-verde"); 
+         
+         
+
+        document.getElementById("cuentaLabel").innerText = idGrupo;
+        document.getElementById("subCuentaLabel").innerText = vacio;
         
-        document.getElementById("subCuentaLabel").innerText = "";
+        
 
 
         })
@@ -1361,8 +1420,8 @@ function mostrarDetalleSubCuenta(element) {
     const selectedRow = element.closest("tr");
     const idCuenta = element.getAttribute("data-id-cuenta");
     const idClase = element.getAttribute("data-id-claseCuenta");
-    console.log("ID de la opción seleccionada en mostrarLista3: " + idCuenta);
-    console.log("idClase seleccionada en mostrarLista3: " + idClase);
+    console.log("ID de la opción seleccionada en mostrarDetalleSubCuenta: " + idCuenta);
+    console.log("idClase seleccionada en mostrarDetalleSubCuenta: " + idClase);
     
     
         const botonActualizar = document.getElementById("actualizarAux");  
@@ -1370,6 +1429,9 @@ function mostrarDetalleSubCuenta(element) {
         
         const botonEliminar = document.getElementById("eliminarAux");  
         botonEliminar.style.display = "none";
+        
+        const botonEliminarSubCuenta = document.getElementById("eliminarSubCuenta");  
+        botonEliminarSubCuenta.style.display = "none";
         
         const botonCrear = document.getElementById("crearAux");  
         botonCrear.style.display = "none";
@@ -1525,37 +1587,15 @@ function mostrarDetalleSubCuenta(element) {
         });
 }
 
-
-
-
-function mostrarDetalleCuenta(element) {
-	console.log("ingresó a  mostrarDetalleCuenta ");
+function mostrarDetalleAux(element) {
+	console.log("ingresó a  mostrarDetalleAux" );
     // Obtener la fila seleccionada
     const selectedRow = element.closest("tr");
+    const idCuentaAux = element.getAttribute("data-id-aux");
     const idCuenta = element.getAttribute("data-id-cuenta");
-    const idClase = element.getAttribute("data-id-claseCuenta");
-    console.log("ID de la opción seleccionada en mostrarDetalleCuenta: " + idCuenta);
-    console.log("idClase seleccionada en mostrarDetalleCuenta: " + idClase);
-    
-    
-        const botonActualizar = document.getElementById("actualizarAux");  
-        botonActualizar.style.display = "none";
-        
-        const botonEliminar = document.getElementById("eliminarAux");  
-        botonEliminar.style.display = "none";
-        
-        const botonCrear = document.getElementById("crearAux");  
-        botonCrear.style.display = "none";
-        
-        const crearSubCuenta = document.getElementById("crearSubCuenta"); 
-        crearSubCuenta.style.display = "none";
-        
-        const crearCuenta = document.getElementById("crearCuenta"); 
-        crearCuenta.style.display = "block";
-        
-        errorMessage.style.display = "none";
-        errorMessageSubCuenta.style.display = "none";
-        
+    const idClase = element.getAttribute("data-id-clase");
+
+   console.log("Ingresó a mostrarDetalleAux");
     
     const vacio = "";
     
@@ -1570,58 +1610,20 @@ function mostrarDetalleCuenta(element) {
 
         document.getElementById("subCuenta").value = vacio;
         document.getElementById("nombreSubCuenta").value = vacio;
-        
-        
-        let inputCodidoAux = document.getElementById("codidoAux");
-        inputCodidoAux.readOnly = true; 
-        inputCodidoAux.value = vacio;
-        inputCodidoAux.style.backgroundColor = "#eee"; 
-        inputCodidoAux.classList.remove("input-barra-verde");
-        
-        let inputNombreAux = document.getElementById("nombreAux");
-        inputNombreAux.readOnly = true; 
-        inputNombreAux.value = vacio;
-        inputNombreAux.style.backgroundColor = "#eee"; 
-        inputNombreAux.classList.remove("input-barra-verde");
-        
-        
-        document.getElementById("codidoAux").value = vacio;
-        document.getElementById("nombreAux").value = vacio;
-        
-        document.getElementById("subCuentaAux").innerText = vacio;
 
 
-     // Buscar si ya hay filas desplegadas para este idCuenta
-    let nextRow = selectedRow.nextElementSibling;
-    let isExpanded = false;
 
-    // Verificar si las filas siguientes pertenecen al mismo `idCuenta`
-    while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
-        isExpanded = true;
-        nextRow = nextRow.nextElementSibling;
-    }
-
-    // Si ya está expandido, eliminar las filas desplegadas
-    if (isExpanded) {
-        console.log("Cerrando las filas desplegadas para ID: " + idCuenta);
-        nextRow = selectedRow.nextElementSibling;
-        while (nextRow && nextRow.getAttribute("data-parent-id") === idCuenta) {
-            const rowToRemove = nextRow;
-            nextRow = nextRow.nextElementSibling;
-            rowToRemove.remove();
-        }
-        return; // Terminar la ejecución aquí
-    }
 
 
     // Crear un objeto con los datos a enviar
     const datos = {
         idCuenta: idCuenta,
+        idCuentaAux: idCuentaAux,
         idClase: idClase
     };
 
     // Realizar una solicitud POST al controlador
-    fetch("./DetalleCuenta", {
+    fetch("./DetalleAux", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -1630,9 +1632,7 @@ function mostrarDetalleCuenta(element) {
     })
         .then((response) => response.json())
         .then((data) => {
-			
-             xListaCuentas = data.xListaCuentas;
-            
+            // Obtener la lista del segundo nivel
             const nombreClase = data.xNombreClase;
             const idClase = data.xIdClase;
             
@@ -1645,6 +1645,11 @@ function mostrarDetalleCuenta(element) {
             const nombreSubCuenta = data.xNombreSubCuenta;
             const idSubCuenta = data.xIdSubCuenta;
             
+            const nombreCuentaAux = data.xNombreCuentaAux;
+            const coidgoAux = data.xCoidgoAux;
+            
+            xListaAuxiliares = [];
+            
              // Asignar los valores a los inputs
         document.getElementById("clase").value = idClase;
         document.getElementById("nombreClase").value = nombreClase;
@@ -1652,38 +1657,54 @@ function mostrarDetalleCuenta(element) {
         document.getElementById("grupo").value = idGrupo;
         document.getElementById("nombreGrupo").value = nombreGrupo;
 
+        document.getElementById("cuenta").value = idCuenta;
+        document.getElementById("nombreCuenta").value = nombreCuenta;
 
+        document.getElementById("subCuenta").value = idSubCuenta;
+        document.getElementById("nombreSubCuenta").value = nombreSubCuenta;
+        
+        document.getElementById("subCuentaAux").innerText = idSubCuenta;
+        
+        document.getElementById("codidoAux").value = coidgoAux;
+        document.getElementById("nombreAux").value = nombreCuentaAux;
+        
+        const codigoAux = document.getElementById("codidoAux");
+        codigoAux.readOnly = true;
+        codigoAux.style.backgroundColor = "#eee";
         
         
+        const botonActualizar = document.getElementById("actualizarAux");  
+        botonActualizar.style.display = "block";
         
-        let inputCuenta = document.getElementById("cuenta");
-        inputCuenta.readOnly = false; 
-        inputCuenta.style.backgroundColor = "white"; 
-        inputCuenta.classList.add("input-barra-verde"); // Agregar la clase
+        const botonEliminar = document.getElementById("eliminarAux");  
+        botonEliminar.style.display = "block";
         
-        let inputnombreCuenta = document.getElementById("nombreCuenta");
-        inputnombreCuenta.readOnly = false; 
-        inputnombreCuenta.style.backgroundColor = "white"; 
-        inputnombreCuenta.classList.add("input-barra-verde"); // Agregar la clase
+        const botonEliminarSubCuenta = document.getElementById("eliminarSubCuenta");  
+        botonEliminarSubCuenta.style.display = "none";
+        
+        const botonCrear = document.getElementById("crearAux");  
+        botonCrear.style.display = "none";
+        
+        const crearSubCuenta = document.getElementById("crearSubCuenta"); 
+        crearSubCuenta.style.display = "none";
+        
+        let inputNombreAux = document.getElementById("nombreAux");
+        inputNombreAux.readOnly = false; 
+        inputNombreAux.value = vacio;
+        inputNombreAux.style.backgroundColor = "White"; 
+        inputNombreAux.classList.add("input-barra-verde"); // Agregar la clase
         
         let inputSubCuenta = document.getElementById("subCuenta");
         inputSubCuenta.readOnly = true; 
-        inputSubCuenta.value = vacio
         inputSubCuenta.style.backgroundColor = "#eee"; 
-        inputSubCuenta.classList.remove("input-barra-verde"); 
+        inputSubCuenta.classList.remove("input-barra-verde");
         
         let inputnombreSubCuenta = document.getElementById("nombreSubCuenta");
         inputnombreSubCuenta.readOnly = true; 
-        inputnombreSubCuenta.value = vacio
         inputnombreSubCuenta.style.backgroundColor = "#eee"; 
-        inputnombreSubCuenta.classList.remove("input-barra-verde"); 
-         
-         
-
-        document.getElementById("cuentaLabel").innerText = idGrupo;
-        document.getElementById("subCuentaLabel").innerText = vacio;
+        inputnombreSubCuenta.classList.remove("input-barra-verde");
         
-        
+        document.getElementById("subCuentaLabel").innerText = "";
 
 
         })
@@ -1694,13 +1715,14 @@ function mostrarDetalleCuenta(element) {
 
 
 
+
 function mostrarDetalle(element) {
     // Obtener la fila seleccionada
     const selectedRow = element.closest("tr");
     const idCuenta = element.getAttribute("data-id-cuenta");
     const idClase = element.getAttribute("data-id-claseCuenta");
-    console.log("ID de la opción seleccionada en mostrarLista3: " + idCuenta);
-    console.log("idClase seleccionada en mostrarLista3: " + idClase);
+    console.log("ID de la opción seleccionada en mostrarDetalleeeee: " + idCuenta);
+    console.log("idClase seleccionada en mostrarDetalleeee: " + idClase);
     
     
         const botonActualizar = document.getElementById("actualizarAux");  
@@ -1711,6 +1733,9 @@ function mostrarDetalle(element) {
         
         const botonCrear = document.getElementById("crearAux");  
         botonCrear.style.display = "block";
+        
+         const botonEliminarSubCuenta = document.getElementById("eliminarSubCuenta");  
+        botonEliminarSubCuenta.style.display = "block";
         
         const crearSubCuenta = document.getElementById("crearSubCuenta"); 
         crearSubCuenta.style.display = "none";
@@ -1986,6 +2011,70 @@ function EliminarAuxiliar() {
   });
 }
 
+
+function EliminarSubCuenta() {
+  var subCuenta = document.getElementById("subCuenta").value;
+  var nombreSubCuenta = document.getElementById("nombreSubCuenta").value;
+  
+  console.log("subCuenta en EliminarSubCuenta es " + subCuenta);
+  console.log("codidoAux es " + codidoAux);
+  console.log("nombreSubCuenta es " + nombreSubCuenta);
+
+  if (!subCuenta) {
+    alert("Por favor cargue los datos");
+    return;
+  }
+
+
+
+  var datos = {
+    subCuenta: subCuenta,
+    nombreSubCuenta: nombreSubCuenta
+  };
+
+  Swal.fire({
+    title: "¿Está seguro?",
+    text: "¿Desea eliminar la subCuenta  " + subCuenta + "? Esta acción no se puede deshacer.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Eliminar",
+    cancelButtonText: "Cancelar",
+    dangerMode: true,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch("./EliminarSubCuenta-Post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          var xNombreSubCuenta = data.xNombreSubCuenta;
+          var xIdCuentaAux = data.xIdCuentaAux;
+
+          Swal.fire({
+            title: "¡Eliminada!",
+            text: "subCuenta " + subCuenta + " - " + xNombreSubCuenta + " eliminada correctamente.",
+            icon: "success",
+            confirmButtonText: "Continuar",
+          }).then(() => {
+            window.location.href = "./Puc";
+          });
+        })
+        .catch((error) => {
+          console.error("Error al eliminar el auxiliar:", error);
+          Swal.fire({
+            title: "Error",
+            text: "Ocurrió un error al eliminar el auxiliar.",
+            icon: "error",
+            confirmButtonText: "Cerrar",
+          });
+        });
+    }
+  });
+}
 
 
 

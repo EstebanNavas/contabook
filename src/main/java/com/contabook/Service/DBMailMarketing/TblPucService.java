@@ -63,17 +63,17 @@ public class TblPucService {
 		
 	}
 	
-	public List<TblPucDTO> RepEstadoSituacionFinanciera( int idLocal, int idPeriodo){
+	public List<TblPucDTO> RepEstadoSituacionFinanciera( int idLocal, int idPeriodo1 , int idPeriodo2){
 		
-		List<TblPucDTO> reporteFinanciero = tblPucRepo.RepEstadoSituacionFinanciera(idLocal, idPeriodo);
+		List<TblPucDTO> reporteFinanciero = tblPucRepo.RepEstadoSituacionFinanciera(idLocal, idPeriodo1, idPeriodo2);
 		
 		return reporteFinanciero;
 	}
 	
 	
-	public List<TblPucDTO> RepEstadoResultadoIntegral( int idLocal, int idPeriodo){
+	public List<TblPucDTO> RepEstadoResultadoIntegral( int idLocal, int idPeriodo1 , int idPeriodo2){
 		
-		List<TblPucDTO> reporteResultado = tblPucRepo.RepEstadoResultadoIntegral(idLocal, idPeriodo);
+		List<TblPucDTO> reporteResultado = tblPucRepo.RepEstadoResultadoIntegral(idLocal, idPeriodo1, idPeriodo2);
 		
 		return reporteResultado;
 		
