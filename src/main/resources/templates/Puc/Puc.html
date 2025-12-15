@@ -165,10 +165,87 @@
 			</form>
 		</div>
 	</div>
+	
+	<div style="display: flex; justify-content: center;  margin-top: 35px; align-items: center; gap: 10px;">
+        <span style="font-weight: bold;">Exportar:</span>
+    
+         <!-- Botón PDF -->
+         <button onclick="GenerarReporte('PDF')" style="border: none; background: none; cursor: pointer;">
+          <img src="./imagenes/logoPDF.png" alt="PDF" title="Exportar a PDF" width="60">
+         </button>
+
+         <!-- Botón Excel -->
+        <button onclick="GenerarReporte('EXCEL')" style="border: none; background: none; cursor: pointer;">
+          <img src="./imagenes/logoEXCEL.png" alt="Excel" title="Exportar a Excel" width="60">
+         </button>
+       </div>
+       
+       <div id="loadingSpinner" style="display: none;">
+   				 
+  	   <div class="spinner"></div>
+	</div>
 
 	<script type="text/javascript" th:inline="javascript">
 		
-let xListaAuxiliares = [];  // Asegúrate de que este array esté siendo correctamente llenado con los valores de Integer
+		
+function GenerarReporte(formato) {
+	
+	   event.preventDefault();
+	   
+
+       // Mostrar el spinner de carga
+       document.getElementById('loadingSpinner').style.display = 'block';
+
+        // Crear un objeto que contenga los datos a enviar
+		var datos = {
+			formato: formato
+			};
+
+		 // Realizar una solicitud POST al controlador
+		 fetch("./DescargarReportePuc", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(datos),
+		})
+		.then(response => {
+     if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.blob();  // Convierte la respuesta a un Blob (secuencia de bytes)
+   })
+  .then(blob => {
+     const url = window.URL.createObjectURL(blob);
+        
+     if (formato === 'PDF') {
+        // Abrir el PDF en una nueva pestaña
+        window.open(url, '_blank');
+      } else if (formato === 'EXCEL') {
+         // Descargar el archivo Excel
+         const a = document.createElement('a');
+         a.href = url;
+         a.download = 'reporte.xlsx';
+         document.body.appendChild(a);
+         a.click();
+         a.remove();
+       }
+
+      // Liberar la URL del objeto para liberar recursos
+      window.URL.revokeObjectURL(url);
+   })
+   .catch(error => console.error('Error al descargar el archivo', error))
+   .finally(() => {
+      // Ocultar el spinner de carga
+      document.getElementById('loadingSpinner').style.display = 'none';
+      button.disabled = false;
+  });
+  
+ }		
+		
+		
+		
+let xListaAuxiliares = [];  
 let xListaSubCuentas = [];
 let xListaCuentas = [];
 

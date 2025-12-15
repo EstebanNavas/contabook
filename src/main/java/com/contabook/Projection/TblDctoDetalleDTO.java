@@ -17,4 +17,6 @@ public interface TblDctoDetalleDTO {
 	String getNombreUsuario();
 	String getFechaDcto();
 	String getNombreTipoComprobante();
+	
+	Integer getIdPeriodo();
 }

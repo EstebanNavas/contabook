@@ -98,10 +98,7 @@
 						<th class="subtituloAF">Nombre cuenta</th>
 						<th class="subtituloAF">#Comprobante</th>	
 						<th class="subtituloAF">Fecha elaboración</th>	
-						<th class="subtituloAF">Saldo Inicial</th>	
-						<th class="subtituloAF">Debito</th>
-						<th class="subtituloAF">Credito</th>						
-						<th class="subtituloAF">Saldo Final</th>	
+						<th class="subtituloAF">Valor</th>	
 						<th class="subtituloAF">Detalle</th>	
 					</tr>
 				</thead>
@@ -144,7 +141,9 @@ function GenerarReporte(formato) {
 	
 	   event.preventDefault();
 	   
-
+	   const button = document.getElementById('generarBtn');
+	   // Deshabilitar el botón
+       button.disabled = true;
        // Mostrar el spinner de carga
        document.getElementById('loadingSpinner').style.display = 'block';
          
@@ -159,26 +158,19 @@ function GenerarReporte(formato) {
 	   
 	   if(Cuenta1 == null || Cuenta1Value == ""){
 		    console.log("Ingreso al if cuenta1" );
-		    
-		   alert("Por favor, ingrese una cuenta contable.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
-
+		   
+		   Cuenta1 = "0";
 	   }
 	   
 	   if(Cuenta2 == null || Cuenta2Value == ""){
 		   
-		   alert("Por favor, ingrese una cuenta contable.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
+		   Cuenta2 = "0";
 	   }
 	   
 	   
 	   //Si el campo (Value) está vacio
 	   if(TerceroValue == ""){		   
-		   alert("Por favor, ingrese un tercero.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
+		   Tercero = "";
 	   }
 
         // Crear un objeto que contenga los datos a enviar
@@ -191,7 +183,7 @@ function GenerarReporte(formato) {
 			};
 
 		 // Realizar una solicitud POST al controlador
-		 fetch("./DescargarReporteMovimientoAuxTerceroPorCtaContable", {
+		 fetch("./DescargarReporteMovimientoAuxPorCtaContable", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -238,6 +230,9 @@ function BuscarComprobantes(){
 			
 	   event.preventDefault();
 	   
+	   const button = document.getElementById('generarBtn');
+	   // Deshabilitar el botón
+       button.disabled = true;
        // Mostrar el spinner de carga
        document.getElementById('loadingSpinner').style.display = 'block';
          
@@ -250,28 +245,21 @@ function BuscarComprobantes(){
 	   var TerceroValue = document.getElementById("buscarTercero").value;
 	   var idPeriodo = document.getElementById("idPeriodo").value;
 	   
-	  if(Cuenta1 == null || Cuenta1Value == ""){
+	   if(Cuenta1 == null || Cuenta1Value == ""){
 		    console.log("Ingreso al if cuenta1" );
-		    
-		   alert("Por favor, ingrese una cuenta contable.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
-
+		   
+		   Cuenta1 = "0";
 	   }
 	   
 	   if(Cuenta2 == null || Cuenta2Value == ""){
 		   
-		   alert("Por favor, ingrese una cuenta contable.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
+		   Cuenta2 = "0";
 	   }
 	   
 	   
 	   //Si el campo (Value) está vacio
 	   if(TerceroValue == ""){		   
-		   alert("Por favor, ingrese un tercero.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
+		   Tercero = "";
 	   }
 
 	   
@@ -285,7 +273,7 @@ function BuscarComprobantes(){
         };
 
         // Realizar una solicitud POST al controlador
-        fetch("./BuscarMovimientoAuxTercero", {
+        fetch("./BuscarMovimientoAux", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -343,14 +331,11 @@ function actualizarTabla(listaComprobantes) {
                     "<td class='detalleAF'>" + lista.nombreTercero + "</td>" +
                     "<td class='detalleAF'>" + lista.tipoComprobante + "</td>" +
                     "<td class='detalleAF'>" + lista.idCuentaAux + "</td>" +
-                    "<td class='detalleAF'>" + lista.nombreAuxiliar + "</td>" +
+                    "<td class='detalleAF'>" + lista.nombreCuenta + "</td>" +
                     // Modificación en esta línea para incluir un enlace con onclick
                     "<td class='detalleAF'><a href='#' onclick='mostrarDetalle(" + lista.idCpte + ")'>" + lista.idCpte + "</a></td>" +
                     "<td class='detalleAF'>" + lista.fechaDcto + "</td>" +
-                    "<td class='detalleAF'>" +(lista.vrTotalDebitoAnterior <= 0 ? lista.vrTotalCreditoAnterior : lista.vrTotalDebitoAnterior) + "</td>" +
-                    "<td class='detalleAF'>" + lista.vrTotalDebitoActual + "</td>" +
-                    "<td class='detalleAF'>" + lista.vrTotalCreditoActual + "</td>" +                    
-                    "<td class='detalleAF'>" + lista.vrSaldoFinal + "</td>" +
+                    "<td class='detalleAF'>" + lista.vrTotal + "</td>" +
                     "<td class='detalleAF'>" + lista.detalle + "</td>" +
 
                     // ... (agregar las demás columnas)
@@ -370,7 +355,7 @@ function actualizarTabla(listaComprobantes) {
 		};
 
 		// Realizar una solicitud POST al controlador
-		fetch("./TraerMovimientoContableTercero-Post", {
+		fetch("./TraerMovimientoContable-Post", {
 				method: "POST",
 				headers: {
 				"Content-Type": "application/json",

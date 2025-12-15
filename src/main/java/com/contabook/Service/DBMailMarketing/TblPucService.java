@@ -78,5 +78,13 @@ public class TblPucService {
 		return reporteResultado;
 		
 	}
+	
+	public List<TblPucDTO> RepPUC( int idLocal){
+		
+		List<TblPucDTO> listaPUC = tblPucRepo.RepPUC(idLocal);
+		
+		return listaPUC;
+	}
+	
 
 }

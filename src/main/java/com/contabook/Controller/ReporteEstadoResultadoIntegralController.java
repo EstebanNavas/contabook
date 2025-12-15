@@ -210,6 +210,9 @@ public class ReporteEstadoResultadoIntegralController {
 			params.put("p_direccion", L.getDireccion());
 			params.put("p_idLocal", idLocal);
 			params.put("p_fechaActual", strFechaActual);
+			
+			params.put("p_representanteLegal", L.getRepresentanteLegal());
+			params.put("p_contador", L.getContador());
 			//xPathReport = L.getPathReport() + "contabook" + xCharSeparator;
 			xPathReport = L.getPathReportContaBook() + "contabook" + xCharSeparator;
 

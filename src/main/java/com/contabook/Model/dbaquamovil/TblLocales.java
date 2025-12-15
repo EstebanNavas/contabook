@@ -137,6 +137,20 @@ public class TblLocales {
 	private String pathReportContaBook;
 	
 	
+	@Column(name = "contador")
+	private String contador;
+	
+	
+	
+	
+
+	public String getContador() {
+		return contador;
+	}
+
+	public void setContador(String contador) {
+		this.contador = contador;
+	}
 
 	public Integer getIdContableFormato() {
 		return idContableFormato;

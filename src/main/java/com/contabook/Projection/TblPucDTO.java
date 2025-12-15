@@ -24,5 +24,8 @@ public interface TblPucDTO {
 	Double getTotalCuentaVrCredito();
 	Double getTotalSubCuentaVrDebito();
 	Double getTotalSubCuentaVrCredito();
+	
+	
+
 
 }

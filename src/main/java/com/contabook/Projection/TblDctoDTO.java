@@ -42,5 +42,18 @@ public interface TblDctoDTO {
 	
 	String getDetalle();
 	String getTipoComprobante();
+	
+	Double getTotalSubCuentaVrCredito();
+	Double getTotalSubCuentaVrDebito();
+	Double getTotalCuentaVrCredito();
+	Double getTotalCuentaVrDebito();
+	Double getTotalGrupoVrCredito();
+	Double getTotalGrupoVrDebito();
+	Double getTotalClaseVrCredito();
+	Double getTotalClaseVrDebito();
+	
+	Double getVrTotalDebito();
+	Double getVrTotalCredito();
+	Double getVrSaldoFinal();
 
 }

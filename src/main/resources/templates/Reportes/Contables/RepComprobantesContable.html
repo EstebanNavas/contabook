@@ -43,10 +43,22 @@
 
 	   <div style="margin-left: 100px;">
 		   <div>
-			   <label style="font-size: 20px; margin-bottom: 10px;">Periodo:</label>
+			   <label style="font-size: 20px; margin-bottom: 10px;">Periodo desde:</label>
 		   </div>		
 		   <div>
 			  <select id="idPeriodo" style="width: 200px; height: 25px;">
+				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
+			</select>
+		   </div>		
+	   </div>
+	   
+	   
+	   <div style="margin-left: 100px;">
+		   <div>
+			   <label style="font-size: 20px; margin-bottom: 10px;">Periodo hasta:</label>
+		   </div>		
+		   <div>
+			  <select id="idPeriodo2" style="width: 200px; height: 25px;">
 				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
 			</select>
 		   </div>		
@@ -115,11 +127,13 @@
          
 	   var tipoComprobante = document.getElementById("tipoComprobante").value;
 	   var idPeriodo = document.getElementById("idPeriodo").value;
+	   var idPeriodo2 = document.getElementById("idPeriodo2").value;
 			 
 		// Crear un objeto que contenga los datos a enviar
         var datos = {
             tipoComprobante: tipoComprobante,
-            idPeriodo: idPeriodo
+            idPeriodo: idPeriodo,
+            idPeriodo2: idPeriodo2
         };
 
         // Realizar una solicitud POST al controlador

@@ -55,7 +55,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
-public class ReporteMovimientoAuxTerceroPorCtaContableController {
+public class ReporteMovimientoAuxPorCtaContableController {
 	
 	@Autowired
 	TblPucService tblPucService;
@@ -88,8 +88,8 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	ControlDeInactividad controlDeInactividad;
 	
 	
-	@GetMapping("/ReporteMovimientoAuxTerceroPorCtaContable")
-	public String reporteMovimientoAuxTerceroPorCtaContable(HttpServletRequest request,Model model) {
+	@GetMapping("/ReporteMovimientoAuxPorCtaContable")
+	public String ReporteMovimientoAuxPorCtaContable(HttpServletRequest request,Model model) {
 		
 		Class tipoObjeto = this.getClass();					
         String nombreClase = tipoObjeto.getName();		
@@ -142,14 +142,14 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	           model.addAttribute("xListaPeriodos", ListaPeriodos);
 	           model.addAttribute("xIdPeriodo", idPeriodo);
 
-			return "Reportes/Contables/ReporteMovimientoAuxTerceroPorCtaContable";
+			return "Reportes/Contables/ReporteMovimientoAuxPorCtaContable";
 
 
 	}
 	
 	
 	
-	@PostMapping("/BuscarMovimientoAuxTercero")
+	@PostMapping("/BuscarMovimientoAux")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> BuscarComprobantes(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, Model model) {
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
@@ -158,7 +158,7 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	    
 	    List<Integer> listaCuentas = new ArrayList<>();
 
-	    System.out.println("SI ENTRÓ A  /BuscarMovimientoAuxTercero");
+	    System.out.println("SI ENTRÓ A  /BuscarMovimientoAux");
 
 	    // Obtenemos los datos del JSON recibido
 	    Integer Cuenta1 = Integer.parseInt((String) requestBody.get("Cuenta1"));
@@ -186,7 +186,7 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	    //Búsqueda por cuentas y Tercero
 	    if(Tercero != null && !listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a cuentas y Tercero"); 
-	    	listaComprobantes = tblDctoService.repMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, Tercero, listaCuentas);
+	    	listaComprobantes = tblDctoService.listaMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, Tercero, listaCuentas);
 	    	
 	    }
 	    
@@ -216,24 +216,24 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	
 	
 	
-	@PostMapping("/TraerMovimientoContableTercero-Post")
-	public ModelAndView TraerMovimientoContableTercero(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, Model model) {
+	@PostMapping("/TraerMovimientoContable-Post")
+	public ModelAndView TraerMovimientoContablePost(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, Model model) {
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 
 	    // Obtenemos los datos del JSON recibido
 	    Integer idCpte = (Integer) requestBody.get("idCpte");
 
-	    System.out.println("Entró a /TraerMovimientoContableTercero-Post con idCpte: " + idCpte);
+	    System.out.println("Entró a /TraerComprobante-Post con idCpte: " + idCpte);
 
 
 	    // Redirige a la vista y le pasamos el parametro de idTercero
-	    ModelAndView modelAndView = new ModelAndView("redirect:/TraerMovimientoContableTercero?idCpte=" + idCpte);
+	    ModelAndView modelAndView = new ModelAndView("redirect:/TraerMovimientoContable?idCpte=" + idCpte);
 	    return modelAndView;
 	}
 	
 	
-	@GetMapping("/TraerMovimientoContableTercero")
-	public String TraerMovimientoContableTercero(@RequestParam(name = "idCpte", required = false) Integer idCpte, HttpServletRequest request, Model model) {
+	@GetMapping("/TraerMovimientoContable")
+	public String traerMovimientoContable(@RequestParam(name = "idCpte", required = false) Integer idCpte, HttpServletRequest request, Model model) {
 		
 		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
 		System.out.println("Entró a /TraerReferencia con idCpte: " + idCpte);
@@ -279,8 +279,8 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	
 	
 	
-	@PostMapping("/DescargarReporteMovimientoAuxTerceroPorCtaContable")
-	public ResponseEntity<Resource> DescargarReporteMovimientoAuxTerceroPorCtaContable(@RequestBody Map<String, Object> requestBody,HttpServletRequest request, Model model) 
+	@PostMapping("/DescargarReporteMovimientoAuxPorCtaContable")
+	public ResponseEntity<Resource> DescargarReporteMovimientoAuxPorCtaContable(@RequestBody Map<String, Object> requestBody,HttpServletRequest request, Model model) 
 			                                                       throws JRException, IOException, SQLException {
 
 		Class tipoObjeto = this.getClass();
@@ -320,7 +320,7 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	    //Búsqueda por cuentas y Tercero
 	    if(Tercero != null && !listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a cuentas y Tercero"); 
-	    	lista = tblDctoService.repMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, Tercero, listaCuentas);
+	    	lista = tblDctoService.listaMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, Tercero, listaCuentas);
 	    	
 	    }
 	    
@@ -333,8 +333,8 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	    
 	    //Búsqueda solo por tercero
 	    if(Tercero != null && listaCuentas.isEmpty()) {
-	    	System.out.println("Ingresó a solo Tercero Nuevo"); 
-	    	lista = tblDctoService.repMovimientoAuxTercero(idLocal, idPeriodo, Tercero);
+	    	System.out.println("Ingresó a solo Tercero"); 
+	    	lista = tblDctoService.listaMovimientoPorTercero(idLocal, idPeriodo, Tercero);
 	    	
 	    }
 	    
@@ -346,7 +346,7 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 
 		
 
-		int xIdReporte = 1115;
+		int xIdReporte = 1110;
 		
 		// Obtenemos el periodo activo
 		List <TblDctosPeriodo> PeriodoActivo = tblDctosPeriodoService.ObtenerPeriodoActivo(idLocal);

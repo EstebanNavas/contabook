@@ -166,9 +166,13 @@ public class ReporteComprobantesContableController {
 	        	        
 	        String idPeriodoStr = (String) requestBody.get("idPeriodo");	        
 	        Integer idPeriodo = Integer.parseInt(idPeriodoStr);
+	        
+	        
+	        String idPeriodo2Str = (String) requestBody.get("idPeriodo2");	        
+	        Integer idPeriodo2 = Integer.parseInt(idPeriodo2Str);
 
 
-	        List<TblDctoDTO> listaComprobantes = tblDctoService.listaComprobantes(idLocal, tipoComprobante, idPeriodo);
+	        List<TblDctoDTO> listaComprobantes = tblDctoService.listaComprobantes(idLocal, tipoComprobante, idPeriodo, idPeriodo2);
 	        System.out.println("listaComprobantes es " + listaComprobantes);
 	        
 		    
@@ -281,11 +285,11 @@ public class ReporteComprobantesContableController {
 		// Obtenemos el periodo activo
 		List <TblDctosPeriodo> PeriodoActivo = tblDctosPeriodoService.ObtenerPeriodoActivo(idLocal);
 		
-		Integer idPeriodo = 0;
-		
-		for(TblDctosPeriodo P : PeriodoActivo) {						
-			idPeriodo = P.getIdPeriodo();					
-		}
+//		Integer idPeriodo = 0;
+//		
+//		for(TblDctosPeriodo P : PeriodoActivo) {						
+//			idPeriodo = P.getIdPeriodo();					
+//		}
 		
 		
 
@@ -322,10 +326,10 @@ public class ReporteComprobantesContableController {
 		for (TblLocales L : Local) {
 
 			// Parametros del encabezado
-			params.put("p_idPeriodo", idPeriodo);
+			
 			params.put("p_nombreLocal", L.getNombreLocal());
 			params.put("p_nit", L.getNit());
-			params.put("p_titulo", xTituloReporte);
+			params.put("p_titulo", xTituloReporte  + " No. " + idCpte);
 			params.put("p_direccion", L.getDireccion());
 			params.put("p_idLocal", idLocal);
 			params.put("p_fechaActual", strFechaActual);
@@ -338,6 +342,16 @@ public class ReporteComprobantesContableController {
 		
 		lista = tblDctoDetalleService.comprobanteContableDetalle(idLocal, idCpte);
 		System.out.println("lista es : " + lista);
+		
+		Integer idPeriodo = 0;
+		for(TblDctoDetalleDTO L : lista) {
+			
+			idPeriodo = L.getIdPeriodo();
+			
+		}
+		
+		params.put("p_idPeriodo", idPeriodo);
+		
 
 		System.out.println("formato es : " + formato);
 		System.out.println("xFileNameReporte es : " + xFileNameReporte);

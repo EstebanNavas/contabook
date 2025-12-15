@@ -182,7 +182,7 @@ public class ReporteBalancePruebaGeneralController {
 	    //Búsqueda por cuentas y Periodo
 	    if(idPeriodo != null && !listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a cuentas y Periodo"); 
-	    	listaComprobantes = tblDctoService.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodo, listaCuentas);
+	    	listaComprobantes = tblDctoService.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodo, Cuenta1, Cuenta2);
 	    	
 	    }
 	    
@@ -309,7 +309,7 @@ public class ReporteBalancePruebaGeneralController {
 	    //Búsqueda por cuentas y Periodo
 	    if(idPeriodo != null && !listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a cuentas y Periodo"); 
-	    	lista = tblDctoService.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodo, listaCuentas);
+	    	lista = tblDctoService.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodo, Cuenta1, Cuenta2);
 	    	
 	    }
 	    

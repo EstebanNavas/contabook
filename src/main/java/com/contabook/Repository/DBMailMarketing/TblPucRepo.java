@@ -493,6 +493,41 @@ public interface TblPucRepo extends JpaRepository<TblPuc, Integer> {
 	     List<TblPucDTO> RepEstadoResultadoIntegral( int idLocal, int idPeriodo1 , int idPeriodo2);
 	 
 	 
+	 
+	 @Query(value = "    SELECT  tblPucAux.idLocal                                                      "                                                                                 
+			  + "        ,tblPucAux.idCuentaAux                                                     "                       
+			  + "        ,tblPucAux.nombreCuenta AS nombreAuxiliar                                  "                       
+			  + "  	  ,tblPuc.nombreCuenta AS nombreSubCuenta                                       "                    
+			  + "  	  ,tblPuc.idCuenta AS  idSubCuenta,                                             "                    
+			  + "  	  ( SELECT TOP 1 tblPuc.nombreCuenta                                            "                    
+			  + "  	    FROM  tblPuc                                                                "                    
+			  + "  		WHERE SUBSTRING(LTRIM(STR(tblPuc.idCuenta)),1,4)=                           "                    
+			  + "  		     SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,4) ) AS nombreCuenta,    "                    
+			  + "  	  SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,4) AS idCuenta,                 "                    
+			  + "      (SELECT TOP 1 tblPuc.nombreCuenta                                            "                       
+			  + "  	    FROM  tblPuc                                                                "                    
+			  + "  		WHERE SUBSTRING(LTRIM(STR(tblPuc.idCuenta)),1,2)=                           "                    
+			  + "  		     SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,2) ) AS nombreGrupo,     "                    
+			  + "  	  SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,2) AS idGrupo,                  "                    
+			  + "      (SELECT TOP 1 tblPuc.nombreCuenta                                            "                       
+			  + "  	    FROM  tblPuc                                                                "                    
+			  + "  		WHERE SUBSTRING(LTRIM(STR(tblPuc.idCuenta)),1,1)=                           "                    
+			  + "  		     SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,1) ) AS nombreClase,     "                    
+			  + "  	 SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,1) AS idClase,                   "                    
+			  + "		 CASE                                                                       "                        
+              + "       WHEN SUBSTRING(LTRIM(STR(tblPuc.idCuenta)),1,1)IN (1,5,6) THEN 1            "                    
+              + "       ELSE (-1)                                                                   "                    
+              + "       END AS signoNaturaleza                                                      "               
+			  + "    FROM tblPucAux                                                                 "                       
+			  + "    INNER JOIN tblPuc                                                              "                       
+			  + "    ON  tblPucAux.idLocal   = tblPuc.idLocal                                       "          
+			  + "    AND SUBSTRING(LTRIM(STR(tblPucAux.idCuentaAux)),1,6) = tblPuc.idCuenta    		"          						  
+			  + "    WHERE tblPucAux.idLocal= ?1	                                                "          
+			  + "	  ORDER BY 1,2	                                                                ",
+          nativeQuery = true)
+	     List<TblPucDTO> RepPUC( int idLocal);
+	 
+	 
 	 @Modifying
 	  @Transactional
 	  @Query(value = "DELETE FROM dbo.tblPuc " +
