@@ -19,4 +19,5 @@ public interface TblDctoDetalleDTO {
 	String getNombreTipoComprobante();
 	
 	Integer getIdPeriodo();
+	String getNombreCmpte();
 }

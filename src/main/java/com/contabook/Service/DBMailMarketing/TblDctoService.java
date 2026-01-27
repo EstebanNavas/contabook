@@ -68,27 +68,27 @@ public class TblDctoService {
 	}
 	
 	
-	public List<TblDctoDTO> listaMovimientoPorAuxiliar(int idLocal, int idPeriodo, List<Integer> cuentasContables){
+	public List<TblDctoDTO> listaMovimientoPorAuxiliar(int idLocal, int idPeriodoDesde, int idPeriodoHasta, List<Integer> cuentasContables){
 		
-		List<TblDctoDTO> lista = tblDctoRepo.listaMovimientoPorAuxiliar(idLocal, idPeriodo, cuentasContables);
-		
-		return lista;
-		
-	}
-	
-	
-	public List<TblDctoDTO> listaMovimientoPorTercero(int idLocal, int idPeriodo, String idCliente){
-		
-		List<TblDctoDTO> lista = tblDctoRepo.listaMovimientoPorTercero(idLocal, idPeriodo, idCliente);
+		List<TblDctoDTO> lista = tblDctoRepo.listaMovimientoPorAuxiliar(idLocal, idPeriodoDesde, idPeriodoHasta, cuentasContables);
 		
 		return lista;
 		
 	}
 	
 	
-	public List<TblDctoDTO> repMovimientoAuxTercero(int idLocal, int idPeriodo, String idCliente){
+	public List<TblDctoDTO> listaMovimientoPorTercero(int idLocal, int idPeriodoDesde, int idPeriodoHasta, String idCliente){
 		
-		List<TblDctoDTO> lista = tblDctoRepo.repMovimientoAuxTercero(idLocal, idPeriodo, idCliente);
+		List<TblDctoDTO> lista = tblDctoRepo.listaMovimientoPorTercero(idLocal, idPeriodoDesde, idPeriodoHasta, idCliente);
+		
+		return lista;
+		
+	}
+	
+	
+	public List<TblDctoDTO> repMovimientoAuxTercero(int idLocal, int idPeriodoDesde, int idPeriodoHasta, String idCliente){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.repMovimientoAuxTercero(idLocal, idPeriodoDesde, idPeriodoHasta, idCliente);
 		
 		return lista;
 	}
@@ -103,9 +103,9 @@ public class TblDctoService {
 	}
 	
 	
-	public List<TblDctoDTO> repMovimientoPorTerceroYAuxiiar(int idLocal, int idPeriodo, String idCliente, List<Integer> cuentasContables){
+	public List<TblDctoDTO> repMovimientoPorTerceroYAuxiiar(int idLocal, int idPeriodoDesde, int idPeriodoHasta, String idCliente, List<Integer> cuentasContables){
 		
-		List<TblDctoDTO> lista = tblDctoRepo.repMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, idCliente, cuentasContables);
+		List<TblDctoDTO> lista = tblDctoRepo.repMovimientoPorTerceroYAuxiiar(idLocal, idPeriodoDesde, idPeriodoHasta, idCliente, cuentasContables);
 		
 		return lista;
 		
@@ -131,6 +131,14 @@ public class TblDctoService {
 		return lista;
 		
 	
+	}
+	
+	
+	public List<TblDctoDTO> listaBalancePruebaPorTercero(int idLocal, int idPeriodo, int idCuentaAux1, int idCuentaAux2, String cc_nit){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaPorTercero(idLocal, idPeriodo, idCuentaAux1, idCuentaAux2, cc_nit);
+		
+		return lista;
 	}
 	
 	

@@ -107,6 +107,7 @@
 	<div class="divCencer" style="margin-top: 50px; margin-right: 15px;">				
     	<a href="./menuPrincipal" class="btn btn-primary" >Regresar</a>	
     	<button type="button" class="btn btn-warning" value="Guardar" style="width: 150px;" onclick="EditarDctoContable()" >Editar/Eliminar</button>
+    	<button type="button" class="btn btn-warning" value="Guardar" style="width: 200px;" onclick="CopiarDctoContable()" >Copiar Comprobante</button>
 	</div>
 	
 	
@@ -118,6 +119,48 @@
 
 
 	<script type="text/javascript" th:inline="javascript">
+		
+		
+ function CopiarDctoContable() {
+
+	var idCpte = document.getElementById("idCpte").value;
+
+
+	// Crear un objeto que contenga los datos a enviar
+	var datos = {
+	idCpte: idCpte
+	};
+
+	// Realizar una solicitud POST al controlador
+	fetch("./CopiarComprobanteContable-Post", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(datos),
+	})
+
+		.then((response) => {
+			// Verifica si la respuesta es una redirección
+			if (response.redirected) {
+				// Redirige al URL especificado en la respuesta
+				window.location.href = response.url;
+			} else {
+				// Parsea la respuesta JSON si no es una redirección
+				return response.json();
+			}
+		})
+		.then((data) => {
+			if (data) {
+				var message = data.message;
+				console.log(message);
+			}
+		})
+		.catch((error) => {
+			console.error("Error al registrar el log:", error);
+		});
+
+}	
 		
 		
 function EditarDctoContable() {

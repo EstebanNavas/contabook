@@ -321,6 +321,7 @@ public class ReporteComprobantesContableController {
         String strFechaActual = fechaActual.format(formatter);
 
 		String xPathReport = "";
+		
 
 		String xCharSeparator = File.separator;
 		for (TblLocales L : Local) {
@@ -333,6 +334,7 @@ public class ReporteComprobantesContableController {
 			params.put("p_direccion", L.getDireccion());
 			params.put("p_idLocal", idLocal);
 			params.put("p_fechaActual", strFechaActual);
+			
 			//xPathReport = L.getPathReport() + "contabook" + xCharSeparator;
 			xPathReport = L.getPathReportContaBook() + "contabook" + xCharSeparator;
 
@@ -485,5 +487,112 @@ public class ReporteComprobantesContableController {
 	
 
 	}
+	
+	
+	
+	
+	
+	
+	@PostMapping("/CopiarComprobanteContable-Post")
+	public ModelAndView CopiarComprobanteContablePost(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, Model model) {
+	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
+
+	    // Obtenemos los datos del JSON recibido
+	    String idCpte = (String) requestBody.get("idCpte");
+	    
+	    // Redirige a la vista y le pasamos el parametro de idTercero
+	    ModelAndView modelAndView = new ModelAndView("redirect:./CopiarComprobanteContable?idCpte=" + idCpte);
+	    return modelAndView;
+	}
+	
+	
+	
+	
+	@GetMapping("/CopiarComprobanteContable")
+	public String CopiarComprobanteContable(@RequestParam(name = "idCpte", required = false) String idCpte, HttpServletRequest request, Model model) {
+		
+		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
+		System.out.println("Entró a /CopiarComprobanteContable con idCpte: " + idCpte);
+		
+		Integer idLocal = usuario.getIdLocal();
+		
+		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
+	    HttpSession session = request.getSession();
+	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
+	    
+	    @SuppressWarnings("unchecked")
+		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
+	    
+	    Integer estadoUsuario = 0;
+	    
+
+	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
+	            Integer idLocalUsuario = usuarioLog.getIdLocal();
+	            Integer idLogUsuario = usuarioLog.getIDLOG();
+	            String sessionIdUsuario = usuarioLog.getSessionId();
+	            
+	            
+	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
+	        }
+    
+	           if(estadoUsuario.equals(2)) {
+	        	   System.out.println("USUARIO INACTIVO");
+	        	   return "redirect:/";
+	           }
+		
+		//------------------------------------------------------------------------------------------------------------------------------------------
+
+		    
+		    Integer idCpteInt = Integer.parseInt(idCpte);
+		    
+		     List<TblDctoDetalleDTO> comprobanteDetalle = tblDctoDetalleService.comprobanteContableDetalle(idLocal, idCpteInt);
+	         model.addAttribute("xComprobanteDetalle", comprobanteDetalle);
+	         
+	         for(TblDctoDetalleDTO comprobante : comprobanteDetalle) {
+	        	 
+	        	 model.addAttribute("xIdTipoCpte", comprobante.getIdTipoCpte());
+	        	 System.out.println("xIdTipoCpte es: " + comprobante.getIdTipoCpte());
+	        	 
+	         }
+	         
+	         // Obtener la fecha actual
+	         LocalDate fechaActual = LocalDate.now();
+	         
+	         
+	         DateTimeFormatter formatterAct = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	         String FechActual = fechaActual.format(formatterAct);
+	         model.addAttribute("xFechaActual", FechActual);
+	         
+	         
+	        // lista tipos de comprobante
+	 		List<TblTipoCpte> listaComprobantes = tblTipoCpteService.ListaComprobantes();
+	 	    System.out.println("La lista de ListaComprobantes es: " + listaComprobantes);
+	 	    
+	 	     model.addAttribute("xListaComprobantes", listaComprobantes);
+	 	     
+	 	     //Obtener idTipoOrden
+	 	    List<TblDctoDTO> comprobante = tblDctoService.ObtenerIdCpte(idLocal, idCpteInt);
+	 	    
+	 	    for(TblDctoDTO cpte : comprobante) {
+	 	    	
+	 	    	model.addAttribute("xIdTipoOrden", cpte.getIdTipoOrden());
+	 	    	model.addAttribute("xIdDcto", cpte.getIdDcto());
+	 	    	model.addAttribute("xIPeriodo", cpte.getIdPeriodo());
+	 	    	
+	 	    }
+	 	     
+	 	     
+	 	     
+	 	    model.addAttribute("xNumeroComprobante", idCpteInt);
+			
+			return "Reportes/Contables/CopiarComprobanteContable";
+			
+	
+
+	}
+	
+	
+	
+	
 
 }

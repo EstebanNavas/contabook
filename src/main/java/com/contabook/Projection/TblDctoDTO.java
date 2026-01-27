@@ -56,4 +56,6 @@ public interface TblDctoDTO {
 	Double getVrTotalCredito();
 	Double getVrSaldoFinal();
 
+	String getCC_Nit();
+
 }

@@ -1,8 +1,5 @@
 package com.contabook.Controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +8,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,9 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.contabook.Model.DBMailMarketing.TblDctosPeriodo;
 import com.contabook.Model.DBMailMarketing.TblLocalesReporte;
@@ -55,7 +53,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
-public class ReporteMovimientoAuxPorCtaContableController {
+public class ReporteBalancePruebaPorTercero {
 	
 	@Autowired
 	TblPucService tblPucService;
@@ -88,8 +86,8 @@ public class ReporteMovimientoAuxPorCtaContableController {
 	ControlDeInactividad controlDeInactividad;
 	
 	
-	@GetMapping("/ReporteMovimientoAuxPorCtaContable")
-	public String ReporteMovimientoAuxPorCtaContable(HttpServletRequest request,Model model) {
+	@GetMapping("/ReporteBalancePruebaPorTercero")
+	public String ReporteBalancePruebaPorTercero(HttpServletRequest request,Model model) {
 		
 		Class tipoObjeto = this.getClass();					
         String nombreClase = tipoObjeto.getName();		
@@ -142,146 +140,19 @@ public class ReporteMovimientoAuxPorCtaContableController {
 	           model.addAttribute("xListaPeriodos", ListaPeriodos);
 	           model.addAttribute("xIdPeriodo", idPeriodo);
 
-			return "Reportes/Contables/ReporteMovimientoAuxPorCtaContable";
+			return "Reportes/Balances/ReporteBalancePruebaPorTercero";
 
-
-			
-	}
-	
-	
-	
-	@PostMapping("/BuscarMovimientoAux")
-	@ResponseBody
-	public ResponseEntity<Map<String, Object>> BuscarComprobantes(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, Model model) {
-	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
-	    Integer IdUsuario = usuario.getIdUsuario();
-	    Integer idLocal = usuario.getIdLocal();
-	    
-	    List<Integer> listaCuentas = new ArrayList<>();
-
-	    System.out.println("SI ENTRÓ A  /BuscarMovimientoAux");
-
-	    // Obtenemos los datos del JSON recibido
-	    Integer Cuenta1 = Integer.parseInt((String) requestBody.get("Cuenta1"));
-	    Integer Cuenta2 = Integer.parseInt((String) requestBody.get("Cuenta2"));
-	    String Tercero = (String) requestBody.get("Tercero");
-	    Integer idPeriodo = Integer.parseInt((String) requestBody.get("idPeriodo"));
-	    
-	    System.out.println("Cuenta1 es " + Cuenta1);
-	    System.out.println("Cuenta2 es " + Cuenta2);
-	    System.out.println("Tercero es " + Tercero);
-	    System.out.println("idPeriodo es " + idPeriodo);
-	    
-	    
-	    if (Cuenta1 != 0) {
-	        listaCuentas.add(Cuenta1);
-	    }
-	    if (Cuenta2 != 0) {
-	        listaCuentas.add(Cuenta2);
-	    }
-
-	    System.out.println("listaCuentas es " + listaCuentas);
-	    
-	    List<TblDctoDTO> listaComprobantes = null;
-	    
-	    //Búsqueda por cuentas y Tercero
-	    if(Tercero != null && !listaCuentas.isEmpty()) {
-	    	System.out.println("Ingresó a cuentas y Tercero"); 
-	    	listaComprobantes = tblDctoService.listaMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, Tercero, listaCuentas);
-	    	
-	    }
-	    
-	    // Búsqueda solo por cuentas
-	    if ((Tercero == null || Tercero.trim().isEmpty()) && !listaCuentas.isEmpty()) {
-	        System.out.println("Ingresó a solo cuentas");    
-	        listaComprobantes = tblDctoService.listaMovimientoPorAuxiliar(idLocal, idPeriodo, idPeriodo, listaCuentas);
-	    }
-	    
-	    
-	    //Búsqueda solo por tercero
-	    if(Tercero != null && listaCuentas.isEmpty()) {
-	    	System.out.println("Ingresó a solo Tercero"); 
-	    	listaComprobantes = tblDctoService.listaMovimientoPorTercero(idLocal, idPeriodo, idPeriodo, Tercero);
-	    	
-	    }
-	    
-	    
-
-	    System.out.println("listaComprobantes es " + listaComprobantes);
-	    
-	    Map<String, Object> response = new HashMap<>();
-	    response.put("message", "LOGGGGGGGGG");
-	     response.put("listaComprobantes", listaComprobantes);
-	    return ResponseEntity.ok(response);
-	}
-	
-	
-	
-	@PostMapping("/TraerMovimientoContable-Post")
-	public ModelAndView TraerMovimientoContablePost(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, Model model) {
-	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
-
-	    // Obtenemos los datos del JSON recibido
-	    Integer idCpte = (Integer) requestBody.get("idCpte");
-
-	    System.out.println("Entró a /TraerComprobante-Post con idCpte: " + idCpte);
-
-
-	    // Redirige a la vista y le pasamos el parametro de idTercero
-	    ModelAndView modelAndView = new ModelAndView("redirect:/TraerMovimientoContable?idCpte=" + idCpte);
-	    return modelAndView;
-	}
-	
-	
-	@GetMapping("/TraerMovimientoContable")
-	public String traerMovimientoContable(@RequestParam(name = "idCpte", required = false) Integer idCpte, HttpServletRequest request, Model model) {
-		
-		Ctrlusuarios usuario = (Ctrlusuarios)request.getSession().getAttribute("usuarioAuth");
-		System.out.println("Entró a /TraerReferencia con idCpte: " + idCpte);
-		
-		Integer idLocal = usuario.getIdLocal();
-		
-		
-		// ----------------------------------------------------------- VALIDA INACTIVIDAD ------------------------------------------------------------
-	    HttpSession session = request.getSession();
-	    //Integer idUsuario = (Integer) session.getAttribute("xidUsuario");
-	    
-	    @SuppressWarnings("unchecked")
-		List<TblAgendaLogVisitas> UsuarioLogueado = (List<TblAgendaLogVisitas>) session.getAttribute("UsuarioLogueado");
-	    
-	    Integer estadoUsuario = 0;
-	    
-
-	        for (TblAgendaLogVisitas usuarioLog : UsuarioLogueado) {
-	            Integer idLocalUsuario = usuarioLog.getIdLocal();
-	            Integer idLogUsuario = usuarioLog.getIDLOG();
-	            String sessionIdUsuario = usuarioLog.getSessionId();
-	            
-	            
-	           estadoUsuario = controlDeInactividad.ingresa(idLocalUsuario, idLogUsuario, sessionIdUsuario);          
-	        }
-    
-	           if(estadoUsuario.equals(2)) {
-	        	   System.out.println("USUARIO INACTIVO");
-	        	   return "redirect:/";
-	           }
-		
-		//------------------------------------------------------------------------------------------------------------------------------------------
-
-	           List<TblDctoDetalleDTO> comprobanteDetalle = tblDctoDetalleService.comprobanteContableDetalle(idLocal, idCpte);
-	           model.addAttribute("xComprobanteDetalle", comprobanteDetalle);
-	           model.addAttribute("xNumeroComprobante", idCpte);
-		   
-
-			
-			return "Reportes/Contables/ReporteMovimientoContableDetalle";
 
 	}
 	
 	
+
 	
-	@PostMapping("/DescargarReporteMovimientoAuxPorCtaContable")
-	public ResponseEntity<Resource> DescargarReporteMovimientoAuxPorCtaContable(@RequestBody Map<String, Object> requestBody,HttpServletRequest request, Model model) 
+	
+	
+	
+	@PostMapping("/DescargarBalancePruebaPorTercero")
+	public ResponseEntity<Resource> DescargarBalancePruebaPorTercero(@RequestBody Map<String, Object> requestBody,HttpServletRequest request, Model model) 
 			                                                       throws JRException, IOException, SQLException {
 
 		Class tipoObjeto = this.getClass();
@@ -292,70 +163,36 @@ public class ReporteMovimientoAuxPorCtaContableController {
 		Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
 		String sistema = (String) request.getSession().getAttribute("sistema");
 		
+		
 		List<Integer> listaCuentas = new ArrayList<>();
-		int idLocal = usuario.getIdLocal();
 
 		// Obtenemos los datos del JSON recibido
-	    Integer Cuenta1 = Integer.parseInt((String) requestBody.get("Cuenta1"));
+		Integer Cuenta1 = Integer.parseInt((String) requestBody.get("Cuenta1"));
 	    Integer Cuenta2 = Integer.parseInt((String) requestBody.get("Cuenta2"));
-	    String Tercero = (String) requestBody.get("Tercero");
-	    Integer idPeriodo = Integer.parseInt((String) requestBody.get("idPeriodo"));
-	    
-	    System.out.println("Cuenta1 es " + Cuenta1);
-	    System.out.println("Cuenta2 es " + Cuenta2);
-	    System.out.println("Tercero es " + Tercero);
-	    System.out.println("idPeriodo es " + idPeriodo);
-	    
-	    
-	    if (Cuenta1 != 0) {
-	        listaCuentas.add(Cuenta1);
-	    }
-	    if (Cuenta2 != 0) {
-	        listaCuentas.add(Cuenta2);
-	    }
-
-	    System.out.println("listaCuentas es " + listaCuentas);
-	    
-	    List<TblDctoDTO> lista = null;
-	    
-	    //Búsqueda por cuentas y Tercero
-	    if(Tercero != null && !listaCuentas.isEmpty()) {
-	    	System.out.println("Ingresó a cuentas y Tercero"); 
-	    	lista = tblDctoService.listaMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, Tercero, listaCuentas);
-	    	
-	    }
-	    
-	    // Búsqueda solo por cuentas
-	    if ((Tercero == null || Tercero.trim().isEmpty()) && !listaCuentas.isEmpty()) {
-	        System.out.println("Ingresó a solo cuentas");    
-	        lista = tblDctoService.listaMovimientoPorAuxiliar(idLocal, idPeriodo, idPeriodo, listaCuentas);
-	    }
-	    
-	    
-	    //Búsqueda solo por tercero
-	    if(Tercero != null && listaCuentas.isEmpty()) {
-	    	System.out.println("Ingresó a solo Tercero"); 
-	    	lista = tblDctoService.listaMovimientoPorTercero(idLocal, idPeriodo, idPeriodo, Tercero);
-	    	
-	    }
-	    
-	    
-
-	    System.out.println("listaComprobantes es " + lista);
+		Integer idPeriodo = Integer.parseInt((String) requestBody.get("idPeriodo"));
+		String tercero = (String) requestBody.get("Tercero");
+		    
+		    System.out.println("Cuenta1 es " + Cuenta1);
+		    System.out.println("Cuenta2 es " + Cuenta2);
+		    System.out.println("idPeriodo es " + idPeriodo);
+		    
+		    
+		    if (Cuenta1 != 0) {
+		        listaCuentas.add(Cuenta1);
+		    }
+		    if (Cuenta2 != 0) {
+		        listaCuentas.add(Cuenta2);
+		    }
+		
+		
+		
+		
 
 		String formato = (String) requestBody.get("formato");
 
-		
+		int idLocal = usuario.getIdLocal();
 
-		int xIdReporte = 1110;
-		
-		// Obtenemos el periodo activo
-		List <TblDctosPeriodo> PeriodoActivo = tblDctosPeriodoService.ObtenerPeriodoActivo(idLocal);
-		
-		
-		for(TblDctosPeriodo P : PeriodoActivo) {						
-			idPeriodo = P.getIdPeriodo();					
-		}
+		int xIdReporte = 1410;
 		
 		
 
@@ -395,7 +232,7 @@ public class ReporteMovimientoAuxPorCtaContableController {
 			params.put("p_idPeriodo", idPeriodo);
 			params.put("p_nombreLocal", L.getNombreLocal());
 			params.put("p_nit", L.getNit());
-			params.put("p_titulo", xTituloReporte );
+			params.put("p_titulo", xTituloReporte);
 			params.put("p_direccion", L.getDireccion());
 			params.put("p_idLocal", idLocal);
 			params.put("p_fechaActual", strFechaActual);
@@ -403,7 +240,21 @@ public class ReporteMovimientoAuxPorCtaContableController {
 			xPathReport = L.getPathReportContaBook() + "contabook" + xCharSeparator;
 
 		}
+		
+		
+        List<TblDctoDTO> lista = null;
+	    
+	    //Búsqueda por cuentas y Periodo
+	    if(idPeriodo != null && !listaCuentas.isEmpty()) {
+	    	System.out.println("Ingresó a cuentas y Periodo"); 
+	    	lista = tblDctoService.listaBalancePruebaPorTercero(idLocal, idPeriodo, Cuenta1, Cuenta2, tercero);
+	    	
+	    }
+	    
+	    
 
+
+		
 		System.out.println("lista es : " + lista);
 
 		System.out.println("formato es : " + formato);
@@ -438,5 +289,6 @@ public class ReporteMovimientoAuxPorCtaContableController {
 		return ResponseEntity.ok().header("Content-Disposition", "inline; filename=\"" + dto.getFileName() + "\"")
 				.contentLength(dto.getLength()).contentType(mediaType).body(streamResource);
 	}
+
 
 }

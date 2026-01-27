@@ -161,6 +161,7 @@ public class ImportarController {
         int idTipoCpteRecaudo= 3;
         int idTipoCpteNomina= 10;
         int idTipoCpDctoSoporte= 8;
+        int idTipoCpteNotaDBCR= 22;
         
         // FACTURAS
         if(idTipoCpte == idTipoCpteFactura) {
@@ -211,6 +212,63 @@ public class ImportarController {
         	
         	
         }
+        
+        
+        
+       // NOTAS DEBITO - CREDITO
+        if(idTipoCpte == idTipoCpteNotaDBCR) {
+        	
+        	List<TblDctosDTO> listaComprobante = tblDctosService.listaComprobanteDetallado(idLocal, idPeriodo, idTipoOrden);
+    	    System.out.println("listaComprobante es " + listaComprobante);
+    	    
+    	   // Integer idTipoOrden = 0;
+    	    Integer idDcto = 0;
+    	    
+    	    for (TblDctosDTO cpte : listaComprobante) {
+    	       // idTipoOrden = cpte.getIdTipoOrden();
+    	        idDcto = cpte.getIdDcto();
+
+    	        // Verifica si el Dcto ya existe
+    	        Boolean existe = tblDctoService.ExisteDctoCpte(idLocal, idTipoOrden, idDcto, idTipoCpte);
+    	        System.out.println("existe Dcto es " + existe);
+
+    	        if (!existe) {
+    	            System.out.println("El documento no existe " + idDcto);
+
+    	            Integer maxIdCpte = tblDctoService.MaximoiIdCpte(idLocal) + 1;
+
+    	            tblDctoRepo.ingresaDcto(idLocal, idTipoCpte, maxIdCpte, idTipoOrden, idDcto, cpte.getFechaDcto(), cpte.getSiglaMoneda(), 0, cpte.getIdPeriodo());
+    	            System.out.println("ingresaDcto " + idDcto);
+    	            
+    	            int item = 1;
+
+    	            // Ciclo para ingresar detalle
+    	            for (TblDctosDTO detalle : listaComprobante) {
+    	                if (detalle.getIdDcto().equals(idDcto)) {
+    	                	
+    	                	Integer idCuentaAux = detalle.getIdSubcuenta()  != null ? detalle.getIdSubcuenta() : 0;
+
+    	                	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, maxIdCpte, idCuentaAux, detalle.getIdCliente(), item, 0, 0, 0, 
+    	                	 0, 0, 0, 0, 0, detalle.getFechaDcto(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, detalle.getIdPeriodo());
+    	                	System.out.println("ingresaDctoDetalle " + idDcto);
+    	                    
+    	                    item++;
+    	                }
+    	            }
+
+    	        } else {
+    	        	
+
+    	        }
+    	    }
+        	
+        	
+        }
+        
+        
+        
+        
+        
         
         // RECAUDOS
         if(idTipoCpte == idTipoCpteRecaudo) {

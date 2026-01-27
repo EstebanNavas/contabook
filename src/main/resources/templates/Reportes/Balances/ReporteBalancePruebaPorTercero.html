@@ -22,7 +22,7 @@
 			<h2 class="letraBlue" th:replace="combo/comboLocal.html :: comboLocal"></h2>
 		</div>
 		<div class="descripcion">
-			<h2 class="tituloAFcenter">MOVIMIENTO AUXILIAR DE TERCERO POR CUENTA CONTABLE</h2>
+			<h2 class="tituloAFcenter">BALANCE DE PRUEBA POR TERCERO</h2>
 			<h3 th:replace="combo/comboPeriodo.html :: comboPeriodo"></h3>
 		</div>
 		<div class="fechahora">
@@ -47,24 +47,38 @@
 		
 		</div>
 		
-		<div style="margin-left: 50px;">		  
-			   <label style="font-size: 19px; margin-bottom: 10px;">Desde:</label>		
-			   <br>    				   
-			  <select id="idPeriodoDesde" style="width: 200px; height: 25px; ">
+		<div style="margin-left: 200px;">		  
+			   <label style="font-size: 19px; margin-bottom: 10px;">Periodo:</label>		   				   
+			  <select id="idPeriodo" style="width: 200px; height: 25px; margin-left: 20px;">
 				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
 			</select>
 		   		
 	   </div>
-	   <div style="margin-left: 20px; display: block;">	  
-			   <label style="font-size: 19px; margin-bottom: 10px;">Hasta:</label>	
-			   <br>   				   
-			  <select id="idPeriodoHasta" style="width: 200px; height: 25px; ">
-				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
-			</select>
-		   		
-	   </div>
-	   
-	   <div style="display: flex; justify-content: flex-end; margin-left: 50px; margin-top: 0px; align-items: center; gap: 10px;">
+
+	</div>
+	
+	 <div class="fechaComprobante" style="margin-top: 30px;">
+		<div>
+			<label style="font-size: 19px;">Tercero</label>			
+		</div>
+		<div class="search-container" style="margin-left: 128px; width: 500px;">
+			<input type="text" placeholder="Buscar" id="buscarTercero" onfocus="BuscarTerceros(1)" autocomplete="off">
+			<div class="results-container" id="terceros" style="height: 200px;"></div>
+		</div>
+	</div>
+	
+
+	
+ <!--   <div  style="margin-top: 50px; margin-left: 70px;">				
+		<button type="button" class="btn btn-success" id="generarBtn" value="Guardar" style="width: 100px;" onclick="BuscarComprobantes()" >Buscar</button>
+	</div> -->
+	
+	
+	<div  style="display: flex; justify-content: center; margin-right: 20px; margin-top: 10px; align-items: center; gap: 10px;">
+		
+			<div class="divCencer" style="margin-top: 10px;">				
+    	<a href="./menuPrincipal" class="btn btn-primary" style="margin: 25px;">Regresar</a>
+	</div> 
         <span style="font-weight: bold;">Exportar:</span>
     
          <!-- Botón PDF -->
@@ -77,65 +91,11 @@
           <img src="./imagenes/logoEXCEL.png" alt="Excel" title="Exportar a Excel" width="45">
          </button>
        </div>
+	
 
-	</div>
-	
-    <div class="fechaComprobante" style="margin-top: 50px;">
-		<div>
-			<label style="font-size: 19px;">Tercero</label>			
-		</div>
-		<div class="search-container" style="margin-left: 128px; width: 500px;">
-			<input type="text" placeholder="Buscar" id="buscarTercero" onfocus="BuscarTerceros(1)" autocomplete="off">
-			<div class="results-container" id="terceros" style="height: 200px;"></div>
-		</div>
-	</div>
 	
 	
-   <div  style="margin-top: 50px; margin-left: 70px;">				
-		<button type="button" class="btn btn-success" id="generarBtn" value="Guardar" style="width: 100px;" onclick="BuscarComprobantes()" >Buscar</button>
-	</div>
-	
-   <div class="form-group" id="tabla" style="margin-top: 30px; margin-left: 20px; margin-right: 20px;">		
-			<table class="table">
-				<thead style="background-color: #ade4f2;">		
-					<tr>		
-						
-						<th class="subtituloAF">Identificación</th>
-						<th class="subtituloAF">Nombre tercero</th>
-						<th class="subtituloAF">Tipo Comprobante</th>
-						<th class="subtituloAF">Cuenta contable</th>
-						<th class="subtituloAF">Nombre cuenta</th>
-						<th class="subtituloAF">#Comprobante</th>	
-						<th class="subtituloAF">Fecha elaboración</th>	
-						<th class="subtituloAF">Saldo Inicial</th>	
-						<th class="subtituloAF">Debito</th>
-						<th class="subtituloAF">Credito</th>						
-						<th class="subtituloAF">Saldo Final</th>	
-						<th class="subtituloAF">Detalle</th>	
-					</tr>
-				</thead>
-				<tbody>		
-					<tr th:each="referencia : ${TodasLasReferencias}">
-						
-						<td class="detalleCentrado" th:text="${referencia.getIDPLU()}"></td>
-						<td>
-							<a href="#" th:text="${referencia.getNombrePlu()}"
-								th:onclick="'mostrarDetalle(\'' + ${referencia.getIDPLU()} + '\')'"></a>
-						</td>
-						<td class="detalleAF" th:text="${referencia.getIdEstracto()}"></td>
-						<td class="detalleAF" th:text="${referencia.getIdTIPO()}"></td>
-						<td class="detalleAF" th:text="${referencia.getVrGeneral()}"></td>
-						
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	
-	
-	<div class="divCencer" style="margin-top: 100px;">				
-    	<a href="./menuPrincipal" class="btn btn-primary" style="margin: 25px;">Regresar</a>
-	</div>
-	
+
 	<div id="loadingSpinner" style="display: none;">
    				 
   	   <div class="spinner"></div>
@@ -149,10 +109,10 @@ let listaCuentas = []; // Almacena todas las cuentas
 let listaTerceros = [];
 
 
+
+
 function GenerarReporte(formato) {
 	
-	   event.preventDefault();
-	   
 
        // Mostrar el spinner de carga
        document.getElementById('loadingSpinner').style.display = 'block';
@@ -162,27 +122,20 @@ function GenerarReporte(formato) {
 	   var Cuenta1Value = document.getElementById("buscarCuenta1").value;
 	   var Cuenta2 = document.getElementById("buscarCuenta2").getAttribute("data-idCuenta");
 	   var Cuenta2Value = document.getElementById("buscarCuenta2").value;
+	   var idPeriodo = document.getElementById("idPeriodo").value;
 	   var Tercero = document.getElementById("buscarTercero").getAttribute("data-idTercero");
 	   var TerceroValue = document.getElementById("buscarTercero").value;
-	   var idPeriodoDesde = document.getElementById("idPeriodoDesde").value;
-	   var idPeriodoHasta = document.getElementById("idPeriodoHasta").value;
 	   
 	   if(Cuenta1 == null || Cuenta1Value == ""){
 		    console.log("Ingreso al if cuenta1" );
-		    
-		   alert("Por favor, ingrese una cuenta contable.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
-
+		   
+		   Cuenta1 = "0";
 	   }
 	   
 	   if(Cuenta2 == null || Cuenta2Value == ""){
 		   
-		   alert("Por favor, ingrese una cuenta contable.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
+		   Cuenta2 = "0";
 	   }
-	   
 	   
 	   //Si el campo (Value) está vacio
 	   if(TerceroValue == ""){		   
@@ -190,19 +143,20 @@ function GenerarReporte(formato) {
 		   document.getElementById('loadingSpinner').style.display = 'none';
            return;
 	   }
+	
+
 
         // Crear un objeto que contenga los datos a enviar
 		var datos = {
 			Cuenta1: Cuenta1,
             Cuenta2: Cuenta2,
-            Tercero: Tercero,
-            idPeriodoDesde: idPeriodoDesde,
-            idPeriodoHasta: idPeriodoHasta,
-			formato: formato
+            idPeriodo: idPeriodo,
+			formato: formato,
+			Tercero: Tercero
 			};
 
 		 // Realizar una solicitud POST al controlador
-		 fetch("./DescargarReporteMovimientoAuxTerceroPorCtaContable", {
+		 fetch("./DescargarBalancePruebaPorTercero", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -249,6 +203,9 @@ function BuscarComprobantes(){
 			
 	   event.preventDefault();
 	   
+	   const button = document.getElementById('generarBtn');
+	   // Deshabilitar el botón
+       button.disabled = true;
        // Mostrar el spinner de carga
        document.getElementById('loadingSpinner').style.display = 'block';
          
@@ -257,48 +214,30 @@ function BuscarComprobantes(){
 	   var Cuenta1Value = document.getElementById("buscarCuenta1").value;
 	   var Cuenta2 = document.getElementById("buscarCuenta2").getAttribute("data-idCuenta");
 	   var Cuenta2Value = document.getElementById("buscarCuenta2").value;
-	   var Tercero = document.getElementById("buscarTercero").getAttribute("data-idTercero");
-	   var TerceroValue = document.getElementById("buscarTercero").value;
-	   var idPeriodoDesde = document.getElementById("idPeriodoDesde").value;
-	   var idPeriodoHasta = document.getElementById("idPeriodoHasta").value;
+	   var idPeriodo = document.getElementById("idPeriodo").value;
 	   
-	  if(Cuenta1 == null || Cuenta1Value == ""){
+	   if(Cuenta1 == null || Cuenta1Value == ""){
 		    console.log("Ingreso al if cuenta1" );
-		    
-		   alert("Por favor, ingrese una cuenta contable.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
-
+		   
+		   Cuenta1 = "0";
 	   }
 	   
 	   if(Cuenta2 == null || Cuenta2Value == ""){
 		   
-		   alert("Por favor, ingrese una cuenta contable.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
+		   Cuenta2 = "0";
 	   }
 	   
-	   
-	   //Si el campo (Value) está vacio
-	   if(TerceroValue == ""){		   
-		   alert("Por favor, ingrese un tercero.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
-	   }
 
-	   
 			 
 		// Crear un objeto que contenga los datos a enviar
         var datos = {
             Cuenta1: Cuenta1,
             Cuenta2: Cuenta2,
-            Tercero: Tercero,
-            idPeriodoDesde: idPeriodoDesde,
-            idPeriodoHasta: idPeriodoHasta
+            idPeriodo: idPeriodo
         };
 
         // Realizar una solicitud POST al controlador
-        fetch("./BuscarMovimientoAuxTercero", {
+        fetch("./BuscarBalancePruebaGeneral", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -354,17 +293,12 @@ function actualizarTabla(listaComprobantes) {
                     
                     "<td class='detalleAF'>" + lista.idCliente + "</td>" +
                     "<td class='detalleAF'>" + lista.nombreTercero + "</td>" +
-                    "<td class='detalleAF'>" + lista.tipoComprobante + "</td>" +
                     "<td class='detalleAF'>" + lista.idCuentaAux + "</td>" +
-                    "<td class='detalleAF'>" + lista.nombreAuxiliar + "</td>" +
+                    "<td class='detalleAF'>" + lista.nombreCuenta + "</td>" +
                     // Modificación en esta línea para incluir un enlace con onclick
                     "<td class='detalleAF'><a href='#' onclick='mostrarDetalle(" + lista.idCpte + ")'>" + lista.idCpte + "</a></td>" +
                     "<td class='detalleAF'>" + lista.fechaDcto + "</td>" +
-                    "<td class='detalleAF'>" +(lista.vrTotalDebitoAnterior <= 0 ? lista.vrTotalCreditoAnterior : lista.vrTotalDebitoAnterior) + "</td>" +
-                    "<td class='detalleAF'>" + lista.vrTotalDebitoActual + "</td>" +
-                    "<td class='detalleAF'>" + lista.vrTotalCreditoActual + "</td>" +                    
-                    "<td class='detalleAF'>" + lista.vrSaldoFinal + "</td>" +
-                    "<td class='detalleAF'>" + lista.detalle + "</td>" +
+                    "<td class='detalleAF'>" + lista.vrTotal + "</td>" +
 
                     // ... (agregar las demás columnas)
                 "</tr>";
@@ -383,7 +317,7 @@ function actualizarTabla(listaComprobantes) {
 		};
 
 		// Realizar una solicitud POST al controlador
-		fetch("./TraerMovimientoContableTercero-Post", {
+		fetch("./TraerMovimientoContable-Post", {
 				method: "POST",
 				headers: {
 				"Content-Type": "application/json",
@@ -499,6 +433,38 @@ document.addEventListener("click", function(event) {
 
 
 
+
+//----------------------------------------------------------------------------------
+
+// Filtrar en tiempo real para cuentas
+document.querySelectorAll("#buscarCuenta1, #buscarCuenta2").forEach(input => {
+    input.addEventListener("input", function() {
+        let idInput = this.id.replace("buscarCuenta", ""); // Obtener el número (1 o 2)
+       
+        
+        let filtro = this.value.toLowerCase();
+        let cuentasFiltradas = listaCuentas.filter(cuenta =>
+            `${cuenta.idCuentaAux} - ${cuenta.nombreCuenta}`.toLowerCase().includes(filtro)
+        );
+
+        mostrarCuentas(cuentasFiltradas, idInput);
+    });
+});
+
+// Filtrar en tiempo real para terceros
+document.getElementById("buscarTercero").addEventListener("input", function() {
+    let resultsContainer = document.getElementById("terceros");
+
+    let filtro = this.value.toLowerCase();
+    let tercerosFiltrados = listaTerceros.filter(tercero =>
+        `${tercero.cc_Nit} - ${tercero.nombreTercero}`.toLowerCase().includes(filtro)
+    );
+
+    mostrarTerceros(tercerosFiltrados, 1);
+});
+
+
+
 function BuscarTerceros(fila) {
     console.log(`Ingresó a BuscarTerceros en fila ${fila}`);
 
@@ -547,37 +513,6 @@ function mostrarTerceros(terceros, fila) {
 
     resultsContainer.style.display = "block";
 }
-
-
-
-//----------------------------------------------------------------------------------
-
-// Filtrar en tiempo real para cuentas
-document.querySelectorAll("#buscarCuenta1, #buscarCuenta2").forEach(input => {
-    input.addEventListener("input", function() {
-        let idInput = this.id.replace("buscarCuenta", ""); // Obtener el número (1 o 2)
-       
-        
-        let filtro = this.value.toLowerCase();
-        let cuentasFiltradas = listaCuentas.filter(cuenta =>
-            `${cuenta.idCuentaAux} - ${cuenta.nombreCuenta}`.toLowerCase().includes(filtro)
-        );
-
-        mostrarCuentas(cuentasFiltradas, idInput);
-    });
-});
-
-// Filtrar en tiempo real para terceros
-document.getElementById("buscarTercero").addEventListener("input", function() {
-    let resultsContainer = document.getElementById("terceros");
-
-    let filtro = this.value.toLowerCase();
-    let tercerosFiltrados = listaTerceros.filter(tercero =>
-        `${tercero.cc_Nit} - ${tercero.nombreTercero}`.toLowerCase().includes(filtro)
-    );
-
-    mostrarTerceros(tercerosFiltrados, 1);
-});
 
 
 

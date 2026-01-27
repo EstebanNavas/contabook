@@ -164,12 +164,14 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	    Integer Cuenta1 = Integer.parseInt((String) requestBody.get("Cuenta1"));
 	    Integer Cuenta2 = Integer.parseInt((String) requestBody.get("Cuenta2"));
 	    String Tercero = (String) requestBody.get("Tercero");
-	    Integer idPeriodo = Integer.parseInt((String) requestBody.get("idPeriodo"));
+	    Integer idPeriodoDesde = Integer.parseInt((String) requestBody.get("idPeriodoDesde"));
+	    Integer idPeriodoHasta = Integer.parseInt((String) requestBody.get("idPeriodoHasta"));
 	    
 	    System.out.println("Cuenta1 es " + Cuenta1);
 	    System.out.println("Cuenta2 es " + Cuenta2);
 	    System.out.println("Tercero es " + Tercero);
-	    System.out.println("idPeriodo es " + idPeriodo);
+	    System.out.println("idPeriodoDesde es " + idPeriodoDesde);
+	    System.out.println("idPeriodoHasta es " + idPeriodoHasta);
 	    
 	    
 	    if (Cuenta1 != 0) {
@@ -186,21 +188,21 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	    //Búsqueda por cuentas y Tercero
 	    if(Tercero != null && !listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a cuentas y Tercero"); 
-	    	listaComprobantes = tblDctoService.repMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, Tercero, listaCuentas);
+	    	listaComprobantes = tblDctoService.repMovimientoPorTerceroYAuxiiar(idLocal, idPeriodoDesde, idPeriodoHasta, Tercero, listaCuentas);
 	    	
 	    }
 	    
 	    // Búsqueda solo por cuentas
 	    if ((Tercero == null || Tercero.trim().isEmpty()) && !listaCuentas.isEmpty()) {
 	        System.out.println("Ingresó a solo cuentas");    
-	        listaComprobantes = tblDctoService.listaMovimientoPorAuxiliar(idLocal, idPeriodo, listaCuentas);
+	        listaComprobantes = tblDctoService.listaMovimientoPorAuxiliar(idLocal, idPeriodoDesde, idPeriodoHasta, listaCuentas);
 	    }
 	    
 	    
 	    //Búsqueda solo por tercero
 	    if(Tercero != null && listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a solo Tercero"); 
-	    	listaComprobantes = tblDctoService.listaMovimientoPorTercero(idLocal, idPeriodo, Tercero);
+	    	listaComprobantes = tblDctoService.listaMovimientoPorTercero(idLocal, idPeriodoDesde, idPeriodoHasta, Tercero);
 	    	
 	    }
 	    
@@ -298,12 +300,14 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	    Integer Cuenta1 = Integer.parseInt((String) requestBody.get("Cuenta1"));
 	    Integer Cuenta2 = Integer.parseInt((String) requestBody.get("Cuenta2"));
 	    String Tercero = (String) requestBody.get("Tercero");
-	    Integer idPeriodo = Integer.parseInt((String) requestBody.get("idPeriodo"));
+	    Integer idPeriodoDesde = Integer.parseInt((String) requestBody.get("idPeriodoDesde"));
+	    Integer idPeriodoHasta = Integer.parseInt((String) requestBody.get("idPeriodoHasta"));
 	    
 	    System.out.println("Cuenta1 es " + Cuenta1);
 	    System.out.println("Cuenta2 es " + Cuenta2);
 	    System.out.println("Tercero es " + Tercero);
-	    System.out.println("idPeriodo es " + idPeriodo);
+	    System.out.println("idPeriodoDesde es " + idPeriodoDesde);
+	    System.out.println("idPeriodoHasta es " + idPeriodoHasta);
 	    
 	    
 	    if (Cuenta1 != 0) {
@@ -320,21 +324,21 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 	    //Búsqueda por cuentas y Tercero
 	    if(Tercero != null && !listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a cuentas y Tercero"); 
-	    	lista = tblDctoService.repMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, Tercero, listaCuentas);
+	    	lista = tblDctoService.repMovimientoPorTerceroYAuxiiar(idLocal, idPeriodoDesde, idPeriodoHasta, Tercero, listaCuentas);
 	    	
 	    }
 	    
 	    // Búsqueda solo por cuentas
 	    if ((Tercero == null || Tercero.trim().isEmpty()) && !listaCuentas.isEmpty()) {
 	        System.out.println("Ingresó a solo cuentas");    
-	        lista = tblDctoService.listaMovimientoPorAuxiliar(idLocal, idPeriodo, listaCuentas);
+	        lista = tblDctoService.listaMovimientoPorAuxiliar(idLocal, idPeriodoDesde, idPeriodoHasta, listaCuentas);
 	    }
 	    
 	    
 	    //Búsqueda solo por tercero
 	    if(Tercero != null && listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a solo Tercero Nuevo"); 
-	    	lista = tblDctoService.repMovimientoAuxTercero(idLocal, idPeriodo, Tercero);
+	    	lista = tblDctoService.repMovimientoAuxTercero(idLocal, idPeriodoDesde, idPeriodoHasta, Tercero);
 	    	
 	    }
 	    
@@ -347,6 +351,8 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 		
 
 		int xIdReporte = 1115;
+		
+		Integer idPeriodo = 0;
 		
 		// Obtenemos el periodo activo
 		List <TblDctosPeriodo> PeriodoActivo = tblDctosPeriodoService.ObtenerPeriodoActivo(idLocal);
