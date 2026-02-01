@@ -169,6 +169,22 @@ public class ImportarController {
         	List<TblDctosDTO> listaComprobante = tblDctosService.listaComprobanteDetallado(idLocal, idPeriodo, idTipoOrden);
     	    System.out.println("listaComprobante es " + listaComprobante);
     	    
+    	   // VALIDACIÓN DE SUBCUENTA
+            boolean existeSubcuentaInvalida = listaComprobante.stream()
+                .anyMatch(r ->
+                    r.getIdSubcuenta() == null || r.getIdSubcuenta() == 0
+                );
+
+            if (existeSubcuentaInvalida) {
+            	System.out.println("-- existeSubcuentaInvalida --");           	
+                response.put("message", "ERROR_SUBCUENTA");
+                response.put("detalle",
+                    "Existen facturas con subcuenta sin asignar. Por valor validar reporte de REFERENCIAS en Marketing");
+                response.put("nombreComprobante", NombreComprobante);
+
+                return ResponseEntity.badRequest().body(response);
+            }
+    	    
     	   // Integer idTipoOrden = 0;
     	    Integer idDcto = 0;
     	    
@@ -275,6 +291,23 @@ public class ImportarController {
         	
         	
         	List<TblDctosDTO> recaudoDetallado = tblDctosService.listaComprobanteRecaudoDetallado(idLocal, idPeriodo);
+        	
+        	
+        	// VALIDACIÓN DE SUBCUENTA
+            boolean existeSubcuentaInvalida = recaudoDetallado.stream()
+                .anyMatch(r ->
+                    r.getIdSubcuenta() == null || r.getIdSubcuenta() == 0
+                );
+
+            if (existeSubcuentaInvalida) {
+            	System.out.println("-- existeSubcuentaInvalida --");           	
+                response.put("message", "ERROR_SUBCUENTA");
+                response.put("detalle",
+                    "Existen recaudos con subcuenta sin asignar. Por valor validar reporte de REFERENCIAS en Marketing");
+                response.put("nombreComprobante", NombreComprobante);
+
+                return ResponseEntity.badRequest().body(response);
+            }
         	
         	Integer idDcto = 0;
         	

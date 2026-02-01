@@ -100,46 +100,68 @@ function ImportarContabilidad() {
         },
         body: JSON.stringify(datos),
     })
-    .then((response) => response.json())
-    .then((data) => {
-		
-		var message = data.message;
-       console.log(message);
-       
-       var nombreComprobante = data.nombreComprobante
-       console.log("message es " + message);
-       
-       
-       
-       
-       if(message === "OK"){		   
-		     swal({
-            title: "¡Tipo de comprobantes: "+ nombreComprobante + ". Importados correctamente! ",
+    
+    .then(response => {
+    return response.json().then(data => ({
+        ok: response.ok,
+        data: data
+    }));
+})
+.then(({ ok, data }) => {
+
+    // Rehabilitar botón y ocultar spinner 
+    document.getElementById("Importar").disabled = false;
+    document.getElementById('loadingSpinner').style.display = 'none';
+
+    var message = data.message;
+    var nombreComprobante = data.nombreComprobante;
+
+    if (ok && message === "OK") {
+
+        swal({
+            title: "¡Tipo de comprobantes: " + nombreComprobante + " importados correctamente!",
             icon: "success",
             button: "Continuar",
-        })
-        .then((value) => {
-			
-	 // Deshabilitar el botón al inicio de la función
-  	 document.getElementById("Importar").disabled = true;
-  				 
-  	 // Mostrar el spinner de carga
-     document.getElementById('loadingSpinner').style.display = 'block';
-			
-            // Redirigimos a la vista "CrearSuscriptor"" al hacer clic en el botón Continuar
+        }).then((value) => {
             if (value) {
                 window.location.href = "./Importar";
             }
         });
-		   
-	   }
-       
-        
 
-    })
-    .catch((error) => {
-        console.error("Error al registrar el log:", error);
+    } else if (message === "ERROR_SUBCUENTA") {
+
+        swal({
+            title: "No es posible importar " + nombreComprobante,
+            text: data.detalle,
+            icon: "warning",
+            button: "Entendido",
+        });
+
+    } else {
+
+        swal({
+            title: "Error inesperado",
+            text: "Ocurrió un error durante la importación.",
+            icon: "error",
+            button: "Cerrar",
+        });
+    }
+
+})
+.catch((error) => {
+
+    document.getElementById("Importar").disabled = false;
+    document.getElementById('loadingSpinner').style.display = 'none';
+
+    console.error("Error al importar:", error);
+
+    swal({
+        title: "Error de comunicación",
+        text: "No fue posible contactar el servidor.",
+        icon: "error",
+        button: "Cerrar",
     });
+});
     
 		
 	
