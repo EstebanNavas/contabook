@@ -35,6 +35,7 @@ import com.contabook.Model.dbaquamovil.Ctrlusuarios;
 import com.contabook.Model.dbaquamovil.TblAgendaLogVisitas;
 import com.contabook.Model.dbaquamovil.TblLocales;
 import com.contabook.Projection.TblDctoDTO;
+import com.contabook.Projection.TblDctoDTOSubReport;
 import com.contabook.Projection.TblDctoDetalleDTO;
 import com.contabook.Service.DBMailMarketing.TblDctoDetalleService;
 import com.contabook.Service.DBMailMarketing.TblDctoService;
@@ -169,12 +170,14 @@ public class ReporteBalancePruebaPorTercero {
 		// Obtenemos los datos del JSON recibido
 		Integer Cuenta1 = Integer.parseInt((String) requestBody.get("Cuenta1"));
 	    Integer Cuenta2 = Integer.parseInt((String) requestBody.get("Cuenta2"));
-		Integer idPeriodo = Integer.parseInt((String) requestBody.get("idPeriodo"));
-		String tercero = (String) requestBody.get("Tercero");
+		Integer idPeriodoDesde = Integer.parseInt((String) requestBody.get("idPeriodoDesde"));
+		Integer idPeriodoHasta = Integer.parseInt((String) requestBody.get("idPeriodoHasta"));
+
 		    
 		    System.out.println("Cuenta1 es " + Cuenta1);
 		    System.out.println("Cuenta2 es " + Cuenta2);
-		    System.out.println("idPeriodo es " + idPeriodo);
+		    System.out.println("idPeriodoDesde es " + idPeriodoDesde);
+		    System.out.println("idPeriodoHasta es " + idPeriodoHasta);
 		    
 		    
 		    if (Cuenta1 != 0) {
@@ -229,7 +232,8 @@ public class ReporteBalancePruebaPorTercero {
 		for (TblLocales L : Local) {
 
 			// Parametros del encabezado
-			params.put("p_idPeriodo", idPeriodo);
+			params.put("p_idPeriodo", idPeriodoDesde);
+			params.put("p_idPeriodoHasta", idPeriodoHasta);
 			params.put("p_nombreLocal", L.getNombreLocal());
 			params.put("p_nit", L.getNit());
 			params.put("p_titulo", xTituloReporte);
@@ -238,6 +242,8 @@ public class ReporteBalancePruebaPorTercero {
 			params.put("p_fechaActual", strFechaActual);
 			//xPathReport = L.getPathReport() + "contabook" + xCharSeparator;
 			xPathReport = L.getPathReportContaBook() + "contabook" + xCharSeparator;
+			
+			params.put("SUBREPORT_DIR", xPathReport);
 
 		}
 		
@@ -245,15 +251,12 @@ public class ReporteBalancePruebaPorTercero {
         List<TblDctoDTO> lista = null;
 	    
 	    //Búsqueda por cuentas y Periodo
-	    if(idPeriodo != null && !listaCuentas.isEmpty()) {
-	    	System.out.println("Ingresó a cuentas y Periodo"); 
-	    	lista = tblDctoService.listaBalancePruebaPorTercero(idLocal, idPeriodo, Cuenta1, Cuenta2, tercero);
+
+	    	lista = tblDctoService.listaBalancePruebaPorTercero(idLocal, idPeriodoDesde,idPeriodoHasta, Cuenta1, Cuenta2);
 	    	
-	    }
-	    
-	    
-
-
+//	    	List<TblDctoDTOSubReport> listaSubReport = tblDctoService.listaBalancePruebaPorTerceroSubReport(idLocal, idPeriodoDesde,idPeriodoHasta, listaCuentas);	    
+//	    	JRBeanCollectionDataSource dsSubReport =  new JRBeanCollectionDataSource(listaSubReport);
+//	    	params.put("DS_PUC", dsSubReport);
 		
 		System.out.println("lista es : " + lista);
 
@@ -263,6 +266,7 @@ public class ReporteBalancePruebaPorTercero {
 
 		// Se crea una instancia de JRBeanCollectionDataSource con la lista
 		JRDataSource dataSource = new JRBeanCollectionDataSource(lista);
+		
 
 		ReportesDTO dto = reporteSmsServiceApi.Reportes(params, dataSource, formato, xFileNameReporte, xPathReport); 
 

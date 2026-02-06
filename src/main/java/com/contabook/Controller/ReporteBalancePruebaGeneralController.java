@@ -147,7 +147,7 @@ public class ReporteBalancePruebaGeneralController {
 	
 	
 	
-	@PostMapping("/BuscarBalancePruebaGeneral")
+/*	@PostMapping("/BuscarBalancePruebaGeneral")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> BuscarBalancePruebaGeneral(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, Model model) {
 	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
@@ -208,7 +208,7 @@ public class ReporteBalancePruebaGeneralController {
 	    response.put("message", "LOGGGGGGGGG");
 	     response.put("listaComprobantes", listaComprobantes);
 	    return ResponseEntity.ok(response);
-	}
+	} */
 	
 	
 	
@@ -232,11 +232,13 @@ public class ReporteBalancePruebaGeneralController {
 		String idCpteStr = (String) requestBody.get("idCpte");
 		Integer Cuenta1 = Integer.parseInt((String) requestBody.get("Cuenta1"));
 	    Integer Cuenta2 = Integer.parseInt((String) requestBody.get("Cuenta2"));
-		Integer idPeriodo = Integer.parseInt((String) requestBody.get("idPeriodo"));
+		Integer idPeriodoDesde = Integer.parseInt((String) requestBody.get("idPeriodoDesde"));
+		Integer idPeriodoHasta = Integer.parseInt((String) requestBody.get("idPeriodoHasta"));
 		    
 		    System.out.println("Cuenta1 es " + Cuenta1);
 		    System.out.println("Cuenta2 es " + Cuenta2);
-		    System.out.println("idPeriodo es " + idPeriodo);
+		    System.out.println("idPeriodoDesde es " + idPeriodoDesde);
+		    System.out.println("idPeriodoHasta es " + idPeriodoHasta);
 		    
 		    
 		    if (Cuenta1 != 0) {
@@ -291,7 +293,8 @@ public class ReporteBalancePruebaGeneralController {
 		for (TblLocales L : Local) {
 
 			// Parametros del encabezado
-			params.put("p_idPeriodo", idPeriodo);
+			params.put("p_idPeriodo", idPeriodoDesde );
+			params.put("p_idPeriodoHasta", idPeriodoHasta );
 			params.put("p_nombreLocal", L.getNombreLocal());
 			params.put("p_nit", L.getNit());
 			params.put("p_titulo", xTituloReporte);
@@ -307,17 +310,17 @@ public class ReporteBalancePruebaGeneralController {
         List<TblDctoDTO> lista = null;
 	    
 	    //Búsqueda por cuentas y Periodo
-	    if(idPeriodo != null && !listaCuentas.isEmpty()) {
+	    if(idPeriodoDesde != null && !listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a cuentas y Periodo"); 
-	    	lista = tblDctoService.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodo, Cuenta1, Cuenta2);
+	    	lista = tblDctoService.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodoDesde, idPeriodoHasta, Cuenta1, Cuenta2);
 	    	
 	    }
 	    
 	    
 	    //Búsqueda solo por Periodo
-	    if(idPeriodo != null && listaCuentas.isEmpty()) {
+	    if(idPeriodoDesde != null && listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a solo Periodo"); 
-	    	lista = tblDctoService.listaBalancePruebaGeneralPorIdPeriodo(idLocal, idPeriodo);
+	    	lista = tblDctoService.listaBalancePruebaGeneralPorIdPeriodo(idLocal, idPeriodoDesde, idPeriodoHasta);
 	    	
 	    }
 

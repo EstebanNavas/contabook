@@ -47,26 +47,25 @@
 		
 		</div>
 		
-		<div style="margin-left: 200px;">		  
-			   <label style="font-size: 19px; margin-bottom: 10px;">Periodo:</label>		   				   
-			  <select id="idPeriodo" style="width: 200px; height: 25px; margin-left: 20px;">
+		<div style="margin-left: 50px;">		  
+			   <label style="font-size: 19px; margin-bottom: 10px;">Desde:</label>		
+			   <br>    				   
+			  <select id="idPeriodoDesde" style="width: 200px; height: 25px; ">
+				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
+			</select>
+		   		
+	   </div>
+	   <div style="margin-left: 20px; display: block;">	  
+			   <label style="font-size: 19px; margin-bottom: 10px;">Hasta:</label>	
+			   <br>   				   
+			  <select id="idPeriodoHasta" style="width: 200px; height: 25px; ">
 				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
 			</select>
 		   		
 	   </div>
 
 	</div>
-	
-	 <div class="fechaComprobante" style="margin-top: 30px;">
-		<div>
-			<label style="font-size: 19px;">Tercero</label>			
-		</div>
-		<div class="search-container" style="margin-left: 128px; width: 500px;">
-			<input type="text" placeholder="Buscar" id="buscarTercero" onfocus="BuscarTerceros(1)" autocomplete="off">
-			<div class="results-container" id="terceros" style="height: 200px;"></div>
-		</div>
-	</div>
-	
+
 
 	
  <!--   <div  style="margin-top: 50px; margin-left: 70px;">				
@@ -122,9 +121,9 @@ function GenerarReporte(formato) {
 	   var Cuenta1Value = document.getElementById("buscarCuenta1").value;
 	   var Cuenta2 = document.getElementById("buscarCuenta2").getAttribute("data-idCuenta");
 	   var Cuenta2Value = document.getElementById("buscarCuenta2").value;
-	   var idPeriodo = document.getElementById("idPeriodo").value;
-	   var Tercero = document.getElementById("buscarTercero").getAttribute("data-idTercero");
-	   var TerceroValue = document.getElementById("buscarTercero").value;
+	   var idPeriodoDesde = document.getElementById("idPeriodoDesde").value;
+	   var idPeriodoHasta = document.getElementById("idPeriodoHasta").value;
+
 	   
 	   if(Cuenta1 == null || Cuenta1Value == ""){
 		    console.log("Ingreso al if cuenta1" );
@@ -137,22 +136,16 @@ function GenerarReporte(formato) {
 		   Cuenta2 = "0";
 	   }
 	   
-	   //Si el campo (Value) está vacio
-	   if(TerceroValue == ""){		   
-		   alert("Por favor, ingrese un tercero.");
-		   document.getElementById('loadingSpinner').style.display = 'none';
-           return;
-	   }
-	
+
 
 
         // Crear un objeto que contenga los datos a enviar
 		var datos = {
 			Cuenta1: Cuenta1,
             Cuenta2: Cuenta2,
-            idPeriodo: idPeriodo,
-			formato: formato,
-			Tercero: Tercero
+            idPeriodoDesde: idPeriodoDesde,
+            idPeriodoHasta: idPeriodoHasta,
+			formato: formato
 			};
 
 		 // Realizar una solicitud POST al controlador

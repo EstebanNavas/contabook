@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.contabook.Projection.TblDctoDTO;
+import com.contabook.Projection.TblDctoDTOSubReport;
 import com.contabook.Repository.DBMailMarketing.TblDctoRepo;
 
 @Service
@@ -124,9 +125,9 @@ public class TblDctoService {
 	}
 	
 	
-	public List<TblDctoDTO> listaBalancePruebaGeneralIdPeriodoYAuxiiar(int idLocal, int idPeriodo,  int idCuentaAux1, int idCuentaAux2)	{
+	public List<TblDctoDTO> listaBalancePruebaGeneralIdPeriodoYAuxiiar(int idLocal, int idPeriodoDesde, int idPeriodoHasta, int idCuentaAux1, int idCuentaAux2)	{
 		
-		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodo, idCuentaAux1, idCuentaAux2);
+		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodoDesde, idPeriodoHasta, idCuentaAux1, idCuentaAux2);
 		
 		return lista;
 		
@@ -134,17 +135,26 @@ public class TblDctoService {
 	}
 	
 	
-	public List<TblDctoDTO> listaBalancePruebaPorTercero(int idLocal, int idPeriodo, int idCuentaAux1, int idCuentaAux2, String cc_nit){
+	public List<TblDctoDTO> listaBalancePruebaPorTercero(int idLocal, int idPeriodoDesde, int idPeriodoHasta, int idCuentaAux1, int idCuentaAux2){
 		
-		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaPorTercero(idLocal, idPeriodo, idCuentaAux1, idCuentaAux2, cc_nit);
+		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaPorTercero(idLocal, idPeriodoDesde, idPeriodoHasta, idCuentaAux1, idCuentaAux2);
 		
 		return lista;
 	}
 	
 	
-	public List<TblDctoDTO> listaBalancePruebaGeneralPorIdPeriodo(int idLocal, int idPeriodo){
+	public List<TblDctoDTOSubReport> listaBalancePruebaPorTerceroSubReport(int idLocal, int idPeriodoDesde, int idPeriodoHasta,  List<Integer> cuentasContables){
 		
-		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaGeneralPorIdPeriodo(idLocal, idPeriodo);
+		List<TblDctoDTOSubReport> lista = tblDctoRepo.listaBalancePruebaPorTerceroSubReport(idLocal, idPeriodoDesde, idPeriodoHasta, cuentasContables);
+		
+		return lista;
+	}
+	
+	
+	
+	public List<TblDctoDTO> listaBalancePruebaGeneralPorIdPeriodo (int idLocal, int idPeriodoDesde, int idPeriodoHasta){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaGeneralPorIdPeriodo(idLocal, idPeriodoDesde, idPeriodoHasta);
 		
 		return lista;
 	}
