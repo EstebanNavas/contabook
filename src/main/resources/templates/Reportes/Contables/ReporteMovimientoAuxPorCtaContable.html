@@ -47,9 +47,18 @@
 		
 		</div>
 		
-		<div style="margin-left: 100px;">		  
-			   <label style="font-size: 19px; margin-bottom: 10px;">Periodo:</label>		   				   
-			  <select id="idPeriodo" style="width: 200px; height: 25px; margin-left: 20px;">
+		<div style="margin-left: 50px;">		  
+			   <label style="font-size: 19px; margin-bottom: 10px;">Desde:</label>		
+			   <br>    				   
+			  <select id="idPeriodoDesde" style="width: 200px; height: 25px; ">
+				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
+			</select>
+		   		
+	   </div>
+	   <div style="margin-left: 20px; display: block;">	  
+			   <label style="font-size: 19px; margin-bottom: 10px;">Hasta:</label>	
+			   <br>   				   
+			  <select id="idPeriodoHasta" style="width: 200px; height: 25px; ">
 				<option th:text="${xLista.getIdPeriodo() + ' - ' + xLista.getNombrePeriodo()}" th:each="xLista:${xListaPeriodos}" th:value="${xLista.getIdPeriodo()}" th:selected="${xLista.getIdPeriodo() == xIdPeriodo}"></option>
 			</select>
 		   		
@@ -154,7 +163,8 @@ function GenerarReporte(formato) {
 	   var Cuenta2Value = document.getElementById("buscarCuenta2").value;
 	   var Tercero = document.getElementById("buscarTercero").getAttribute("data-idTercero");
 	   var TerceroValue = document.getElementById("buscarTercero").value;
-	   var idPeriodo = document.getElementById("idPeriodo").value;
+	   var idPeriodoDesde = document.getElementById("idPeriodoDesde").value;
+	   var idPeriodoHasta = document.getElementById("idPeriodoHasta").value;
 	   
 	   if(Cuenta1 == null || Cuenta1Value == ""){
 		    console.log("Ingreso al if cuenta1" );
@@ -178,7 +188,8 @@ function GenerarReporte(formato) {
 			Cuenta1: Cuenta1,
             Cuenta2: Cuenta2,
             Tercero: Tercero,
-            idPeriodo: idPeriodo,
+            idPeriodoDesde: idPeriodoDesde,
+            idPeriodoHasta: idPeriodoHasta,
 			formato: formato
 			};
 
@@ -243,7 +254,8 @@ function BuscarComprobantes(){
 	   var Cuenta2Value = document.getElementById("buscarCuenta2").value;
 	   var Tercero = document.getElementById("buscarTercero").getAttribute("data-idTercero");
 	   var TerceroValue = document.getElementById("buscarTercero").value;
-	   var idPeriodo = document.getElementById("idPeriodo").value;
+	   var idPeriodoDesde = document.getElementById("idPeriodoDesde").value;
+	   var idPeriodoHasta = document.getElementById("idPeriodoHasta").value;
 	   
 	   if(Cuenta1 == null || Cuenta1Value == ""){
 		    console.log("Ingreso al if cuenta1" );
@@ -269,7 +281,8 @@ function BuscarComprobantes(){
             Cuenta1: Cuenta1,
             Cuenta2: Cuenta2,
             Tercero: Tercero,
-            idPeriodo: idPeriodo
+            idPeriodoDesde: idPeriodoDesde,
+            idPeriodoHasta: idPeriodoHasta
         };
 
         // Realizar una solicitud POST al controlador

@@ -95,9 +95,9 @@ public class TblDctoService {
 	}
 	
 	
-	public List<TblDctoDTO> listaMovimientoPorTerceroYAuxiiar(int idLocal, int idPeriodo, String idCliente, List<Integer> cuentasContables){
+	public List<TblDctoDTO> listaMovimientoPorTerceroYAuxiiar(int idLocal, int idPeriodoDesde, int idPeriodohasta, String idCliente, List<Integer> cuentasContables){
 		
-		List<TblDctoDTO> lista = tblDctoRepo.listaMovimientoPorTerceroYAuxiiar(idLocal, idPeriodo, idCliente, cuentasContables);
+		List<TblDctoDTO> lista = tblDctoRepo.listaMovimientoPorTerceroYAuxiiar(idLocal, idPeriodoDesde, idPeriodohasta, idCliente, cuentasContables);
 		
 		return lista;
 		
