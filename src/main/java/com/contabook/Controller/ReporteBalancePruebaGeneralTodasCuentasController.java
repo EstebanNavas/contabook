@@ -53,7 +53,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
-public class ReporteBalancePruebaGeneralController {
+public class ReporteBalancePruebaGeneralTodasCuentasController {
 	
 	@Autowired
 	TblPucService tblPucService;
@@ -86,8 +86,8 @@ public class ReporteBalancePruebaGeneralController {
 	ControlDeInactividad controlDeInactividad;
 	
 	
-	@GetMapping("/ReporteBalancePruebaGeneral")
-	public String reporteBalancePruebaGeneral(HttpServletRequest request,Model model) {
+	@GetMapping("/ReporteBalancePruebaGeneralTodasCuentas")
+	public String reporteBalancePruebaGeneralTodasCuentas(HttpServletRequest request,Model model) {
 		
 		Class tipoObjeto = this.getClass();					
         String nombreClase = tipoObjeto.getName();		
@@ -140,18 +140,81 @@ public class ReporteBalancePruebaGeneralController {
 	           model.addAttribute("xListaPeriodos", ListaPeriodos);
 	           model.addAttribute("xIdPeriodo", idPeriodo);
 
-			return "Reportes/Balances/ReporteBalancePruebaGeneral";
+			return "Reportes/Balances/ReporteBalancePruebaGeneralTodasCuentas";
 
 
 	}
 	
 	
+	
+/*	@PostMapping("/BuscarBalancePruebaGeneral")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> BuscarBalancePruebaGeneral(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, Model model) {
+	    Ctrlusuarios usuario = (Ctrlusuarios) request.getSession().getAttribute("usuarioAuth");
+	    Integer IdUsuario = usuario.getIdUsuario();
+	    Integer idLocal = usuario.getIdLocal();
+	    
+	    List<Integer> listaCuentas = new ArrayList<>();
 
+	    System.out.println("SI ENTRÓ A  /BuscarBalancePruebaGeneral");
+
+	    // Obtenemos los datos del JSON recibido
+	    Integer Cuenta1 = Integer.parseInt((String) requestBody.get("Cuenta1"));
+	    Integer Cuenta2 = Integer.parseInt((String) requestBody.get("Cuenta2"));
+	    Integer idPeriodo = Integer.parseInt((String) requestBody.get("idPeriodo"));
+	    
+	    System.out.println("Cuenta1 es " + Cuenta1);
+	    System.out.println("Cuenta2 es " + Cuenta2);
+	    System.out.println("idPeriodo es " + idPeriodo);
+	    
+	    
+	    if (Cuenta1 != 0) {
+	        listaCuentas.add(Cuenta1);
+	    }
+	    if (Cuenta2 != 0) {
+	        listaCuentas.add(Cuenta2);
+	    }
+
+	    System.out.println("listaCuentas es " + listaCuentas);
+	    
+	    List<TblDctoDTO> listaComprobantes = null;
+	    
+	    //Búsqueda por cuentas y Periodo
+	    if(idPeriodo != null && !listaCuentas.isEmpty()) {
+	    	System.out.println("Ingresó a cuentas y Periodo"); 
+	    	listaComprobantes = tblDctoService.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodo, Cuenta1, Cuenta2);
+	    	
+	    }
+	    
+	    // Búsqueda solo por cuentas
+//	    if ((Tercero == null || Tercero.trim().isEmpty()) && !listaCuentas.isEmpty()) {
+//	        System.out.println("Ingresó a solo cuentas");    
+//	        listaComprobantes = tblDctoService.listaMovimientoPorAuxiliar(idLocal, idPeriodo, listaCuentas);
+//	    }
+	    
+	    
+	    //Búsqueda solo por Periodo
+	    if(idPeriodo != null && listaCuentas.isEmpty()) {
+	    	System.out.println("Ingresó a solo Periodo"); 
+	    	listaComprobantes = tblDctoService.listaBalancePruebaGeneralPorIdPeriodo(idLocal, idPeriodo);
+	    	
+	    }
+	    
+	    
+
+	    System.out.println("listaComprobantes es " + listaComprobantes);
+	    
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("message", "LOGGGGGGGGG");
+	     response.put("listaComprobantes", listaComprobantes);
+	    return ResponseEntity.ok(response);
+	} */
 	
 	
 	
-	@PostMapping("/DescargarBalancePruebaGeneral")
-	public ResponseEntity<Resource> DescargarBalancePruebaGeneral(@RequestBody Map<String, Object> requestBody,HttpServletRequest request, Model model) 
+	
+	@PostMapping("/DescargarBalancePruebaGeneralTodasCuentas")
+	public ResponseEntity<Resource> DescargarBalancePruebaGeneralTodasCuentas(@RequestBody Map<String, Object> requestBody,HttpServletRequest request, Model model) 
 			                                                       throws JRException, IOException, SQLException {
 
 		Class tipoObjeto = this.getClass();
@@ -249,7 +312,7 @@ public class ReporteBalancePruebaGeneralController {
 	    //Búsqueda por cuentas y Periodo
 	    if(idPeriodoDesde != null && !listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a cuentas y Periodo"); 
-	    	lista = tblDctoService.listaBalancePruebaGeneralIdPeriodoYAuxiiar(idLocal, idPeriodoDesde, idPeriodoHasta, Cuenta1, Cuenta2);
+	    	lista = tblDctoService.listaBalancePruebaGeneralTodasCuentasIdPeriodoYAuxiiar(idLocal, idPeriodoDesde, idPeriodoHasta, Cuenta1, Cuenta2);
 	    	
 	    }
 	    
@@ -257,7 +320,7 @@ public class ReporteBalancePruebaGeneralController {
 	    //Búsqueda solo por Periodo
 	    if(idPeriodoDesde != null && listaCuentas.isEmpty()) {
 	    	System.out.println("Ingresó a solo Periodo"); 
-	    	lista = tblDctoService.listaBalancePruebaGeneralPorIdPeriodo(idLocal, idPeriodoDesde, idPeriodoHasta);
+	    	lista = tblDctoService.listaBalancePruebaGeneralTodasCuentasPorIdPeriodo(idLocal, idPeriodoDesde, idPeriodoHasta);
 	    	
 	    }
 

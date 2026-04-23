@@ -352,15 +352,6 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 
 		int xIdReporte = 1115;
 		
-		Integer idPeriodo = 0;
-		
-		// Obtenemos el periodo activo
-		List <TblDctosPeriodo> PeriodoActivo = tblDctosPeriodoService.ObtenerPeriodoActivo(idLocal);
-		
-		
-		for(TblDctosPeriodo P : PeriodoActivo) {						
-			idPeriodo = P.getIdPeriodo();					
-		}
 		
 		
 
@@ -397,7 +388,8 @@ public class ReporteMovimientoAuxTerceroPorCtaContableController {
 		for (TblLocales L : Local) {
 
 			// Parametros del encabezado
-			params.put("p_idPeriodo", idPeriodo);
+			params.put("p_idPeriodo", idPeriodoDesde);
+			params.put("p_idPeriodoHasta", idPeriodoHasta);
 			params.put("p_nombreLocal", L.getNombreLocal());
 			params.put("p_nit", L.getNit());
 			params.put("p_titulo", xTituloReporte );

@@ -75,8 +75,8 @@
 						<td class="detalleAF" th:text="${comprobante.getIdCliente()}"></td>
 						<td class="detalleAF" th:text="${comprobante.getFechaDcto()}"></td>
 						<td class="detalleAF" th:text="${comprobante.getObservacion()}"></td>
-						<td class="detalleAF" th:text="${comprobante.getVrDebito()}"  id="debito"></td>
-						<td class="detalleAF" th:text="${comprobante.getVrCredito()}" id="credito"></td>
+						<td class="detalleAF" th:text="${#numbers.formatDecimal(comprobante.vrDebito, 1, 2)}"  id="debito"></td>
+						<td class="detalleAF" th:text="${#numbers.formatDecimal(comprobante.vrCredito, 1, 2)}"  id="credito"></td>
 						
 					</tr>
 				</tbody>

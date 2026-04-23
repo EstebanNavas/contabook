@@ -18,5 +18,6 @@ public interface TblDctosDTO {
 	String getFechaDctoSiigo();
 	String getCc_nit();
 	Integer getIdDctoNitCC();
+	Integer getIdTipoTercero();
 
 }

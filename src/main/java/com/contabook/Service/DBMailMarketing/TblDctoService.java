@@ -134,10 +134,24 @@ public class TblDctoService {
 	
 	}
 	
+	public List<TblDctoDTO> listaBalancePruebaGeneralTodasCuentasIdPeriodoYAuxiiar(int idLocal, int idPeriodoDesde, int idPeriodoHasta, int idCuentaAux1, int idCuentaAux2){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaGeneralTodasCuentasIdPeriodoYAuxiiar(idLocal, idPeriodoDesde, idPeriodoHasta, idCuentaAux1, idCuentaAux2);
+		
+		return lista;
+	}
+	
 	
 	public List<TblDctoDTO> listaBalancePruebaPorTercero(int idLocal, int idPeriodoDesde, int idPeriodoHasta, int idCuentaAux1, int idCuentaAux2){
 		
 		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaPorTercero(idLocal, idPeriodoDesde, idPeriodoHasta, idCuentaAux1, idCuentaAux2);
+		
+		return lista;
+	}
+	
+	public List<TblDctoDTO> listaBalancePruebaPorTerceroSoloPeriodo(int idLocal, int idPeriodoDesde, int idPeriodoHasta){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaPorTerceroSoloPeriodo(idLocal, idPeriodoDesde, idPeriodoHasta);
 		
 		return lista;
 	}
@@ -159,9 +173,21 @@ public class TblDctoService {
 		return lista;
 	}
 	
-	public  List<TblDctoDTO> listaLibroMayorYBalance(int idLocal, int idPeriodo,  List<Integer> tipoComprobante){
+	
+	public List<TblDctoDTO> listaBalancePruebaGeneralTodasCuentasPorIdPeriodo( int idLocal, int idPeriodoDesde, int idPeriodoHasta){
 		
-		List<TblDctoDTO> lista = tblDctoRepo.listaLibroMayorYBalance(idLocal, idPeriodo, tipoComprobante);
+		List<TblDctoDTO> lista = tblDctoRepo.listaBalancePruebaGeneralTodasCuentasPorIdPeriodo(idLocal, idPeriodoDesde, idPeriodoHasta);
+		
+		return lista;
+		
+	}
+	
+	
+	
+	
+	public  List<TblDctoDTO> listaLibroMayorYBalance(int idLocal, int idPeriodoDesde, int idPeriodohasta,  List<Integer> tipoComprobante){
+		
+		List<TblDctoDTO> lista = tblDctoRepo.listaLibroMayorYBalance(idLocal, idPeriodoDesde, idPeriodohasta, tipoComprobante);
 		
 		return lista;
 		

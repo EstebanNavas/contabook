@@ -150,6 +150,21 @@
 				   </div>
 				   
 			   </div>
+			   
+			   <!-- CONCEPTO GRAVABLE -->
+			   <div class="fila" style="margin-top: 10px; margin-left: 20;">
+				    <div class="formGroup" style="margin-right: 50px;" >
+					  <label for="descripcion">Concepto gravable información exógena</label>
+				   </div>
+
+				   <div class="formGroup" style="margin-left: 8px;">
+				    <select id="conceptoGravable" style="width: 200px; height: 25px; ">
+			    	 
+			       </select>
+			      </div>
+				   
+			   </div>
+			   
 			   <div id="error-message" style="color: red; font-size: 12px; display: none;">El código auxiliar ya existe.</div>
 				
 
@@ -1221,6 +1236,7 @@ function CrearAuxiliar() {
     var codidoAux = document.getElementById("codidoAux").value;
    var nombreAux = document.getElementById("nombreAux").value;
    
+   const conceptoGravable = document.getElementById("conceptoGravable").value;
    
      if(!subCuenta){			
 			alert("Por favor cargue los datos");
@@ -1242,7 +1258,8 @@ function CrearAuxiliar() {
     const datos = {
         subCuenta: subCuenta,
 		codidoAux: codidoAux,
-		nombreAux: nombreAux	
+		nombreAux: nombreAux,
+		conceptoGravable: conceptoGravable,	
     };
 
     fetch("./CrearAuxiliar-Post", {
@@ -1725,6 +1742,10 @@ function mostrarDetalleAux(element) {
             const nombreCuentaAux = data.xNombreCuentaAux;
             const coidgoAux = data.xCoidgoAux;
             
+            const listaConceptos = data.xlistaConceptos;
+            
+            const idConceptoGravable = data.xIdConceptoGravable;
+            
             xListaAuxiliares = [];
             
              // Asignar los valores a los inputs
@@ -1782,6 +1803,25 @@ function mostrarDetalleAux(element) {
         inputnombreSubCuenta.classList.remove("input-barra-verde");
         
         document.getElementById("subCuentaLabel").innerText = "";
+        
+        const selectConcepto = document.getElementById("conceptoGravable");
+        // Limpiar opciones anteriores
+         selectConcepto.innerHTML = "";
+         
+			// Llenar con la lista
+			listaConceptos.forEach(item => {
+				const option = document.createElement("option");
+				option.value = item.idCausa;
+				option.text = item.nombreCausa;
+
+				if (item.idCausa == idConceptoGravable) {
+					option.selected = true;
+				}
+
+				selectConcepto.appendChild(option);
+			});
+		
+        
 
 
         })
@@ -1800,6 +1840,7 @@ function mostrarDetalle(element) {
     const idClase = element.getAttribute("data-id-claseCuenta");
     console.log("ID de la opción seleccionada en mostrarDetalleeeee: " + idCuenta);
     console.log("idClase seleccionada en mostrarDetalleeee: " + idClase);
+    
     
     
         const botonActualizar = document.getElementById("actualizarAux");  
@@ -1911,6 +1952,8 @@ function mostrarDetalle(element) {
             const nombreSubCuenta = data.xNombreSubCuenta;
             const idSubCuenta = data.xIdSubCuenta;
             
+            const listaConceptos = data.xlistaConceptos;
+            
              // Asignar los valores a los inputs
         document.getElementById("clase").value = idClase;
         document.getElementById("nombreClase").value = nombreClase;
@@ -1936,6 +1979,18 @@ function mostrarDetalle(element) {
         inputNombreAux.style.backgroundColor = "white"; 
         inputNombreAux.classList.add("input-barra-verde"); // Agregar la clase
         
+         const selectConcepto = document.getElementById("conceptoGravable");
+        // Limpiar opciones anteriores
+         selectConcepto.innerHTML = "";
+        
+        
+        // Llenar con la lista
+			listaConceptos.forEach(item => {
+				const option = document.createElement("option");
+				option.value = item.idCausa;        
+				option.text = item.nombreCausa;     
+				selectConcepto.appendChild(option);
+			});
         
 
 
@@ -1979,11 +2034,15 @@ function mostrarDetalle(element) {
     alert("Por favor ingrese un nombre para el Auxiliar");
     return;
   }
+  
+  
+  const conceptoGravable = document.getElementById("conceptoGravable").value;
 
   var datos = {
     subCuenta: subCuenta,
     codidoAux: codidoAux,
     nombreAux: nombreAux,
+    conceptoGravable: conceptoGravable,
   };
 
   fetch("./ActualizarAuxiliar-Post", {

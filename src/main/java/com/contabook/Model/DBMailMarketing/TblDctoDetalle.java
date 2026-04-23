@@ -90,6 +90,19 @@ public class TblDctoDetalle {
 	
 	@Column(name = "mesCierre")
 	private Integer  mesCierre;
+	
+	@Column(name = "idTipoTercero")
+	private Integer  idTipoTercero;
+	
+	
+
+	public Integer getIdTipoTercero() {
+		return idTipoTercero;
+	}
+
+	public void setIdTipoTercero(Integer idTipoTercero) {
+		this.idTipoTercero = idTipoTercero;
+	}
 
 	public Integer getIdLocal() {
 		return idLocal;

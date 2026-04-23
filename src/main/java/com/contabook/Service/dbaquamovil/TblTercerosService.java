@@ -20,4 +20,11 @@ public class TblTercerosService {
 		
 		return listaTerceros;
 	}
+	
+	public Integer ObtenerIdTipoTercero(int idLocal, String idCliente) {
+		
+		Integer idTipoTercero = tblTercerosRepo.ObtenerIdTipoTercero(idLocal, idCliente);
+		
+		return idTipoTercero;
+	}
 }

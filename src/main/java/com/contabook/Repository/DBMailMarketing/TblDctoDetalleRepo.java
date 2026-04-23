@@ -40,7 +40,8 @@ public interface TblDctoDetalleRepo extends JpaRepository<TblDctoDetalle, Intege
            + "                      vrCredito,                "
            + "                      observacion,              "
            + "                      baseGravable,             "
-           + "                      mesCierre)                "
+           + "                      mesCierre,                "
+           + "                      idTipoTercero)                "
            + "VALUES ( ?1,"
            + "?2,"
            + "?3,"
@@ -65,10 +66,11 @@ public interface TblDctoDetalleRepo extends JpaRepository<TblDctoDetalle, Intege
            + "?22,"
            + "?23,"
            + "?24,"
-           + "?25)", nativeQuery = true)
+           + "?25,"
+           + "?26)", nativeQuery = true)
 	  public void ingresaDctoDetalle(int idLocal, int idTipoCpte, int idCpte, int idCuentaAux, String idCliente, int item, int sucursal, int codProducto, int codBodega, 
 			  int accion, int cantProducto, int prefijo, int consecutivo, int numeroCuota, String fechaVencimiento, int codImpuesto, int codGrupoActivoFijo, int codActivoFijo,
-			  String descripcion, int codCentroSubCentro, Double vrDebito, Double vrCredito, String observacion, Double baseGravable, int mesCierre );
+			  String descripcion, int codCentroSubCentro, Double vrDebito, Double vrCredito, String observacion, Double baseGravable, int mesCierre, int idTipoTercero );
 	
 	
 	

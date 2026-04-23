@@ -29,6 +29,20 @@ public class TblPucAuxService {
 		return nombreCuenta;
 	}
 	
+	public Integer obtenerConceptoGravable(int idLocal, int idCuentaAux) {
+		
+		Integer idConceptoGravable = tblPucAuxRepo.obtenerConceptoGravable(idLocal, idCuentaAux);
+		
+		if(idConceptoGravable == null) {
+			
+			idConceptoGravable = 0;
+			return idConceptoGravable;
+			
+		}
+		
+		return idConceptoGravable;
+	}
+	
 	public List<TblPucAux> listaTodosAuxiliares(int idLocal){
 		
 		List<TblPucAux> todosAuxiliares = tblPucAuxRepo.listaTodosAuxiliares(idLocal);

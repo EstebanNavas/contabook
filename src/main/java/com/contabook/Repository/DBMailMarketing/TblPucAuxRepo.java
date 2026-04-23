@@ -22,14 +22,16 @@ public interface TblPucAuxRepo extends JpaRepository<TblPucAux, Integer> {
          + "                      nombreCuenta,          "
          + "                      ObligaTercero,         "
          + "                      Iva,                   "
-         + "                      RteFuente)             "
+         + "                      RteFuente,             "
+         + "                      idConceptoGravable)    "
          + "VALUES ( ?1,"
          + "?2,"
          + "?3,"
          + "?4,"
          + "?5,"
-         + "?6)", nativeQuery = true)
-	  public void ingresaAuxiliar(int idLocal, int idCuentaAux, String nombreCuenta, int ObligaTercero, Double Iva, int RteFuente);
+         + "?6,"
+         + "?7)", nativeQuery = true)
+	  public void ingresaAuxiliar(int idLocal, int idCuentaAux, String nombreCuenta, int ObligaTercero, Double Iva, int RteFuente, int idConceptoGravable);
 	
 	
 	 @Query(value = "SELECT * " +
@@ -46,14 +48,21 @@ public interface TblPucAuxRepo extends JpaRepository<TblPucAux, Integer> {
              nativeQuery = true)
 	 String obtenerNombreCuentaAux(int idLocal, int idCuentaAux);
 	 
+	 @Query(value = "SELECT idConceptoGravable " +
+             "FROM BDMailMarketing.dbo.tblPucAux " +
+             "WHERE idLocal = ?1 " +
+             "AND idCuentaAux = ?2",
+             nativeQuery = true)
+	 Integer obtenerConceptoGravable(int idLocal, int idCuentaAux);
+	 
 	 
 	  @Modifying
 	  @Transactional
-	  @Query(value = "UPDATE tblPucAux SET nombreCuenta = ?1 " +
-	                 "WHERE tblPucAux.idLocal = ?2 " +
-	                 "AND tblPucAux.idCuentaAux = ?3 ",
+	  @Query(value = "UPDATE tblPucAux SET nombreCuenta = ?1, idConceptoGravable = ?2 " +
+	                 "WHERE tblPucAux.idLocal = ?3 " +
+	                 "AND tblPucAux.idCuentaAux = ?4 ",
 	                 nativeQuery = true)
-	  public void actualizarAuxiliar(String nombreCuenta, int idLocal, int idCuentaAux);
+	  public void actualizarAuxiliar(String nombreCuenta,int idConceptoGravable, int idLocal, int idCuentaAux);
 	  
 	  
 	  @Modifying

@@ -252,11 +252,22 @@ public class ReporteBalancePruebaPorTercero {
 	    
 	    //Búsqueda por cuentas y Periodo
 
-	    	lista = tblDctoService.listaBalancePruebaPorTercero(idLocal, idPeriodoDesde,idPeriodoHasta, Cuenta1, Cuenta2);
 	    	
-//	    	List<TblDctoDTOSubReport> listaSubReport = tblDctoService.listaBalancePruebaPorTerceroSubReport(idLocal, idPeriodoDesde,idPeriodoHasta, listaCuentas);	    
-//	    	JRBeanCollectionDataSource dsSubReport =  new JRBeanCollectionDataSource(listaSubReport);
-//	    	params.put("DS_PUC", dsSubReport);
+	    	
+	    	 //Búsqueda por cuentas y Periodo
+		    if(idPeriodoDesde != null && !listaCuentas.isEmpty()) {
+		    	System.out.println("Ingresó a cuentas y Periodo"); 
+		    	lista = tblDctoService.listaBalancePruebaPorTercero(idLocal, idPeriodoDesde,idPeriodoHasta, Cuenta1, Cuenta2);
+		    	
+		    }
+		    
+		    
+		    //Búsqueda solo por Periodo
+		    if(idPeriodoDesde != null && listaCuentas.isEmpty()) {
+		    	System.out.println("Ingresó a solo Periodo"); 
+		    	lista = tblDctoService.listaBalancePruebaPorTerceroSoloPeriodo(idLocal, idPeriodoDesde,idPeriodoHasta);
+		    	
+		    }
 		
 		System.out.println("lista es : " + lista);
 

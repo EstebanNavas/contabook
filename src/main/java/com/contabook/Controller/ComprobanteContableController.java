@@ -303,13 +303,17 @@ public class ComprobanteContableController {
 	    	    	Double vrCredito = Double.parseDouble(xCreditoArray[l]);
 	    	        String descripcion = xDescripcionArray[l];
 	    	        String observación = xDetalleContableArray[l];
+	    	        
+	    	        //Obtener idTipoTercero
+	    	        Integer idTipoTercero = tblTercerosService.ObtenerIdTipoTercero(idLocal, cliente);
+	    	        System.out.println("idTipoTercero es " + idTipoTercero);
 	            		                	
 	                	                	
                         //(int idLocal, int idTipoCpte, int idCpte, int idCuentaAux, String idCliente, int item, int sucursal, int codProducto, int codBodega, 
 	      			    // int accion, int cantProducto, int prefijo, int consecutivo, int numeroCuota, String fechaVencimiento, int codImpuesto, int codGrupoActivoFijo, int codActivoFijo,
 	    			   //String descripcion, int codCentroSubCentro, Double vrDebito, Double vrCredito, String observacion, Double baseGravable, int mesCierre )
 	                 	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, maxIdCpte, idCuenta, cliente, item, 0, 0, 0, 
-	                	 0, 0, 0, 0, 0, fechaDcto, 0, 0, 0, descripcion, 0, vrDebito, vrCredito, observación, 0.0, idPeriodo);
+	                	 0, 0, 0, 0, 0, fechaDcto, 0, 0, 0, descripcion, 0, vrDebito, vrCredito, observación, 0.0, idPeriodo, idTipoTercero);
 	                 	
 	                	System.out.println("ingresaDctoDetalle ");
 	                    
@@ -440,13 +444,16 @@ public class ComprobanteContableController {
 	    	    	Double vrCredito = Double.parseDouble(xCreditoArray[l]);
 	    	        String descripcion = xDescripcionArray[l];
 	    	        String observación = xDetalleContableArray[l];
+	    	        
+	    	      //Obtener idTipoTercero
+	    	        Integer idTipoTercero = tblTercerosService.ObtenerIdTipoTercero(idLocal, cliente);
 	            		                	
 	                	                	
                        //(int idLocal, int idTipoCpte, int idCpte, int idCuentaAux, String idCliente, int item, int sucursal, int codProducto, int codBodega, 
 	      			    // int accion, int cantProducto, int prefijo, int consecutivo, int numeroCuota, String fechaVencimiento, int codImpuesto, int codGrupoActivoFijo, int codActivoFijo,
 	    			   //String descripcion, int codCentroSubCentro, Double vrDebito, Double vrCredito, String observacion, Double baseGravable, int mesCierre )
 	                 	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, idCpte, idCuenta, cliente, item, 0, 0, 0, 
-	                	 0, 0, 0, 0, 0, fechaDcto, 0, 0, 0, descripcion, 0, vrDebito, vrCredito, observación, 0.0, idPeriodo);
+	                	 0, 0, 0, 0, 0, fechaDcto, 0, 0, 0, descripcion, 0, vrDebito, vrCredito, observación, 0.0, idPeriodo, idTipoTercero);
 	                 	
 	                	System.out.println("ingresaDctoDetalle ");
 	                    

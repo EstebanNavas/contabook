@@ -167,8 +167,11 @@ public class ReporteLibroMayorYBalanceController {
 		
 
 		// Obtenemos los datos del JSON recibido
-		Integer idPeriodo = Integer.parseInt((String) requestBody.get("idPeriodo"));   
-        System.out.println("idPeriodo es " + idPeriodo);
+		Integer idPeriodoDesde = Integer.parseInt((String) requestBody.get("idPeriodoDesde"));   
+        System.out.println("idPeriodoDesde es " + idPeriodoDesde);
+        
+        Integer idPeriodoHasta = Integer.parseInt((String) requestBody.get("idPeriodoHasta"));   
+        System.out.println("idPeriodoHasta es " + idPeriodoHasta);
         
         
         @SuppressWarnings("unchecked")
@@ -222,7 +225,8 @@ public class ReporteLibroMayorYBalanceController {
 		for (TblLocales L : Local) {
 
 			// Parametros del encabezado
-			params.put("p_idPeriodo", idPeriodo);
+			params.put("p_idPeriodo", idPeriodoDesde);
+			params.put("p_idPeriodoHasta", idPeriodoHasta);
 			params.put("p_nombreLocal", L.getNombreLocal());
 			params.put("p_nit", L.getNit());
 			params.put("p_titulo", xTituloReporte);
@@ -237,7 +241,7 @@ public class ReporteLibroMayorYBalanceController {
 		
         List<TblDctoDTO> lista = null;
 	    
-	    lista = tblDctoService.listaLibroMayorYBalance(idLocal, idPeriodo, xComprobantesIntList);		
+	    lista = tblDctoService.listaLibroMayorYBalance(idLocal, idPeriodoDesde, idPeriodoHasta, xComprobantesIntList);		
 		System.out.println("lista es : " + lista);
 
 		System.out.println("formato es : " + formato);

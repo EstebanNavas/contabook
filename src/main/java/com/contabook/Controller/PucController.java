@@ -40,6 +40,7 @@ import com.contabook.Model.Reportes.ReportesDTO;
 import com.contabook.Model.dbaquamovil.Ctrlusuarios;
 import com.contabook.Model.dbaquamovil.TblAgendaLogVisitas;
 import com.contabook.Model.dbaquamovil.TblLocales;
+import com.contabook.Model.dbaquamovil.TblTipoCausaNota;
 import com.contabook.Projection.TblDctoDTO;
 import com.contabook.Projection.TblPucDTO;
 import com.contabook.Repository.DBMailMarketing.TblPucAuxRepo;
@@ -48,6 +49,7 @@ import com.contabook.Service.DBMailMarketing.TblLocalesReporteService;
 import com.contabook.Service.DBMailMarketing.TblPucAuxService;
 import com.contabook.Service.DBMailMarketing.TblPucService;
 import com.contabook.Service.dbaquamovil.TblLocalesService;
+import com.contabook.Service.dbaquamovil.TblTipoCausaNotaService;
 import com.contabook.ServiceApi.ReporteSmsServiceApi;
 import com.contabook.Utilidades.ControlDeInactividad;
 import com.contabook.enums.TipoReporteEnum;
@@ -83,6 +85,9 @@ public class PucController {
 	
 	@Autowired
 	TblPucRepo tblPucRepo;
+	
+	@Autowired
+	TblTipoCausaNotaService tblTipoCausaNotaService;
 	
 	
 	@GetMapping("/Puc")
@@ -373,6 +378,10 @@ public class PucController {
       	        .collect(Collectors.toList());  // Crear la lista de enteros
       	
       	response.put("xListaAuxiliares", xListaAuxiliares);    
+      	
+      //Obtenemos lista conceptos gravables
+      ArrayList<TblTipoCausaNota> listaConceptos = tblTipoCausaNotaService.ObtenerTblTipoCausaNota(201);
+      response.put("xlistaConceptos", listaConceptos);
       
 	
        	
@@ -585,7 +594,14 @@ public class PucController {
 		System.out.println("nombreCuentaAux en DetalleAux es " + nombreCuentaAux);
 		response.put("xNombreCuentaAux", nombreCuentaAux);
 		response.put("xCoidgoAux", coidgoAux);
+		
+		Integer idConceptoGravable = tblPucAuxService.obtenerConceptoGravable(idLocal, idCuentaAux);
+		response.put("xIdConceptoGravable", idConceptoGravable);
+		System.out.println("idConceptoGravable en DetalleAux es " + idConceptoGravable);
       
+		//Obtenemos lista conceptos gravables
+		ArrayList<TblTipoCausaNota> listaConceptos = tblTipoCausaNotaService.ObtenerTblTipoCausaNota(201);
+		response.put("xlistaConceptos", listaConceptos);
 	
        	
       	     	
@@ -727,6 +743,9 @@ public class PucController {
 	        
 	        
 	        String nombreAux = (String) requestBody.get("nombreAux");
+	        
+	        String conceptoGravable = (String) requestBody.get("conceptoGravable");
+	        Integer idConceptoGravable = Integer.parseInt(conceptoGravable);
 
 	        
 	        System.out.println("subCuenta es " + subCuenta);
@@ -736,7 +755,7 @@ public class PucController {
 	        
 
 	        //INGRESAR NUEVO AUXILIAR
-	        tblPucAuxRepo.ingresaAuxiliar(idLocal, idCuentaAux, nombreAux, 0, 0.0, 0);
+	        tblPucAuxRepo.ingresaAuxiliar(idLocal, idCuentaAux, nombreAux, 0, 0.0, 0, idConceptoGravable);
 
 	        
 		    Map<String, Object> response = new HashMap<>();
@@ -778,16 +797,19 @@ public class PucController {
 	        
 	        
 	        String nombreAux = (String) requestBody.get("nombreAux");
-
+	        
+	        String conceptoGravable = (String) requestBody.get("conceptoGravable");
+	        Integer idConceptoGravable = Integer.parseInt(conceptoGravable);
 	        
 	        System.out.println("subCuenta es " + subCuenta);
 	        System.out.println("codidoAux es " + codidoAux);
 	        System.out.println("nombreAux es " + nombreAux);
+	        System.out.println("idConceptoGravable es " + idConceptoGravable);
 
 	        
 
 	        //ACTUALIZAR AUXILIAR
-	        tblPucAuxRepo.actualizarAuxiliar(nombreAux, idLocal, idCuentaAux);
+	        tblPucAuxRepo.actualizarAuxiliar(nombreAux,idConceptoGravable, idLocal, idCuentaAux);
 
 	        
 		    Map<String, Object> response = new HashMap<>();

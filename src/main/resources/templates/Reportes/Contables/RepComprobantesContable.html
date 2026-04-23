@@ -75,7 +75,8 @@
 					<tr>		
 						<th></th>
 						<th class="subtituloAF">TIPO COMPROBANTE</th>
-						<th class="subtituloAF"># COMPROBANTE</th>
+						<th class="subtituloAF"># CPTE</th>
+						<th class="subtituloAF">IDDCTO</th>
 						<th class="subtituloAF">FECHA ELABORACIÓN</th>
 						<th class="subtituloAF">USUARIO</th>
 						<th class="subtituloAF">PERIODO</th>	
@@ -194,6 +195,7 @@ function actualizarTabla(listaComprobantes) {
                     "<td class='detalleAF'>" + lista.nombreTipoComprobante + "</td>" +
                     // Modificación en esta línea para incluir un enlace con onclick
                     "<td class='detalleAF'><a href='#' onclick='mostrarDetalle(" + lista.idCpte + ")'>" + lista.idCpte + "</a></td>" +
+                    "<td class='detalleAF'>" + lista.idDcto + "</td>" +
                     "<td class='detalleAF'>" + lista.fechaDcto + "</td>" +
                     "<td class='detalleAF'>" + lista.nombreUsuario + "</td>" +
                     "<td class='detalleAF'>" + lista.idPeriodo + "</td>" +

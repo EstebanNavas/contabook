@@ -213,7 +213,7 @@ public class ImportarController {
     	                	Integer idCuentaAux = detalle.getIdSubcuenta()  != null ? detalle.getIdSubcuenta() : 0;
 
     	                	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, maxIdCpte, idCuentaAux, detalle.getIdCliente(), item, 0, 0, 0, 
-    	                	 0, 0, 0, 0, 0, detalle.getFechaDcto(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, detalle.getIdPeriodo());
+    	                	 0, 0, 0, 0, 0, detalle.getFechaDcto(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, detalle.getIdPeriodo(), detalle.getIdTipoTercero());
     	                	System.out.println("ingresaDctoDetalle " + idDcto);
     	                    
     	                    item++;
@@ -265,7 +265,7 @@ public class ImportarController {
     	                	Integer idCuentaAux = detalle.getIdSubcuenta()  != null ? detalle.getIdSubcuenta() : 0;
 
     	                	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, maxIdCpte, idCuentaAux, detalle.getIdCliente(), item, 0, 0, 0, 
-    	                	 0, 0, 0, 0, 0, detalle.getFechaDcto(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, detalle.getIdPeriodo());
+    	                	 0, 0, 0, 0, 0, detalle.getFechaDcto(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, detalle.getIdPeriodo(), detalle.getIdTipoTercero());
     	                	System.out.println("ingresaDctoDetalle " + idDcto);
     	                    
     	                    item++;
@@ -338,7 +338,7 @@ public class ImportarController {
    	                	Integer idCuentaAux = detalle.getIdSubcuenta()  != null ? detalle.getIdSubcuenta() : 0;
 
    	                	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, maxIdCpte, idCuentaAux, detalle.getIdCliente(), item, 0, 0, 0, 
-   	                	 0, 0, 0, 0, 0, detalle.getFechaDctoSiigo(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, idPeriodo);
+   	                	 0, 0, 0, 0, 0, detalle.getFechaDctoSiigo(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, idPeriodo, detalle.getIdTipoTercero());
    	                	System.out.println("ingresaDctoDetalle " + idDcto);
    	                    
    	                    item++;
@@ -390,7 +390,7 @@ public class ImportarController {
     	                	Integer idCuentaAux = detalle.getIdSubcuenta()  != null ? detalle.getIdSubcuenta() : 0;
 
     	                	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, maxIdCpte, idCuentaAux, detalle.getIdCliente(), item, 0, 0, 0, 
-    	                	 0, 0, 0, 0, 0, detalle.getFechaDcto(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, detalle.getIdPeriodo());
+    	                	 0, 0, 0, 0, 0, detalle.getFechaDcto(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, detalle.getIdPeriodo(), 3);
     	                	System.out.println("ingresaDctoDetalle " + idDcto);
     	                    
     	                    item++;
@@ -444,7 +444,7 @@ public class ImportarController {
     	                	Integer idCuentaAux = detalle.getIdSubcuenta()  != null ? detalle.getIdSubcuenta() : 0;
 
     	                	tblDctoDetalleRepo.ingresaDctoDetalle(idLocal, idTipoCpte, maxIdCpte, idCuentaAux, detalle.getIdCliente(), item, 0, 0, 0, 
-    	                	 0, 0, 0, 0, 0, detalle.getFechaDcto(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, detalle.getIdPeriodo());
+    	                	 0, 0, 0, 0, 0, detalle.getFechaDcto(), 0, 0, 0, null, 0, detalle.getVrDebito(), detalle.getVrCredito(), detalle.getObservacion(), 0.0, detalle.getIdPeriodo(), 2);
     	                	System.out.println("ingresaDctoDetalle " + idDcto);
     	                    
     	                    item++;
