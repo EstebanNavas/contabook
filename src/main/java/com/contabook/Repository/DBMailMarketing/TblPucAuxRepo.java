@@ -167,5 +167,24 @@ public interface TblPucAuxRepo extends JpaRepository<TblPucAux, Integer> {
 				 + "    and tblPuc.idClase = ?2                                                            ",
 	             nativeQuery = true)
 		 List<TblPucAuxDTO> listaCuentasContablesPorClase(int idLocal, int idClase);
+		 
+		 
+		 @Query(value = " SELECT                                                                      "
+				 + "      tblPucAux.idLocal,                                                     "
+				 + "      tblPucAux.idCuentaAux,                                                 "
+				 + "      tblPucAux.nombreCuenta,                                                "
+				 + "      tblPucAux.ObligaTercero,                                               "
+				 + "      tblPucAux.Iva,                                                         "
+				 + "      tblPucAux.RteFuente,                                                   "
+				 + "      ISNULL(tblPucAux.idConceptoGravable, 0 ) AS idConceptoGravable,        "
+				 + "      ISNULL(tblTipoCausaNota.nombreCausa, 'NN--NN-NN') AS nombreCausa       "
+				 + " FROM [BDMailMarketing].[dbo].[tblPucAux] AS tblPucAux                       "
+				 + " LEFT JOIN bdaquamovil.dbo.tblTipoCausaNota                                  "
+				 + " ON tblPucAux.idConceptoGravable = tblTipoCausaNota.idCausa                  "
+				 + " AND tblTipoCausaNota.idTipoTabla = 201                                      "
+				 + " WHERE tblPucAux.idLocal = ?1                                                "
+				 +"  ORDER BY idCuentaAux                                                        ",
+	             nativeQuery = true)
+		 List<TblPucAuxDTO> listaCuentasAux(int idLocal);
 
 }

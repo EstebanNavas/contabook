@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+	<head th:replace="combo/head.html :: head"></head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" th:href="@{/styles/login.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/styles/General.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/styles/fuenteColor.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/styles/NavBar.css}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+	<title> Contabook</title>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+	<header th:replace="combo/navBar.html :: navbar"></header>
+	<!-- Encabezado general -->
+	<!-- Encabezado general -->
+	<div class="containerFlex" id="encabezado" >
+		<div class="local">
+			<h2 class="letraBlue" th:replace="combo/comboLocal.html :: comboLocal"></h2>
+		</div>
+
+		<div class="descripcion">
+			<h2 class="tituloAFcenter">LISTA AUXILIARES</h2>
+		</div>
+		<div class="fechahora">
+			<h2 class="letra" th:replace="combo/FechaHoraActual.html :: comboFechaHora">
+
+		</div>
+
+	</div>
+	
+
+
+	<form class="containerTable">
+
+
+		<!-- Registros Terceros -->
+		<div class="form-group">
+
+			<table class="table">
+				<thead>
+
+					<tr>
+
+						<th></th>
+						<th class="subtituloCentrado">IDCUENTAAUX</th>
+						<th class="subtituloAF">NOMBRE CUENTA</th>
+						<th class="subtituloAF">ID-CONCEPTO GRAVABLE</th>
+						<th class="subtituloAF">NOMBRE CONCEPTO</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr th:each="referencia : ${xListaAux}">
+						<td class="detalleCentrado" text=""></td>
+						<td class="detalleCentrado" th:text="${referencia.getIdCuentaAux()}"></td>
+						<td class="detalleAF" th:text="${referencia.getNombreCuenta()}"></td>
+						<td class="detalleAF" th:text="${referencia.getIdConceptoGravable()}"></td>
+						<td class="detalleAF" th:text="${referencia.getNombreCausa()}"></td>
+						
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</form>
+	<div>
+		<a href="./Referencia" class="btn btn-success" style="margin: 50px;">Regresar</a>
+
+	</div>
+	
+	<div id="loadingSpinner" style="display: none;">
+   				 
+  	   <div class="spinner"></div>
+	</div>
+
+
+
+
+
+
+
+
+
+	<script th:inline="javascript" src="./js/contadorRegresivo.js"></script>
+	<script th:inline="javascript">
+
+		function GenerarReporte(formato) {
+	
+	   event.preventDefault();
+	   
+
+       // Mostrar el spinner de carga
+       document.getElementById('loadingSpinner').style.display = 'block';
+         
+
+
+        // Crear un objeto que contenga los datos a enviar
+		var datos = {
+			formato: formato
+			};
+
+		 // Realizar una solicitud POST al controlador
+		 fetch("./DescargarReporteReferencias", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(datos),
+		})
+		.then(response => {
+     if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.blob();  // Convierte la respuesta a un Blob (secuencia de bytes)
+   })
+  .then(blob => {
+     const url = window.URL.createObjectURL(blob);
+        
+     if (formato === 'PDF') {
+        // Abrir el PDF en una nueva pestaña
+        window.open(url, '_blank');
+      } else if (formato === 'EXCEL') {
+         // Descargar el archivo Excel
+         const a = document.createElement('a');
+         a.href = url;
+         a.download = 'reporte.xlsx';
+         document.body.appendChild(a);
+         a.click();
+         a.remove();
+       }
+
+      // Liberar la URL del objeto para liberar recursos
+      window.URL.revokeObjectURL(url);
+   })
+   .catch(error => console.error('Error al descargar el archivo', error))
+   .finally(() => {
+      // Ocultar el spinner de carga
+      document.getElementById('loadingSpinner').style.display = 'none';
+      button.disabled = false;
+  });
+  
+ }
+
+
+
+	</script>
+</body>
+
+</html>

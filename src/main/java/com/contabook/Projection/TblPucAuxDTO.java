@@ -12,5 +12,8 @@ public interface TblPucAuxDTO {
 	String getNombreSubCuenta();
 	Integer getIdCuentaAux();
 	String getNombreAuxiliar();
+	
+	Integer getIdConceptoGravable();
+	String getNombreCausa();
 
 }

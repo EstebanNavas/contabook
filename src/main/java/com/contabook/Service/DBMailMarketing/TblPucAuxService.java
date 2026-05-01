@@ -71,5 +71,12 @@ public class TblPucAuxService {
 		
 		return cuentasContables;
 	}
+	
+	public List<TblPucAuxDTO> listaCuentasAux(int idLocal){
+		
+		List<TblPucAuxDTO> lista = tblPucAuxRepo.listaCuentasAux(idLocal);
+		
+		return lista;
+	}
 
 }
